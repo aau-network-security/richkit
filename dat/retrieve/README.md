@@ -23,4 +23,3 @@ for url in urls:
 
 ```
 
-s
