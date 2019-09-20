@@ -36,7 +36,7 @@ class LocalCategoryDB():
 
 
 
-def fetch_categories(categories_url, local_categories_path):
+def fetch_categories(categories_url=categories_url, local_categories_path=categories_file_path):
     """ --------------------------------------- """
     """ Fetch categories and create local cache """
     """ --------------------------------------- """
@@ -54,6 +54,7 @@ def fetch_categories(categories_url, local_categories_path):
     try:
         f = open(local_categories_path, 'w')
         f.write(dumps(d))
+        f.close()
     except Exception as e:
         f.close()
         sys.stderr.write('Cannot save categories: %s\n' % e)
@@ -72,6 +73,7 @@ def load_categories(name):
         f = open(name, 'r')
         data = f.read()
         d = ast.literal_eval(data)
+        f.close()
     except FileNotFoundError as e:
         return {}
     except OSError as er:
@@ -80,7 +82,7 @@ def load_categories(name):
     return d
 
 
-def check_local_categories_file_exists():
+def check_local_categories_file_exists(categories_file_path=categories_file_path):
     webCats = load_categories(categories_file_path)
     if webCats=={}:
          webCats = fetch_categories(categories_url, categories_file_path)
@@ -93,12 +95,12 @@ def _chunks(s):
 
 
 ## if there is no info related with link  then call for api and append it to categorized_url.txt
-def write_to_local_file(text):
+def write_to_local_file(text,categorized_urls_file=categorized_urls_file):
     with open(categorized_urls_file, 'a') as file:
         file.write(text + "\n")
 
 
-def fetch_from_internet(url):
+def fetch_from_internet(url,categories_file_path=categories_file_path,categorized_urls_file=categorized_urls_file):
     result = ''
     hostname = url
     port = '80'
@@ -111,13 +113,13 @@ def fetch_from_internet(url):
         if domc is not None:
             cats = _chunks(domc.text)
             result = [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]
-            write_to_local_file(url + "," + re.sub('\n', '', result))
+            write_to_local_file(url + "," + re.sub('\n', '', result),categorized_urls_file)
         elif dirc is not None:
             cats = _chunks(dirc.text)
             sys.stdout.write(
-                '%s,%s\n' % (hostname, [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]))
-            result = [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]
-            write_to_local_file(url + "," + re.sub('\n', '', result))
+                '%s,%s\n' % (hostname, [check_local_categories_file_exists(categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]))
+            result = [check_local_categories_file_exists(categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]
+            write_to_local_file(url + "," + re.sub('\n', '', result),categorized_urls_file)
         else:
             sys.stderr.write('Cannot get category for %s\n' % hostname)
 
