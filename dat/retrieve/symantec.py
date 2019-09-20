@@ -16,7 +16,7 @@ Configuration
 Get one here: http://www1.k9webprotection.com/get-k9-web-protection-free
 """
 categories_url = "https://gitlab.com/snippets/1740321/raw"
-data_path = Path("/Users/atu/PycharmProjects/domain-analysis-toolkit/dat/retrieve/data/")
+data_path = Path("dat/retrieve/data/")
 categories_file_path=data_path / "categories_list.txt"
 categorized_urls_file =data_path / "categorized_urls.txt"
 
