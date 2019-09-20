@@ -7,13 +7,13 @@ from dat.retrieve.symantec import categories_url
 
 class DatTestCase(unittest.TestCase):
 
-    def test_fetch_categories(self, categories_file_path='../retrieve/data/categories_list.txt'):
+    def test_fetch_categories(self, categories_file_path='categories_list.txt'):
         ## make sure that categories url is accessible and fetched correctly
         categories=fetch_categories(categories_url,categories_file_path)
         assert categories != {}
         os.remove(categories_file_path)
 
-    def test_load_categories(self, categories_file_path='../retrieve/data/categories_list.txt'):
+    def test_load_categories(self, categories_file_path='categories_list.txt'):
         if os.path.isfile(categories_file_path):
              assert load_categories(categories_file_path) != {}
         else:
@@ -21,7 +21,7 @@ class DatTestCase(unittest.TestCase):
         if os.path.isfile(categories_file_path):
             os.remove(categories_file_path)
 
-    def test_fetch_from_internet(self,categories_file_path='../retrieve/data/categories_list.txt', categorized_url_path='../retrieve/data/categorized_urls.txt'):
+    def test_fetch_from_internet(self,categories_file_path='categories_list.txt', categorized_url_path='categorized_urls.txt'):
         domain_categories = {"Search Engines/Portals":["www.bing.com","www.google.com","www.yandex.com"],
                              "Social Networking":["www.facebook.com","www.twitter.com"]}
         for category, url_list in domain_categories.items():
