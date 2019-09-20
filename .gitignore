@@ -49,7 +49,7 @@ coverage.xml
 .pytest_cache/
 
 # Local data
-dat/retrieve/data/*
+dat/retrieve/data/*.txt
 # Translations
 *.mo
 *.pot
