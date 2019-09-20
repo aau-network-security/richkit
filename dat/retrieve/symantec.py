@@ -1,0 +1,169 @@
+import ast
+import json
+import glob
+import os
+import sys
+from json import dumps
+from xml.etree.ElementTree import fromstring
+import urllib.request
+from urllib.request import urlopen, build_opener
+import re
+import onetimepad
+from pathlib import Path
+salt = '<if we want to anonymize urls than we can give hash to salt >'
+"""
+Configuration
+Get one here: http://www1.k9webprotection.com/get-k9-web-protection-free
+"""
+categories_url = "https://gitlab.com/snippets/1740321/raw"
+data_path = Path("/Users/atu/PycharmProjects/domain-analysis-toolkit/dat/retrieve/data/")
+categories_file_path=data_path / "categories_list.txt"
+categorized_urls_file =data_path / "categorized_urls.txt"
+
+k9License = 'Replace_by_your_own_license'
+
+
+class LocalCategoryDB():
+    def __init__(self):
+        ## mail.google.com:'Web Ads'
+        self.url_to_category = read_categorized_file()
+
+    def get_category(self, url):
+        if url in self.url_to_category:
+            return self.url_to_category[url]
+        else:
+            return ''
+
+
+
+def fetch_categories(categories_url, local_categories_path):
+    """ --------------------------------------- """
+    """ Fetch categories and create local cache """
+    """ --------------------------------------- """
+    if not categories_url:
+        return None
+    try:
+        u = build_opener()
+        r = u.open(categories_url)
+        data = json.load(r)
+        d = dict([('%02x' % c['num'], c['name']) for c in data])
+    except urllib.error.HTTPError as e:
+        sys.stderr.write('Cannot fetch categories, HTTP error: %s\n' % str(e.code))
+    except urllib.error.URLError as e:
+        sys.stderr.write('Cannot fetch categories, URL error: %s\n' % str(e.reason))
+    try:
+        f = open(local_categories_path, 'w')
+        f.write(dumps(d))
+    except Exception as e:
+        f.close()
+        sys.stderr.write('Cannot save categories: %s\n' % e)
+    return d
+
+
+#
+def load_categories(name):
+    """ --------------------------------- """
+    """ Load categories from a cache file """
+    """ --------------------------------- """
+    if not name:
+        return None
+    d = {}
+    try:
+        f = open(name, 'r')
+        data = f.read()
+        d = ast.literal_eval(data)
+    except FileNotFoundError as e:
+        return {}
+    except OSError as er:
+        f.close()
+        os.exit(1)
+    return d
+
+
+def check_local_categories_file_exists():
+    webCats = load_categories(categories_file_path)
+    if webCats=={}:
+         webCats = fetch_categories(categories_url, categories_file_path)
+    return webCats
+
+
+def _chunks(s):
+    # Original: https://github.com/allfro/sploitego/blob/master/src/sploitego/webtools/bluecoat.py
+    return [s[i:i + 2] for i in range(0, len(s), 2)]
+
+
+## if there is no info related with link  then call for api and append it to categorized_url.txt
+def write_to_local_file(text):
+    with open(categorized_urls_file, 'a') as file:
+        file.write(text + "\n")
+
+
+def fetch_from_internet(url):
+    result = ''
+    hostname = url
+    port = '80'
+    r = urlopen(
+        'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (k9License, hostname, port))
+    if r.code == 200:
+        e = fromstring(r.read())
+        domc = e.find('DomC')
+        dirc = e.find('DirC')
+        if domc is not None:
+            cats = _chunks(domc.text)
+            result = [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]
+            write_to_local_file(url + "," + re.sub('\n', '', result))
+        elif dirc is not None:
+            cats = _chunks(dirc.text)
+            sys.stdout.write(
+                '%s,%s\n' % (hostname, [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]))
+            result = [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]
+            write_to_local_file(url + "," + re.sub('\n', '', result))
+        else:
+            sys.stderr.write('Cannot get category for %s\n' % hostname)
+
+    return re.sub('\n', '', result)
+
+
+
+def read_categorized_file():
+    url_to_category = dict()
+    if not os.path.exists(categorized_urls_file):
+        open(categorized_urls_file,'w').close()
+    else:
+        with open(categorized_urls_file, "r") as ins:
+            for line in ins:
+                pair = line.replace('\n', '').split(',')
+                url_to_category[pair[0]] = pair[1]
+
+    return url_to_category
+
+def check_for_local(url):
+    domains = dict()
+    for i in read_categorized_file():
+        line = i.split(',')
+        #     print(line[1])
+        if len(line) == 2:
+            if line[1] in domains:
+                # append tyhhe new number to the existing array at this slot
+                if line[0] not in domains[line[1]]:
+                    domains[line[1]].append(line[0])
+            else:
+                # create a new array in this slot
+                domains[line[1]] = [line[0]]
+    url_belong_to = []
+    result = ''
+    for index, key in enumerate(domains):
+        if url in domains[key]:
+            result = key
+    return result
+
+
+def anonymize_url(URL):
+    anonURL = onetimepad.encrypt(URL, salt)
+    return anonURL
+
+
+def get_index(category):
+    for k, v in check_local_categories_file_exists().items():
+        if (v == category):
+            return k

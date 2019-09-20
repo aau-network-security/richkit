@@ -15,5 +15,4 @@ Ideas for additiaon sources:
 
 """
 
-def symantec_site_review(dn):
-    raise NotImplementedError()
+__all__=['symantec']
