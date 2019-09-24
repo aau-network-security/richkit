@@ -1,16 +1,31 @@
-.. dat documentation master file, created by
-   sphinx-quickstart on Tue Sep 24 11:08:17 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to dat's documentation!
 ===============================
+
+.. automodule:: dat
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+Modules
+=======
 
+The functionality is organised in the following modules.
+
+Analysis
+--------
+.. automodule:: dat.analyse
+                :members:
+
+Lookup
+------
+.. automodule:: dat.lookup
+                :members:
+
+Retrieve
+--------
+.. automodule:: dat.retrieve
+                :members:
 
 Indices and tables
 ==================
