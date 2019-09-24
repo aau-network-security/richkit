@@ -34,5 +34,6 @@ jobs:
         pytest
     - name: Build documentation
       run: |
+        pip install sphinx
         cd docs
         make html
