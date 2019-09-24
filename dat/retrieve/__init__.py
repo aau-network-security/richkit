@@ -5,5 +5,8 @@ any sort. It comes without the "confidentiality contract" of
 `dat.lookup`.
 
 """
+from dat.retrieve import symantec
 
-__all__=['symantec']
+def symantec_category(domain):
+    """Returns the category from Symantec's BlueCoat service."""
+    return symantec.refetch_from_internet(domain)
