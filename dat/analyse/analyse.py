@@ -141,7 +141,7 @@ def get_ratio_vowels_2ld(domain):
     return float(get_num_of_vowels_2ld(domain)) / float(len(get_fld(domain)))
 
 
-def get_num_of_consonants_2ld(domain)
+def get_num_of_consonants_2ld(domain):
     """
 
     :param domain: 
