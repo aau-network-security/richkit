@@ -6,9 +6,9 @@ import numpy as np
 import segment
 import sklearn
 from tld import get_tld, get_fld
-from util import WordMatcher
-from util import load_alexa
-from util import load_words
+from dat.analyse.util import WordMatcher
+from dat.analyse.util import load_alexa
+from dat.analyse.util import load_words
 
 
 def get_tld(domain, fix_protocol=True):
