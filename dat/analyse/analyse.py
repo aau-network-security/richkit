@@ -1,13 +1,14 @@
-from tld import get_tld, get_fld
+import math
 from collections import Counter
+
+import langid
+import numpy as np
+import segment
+import sklearn
+from tld import get_tld, get_fld
+from util import WordMatcher
 from util import load_alexa
 from util import load_words
-from util import WordMatcher
-import sklearn
-import numpy as np
-import langid
-import segment
-import math
 
 
 def get_tld(domain, fix_protocol=True):
@@ -29,8 +30,6 @@ def get_fld(domain, fix_protocol=True):
     """
     return get_fld(domain, fix_protocol)
 
-
-## domain name related features
 
 def get_domain_name_features(domain):
     """
@@ -54,8 +53,6 @@ def get_domain_name_features(domain):
 
 def get_language(domain):
     """
-
-
     :param: domain
     """
     try:
@@ -68,7 +65,11 @@ def get_language(domain):
 
 
 def get_entropy_2ld(domain):
+    """
 
+    :param domain:
+    :return: entropy of second level domain
+    """
     s = get_fld(domain)
 
     def entropy(s):
@@ -79,6 +80,10 @@ def get_entropy_2ld(domain):
 
 
 def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
+    """
+    :param : domain, analyzer, ngram_range
+    :return: grams of second level domain
+    """
     alexa_slds = load_alexa()
     alexa_vc = sklearn.feature_extraction.text.CountVectorizer(analyzer=analyzer,
                                                                ngram_range=ngram_range,
@@ -91,6 +96,11 @@ def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
 
 
 def get_grams_dict_2ld(domain):
+    """
+
+    :param domain:
+    :return: grams_dict_2ld as string
+    """
     words = load_words()
     dict_vc = sklearn.feature_extraction.text.CountVectorizer(analyzer='char',
                                                               ngram_range=(3, 5),
@@ -103,36 +113,77 @@ def get_grams_dict_2ld(domain):
 
 
 def get_num_words_2ld(domain):
+    """
+
+    :param domain:
+    :return: num of words in 2ld from WordMatcher Object
+    """
     word_matcher = WordMatcher()
     return str(word_matcher.get_num_of_words(get_fld(domain)))
 
 
 def get_num_of_vowels_2ld(domain):
+    """
+
+    :param domain:
+    :return: number of counts:  vowels in 2ld
+    """
     vowels = list("aeiouy")
     return sum([get_fld(domain).count(c) for c in vowels])
 
 
 def get_ratio_vowels_2ld(domain):
+    """
+
+    :param domain:
+    :return: ratio of vowels in scope of 2ld
+    """
     return float(get_num_of_vowels_2ld(domain)) / float(len(get_fld(domain)))
 
 
-def get_num_of_consonants_2ld(domain):
+def get_num_of_consonants_2ld(domain)
+    """
+
+    :param domain: 
+    :return: number of consonants in scope of 2ld
+    """
     consonants = list("bcdfghjklmnpqrstvwxz")
     return sum([get_fld(domain).count(c) for c in consonants])
 
 
 def get_ratio_consonants_2ld(domain):
+    """
+    :param domain:
+    :return:  ratio of consonants
+    """
     return float(get_num_of_consonants_2ld(domain)) / float(len(get_fld(domain)))
 
 
 def get_num_of_special_2ld(domain, special=list("~`!@#$%^&*()_={}[]:>;',</?*-+")):
+    """
+
+    :param domain:
+    :param special: special character list, default is "~`!@#$%^&*()_={}[]:>;',</?*-+"
+    :return: total special character in 2ld.
+    """
     return sum([get_fld(domain).count(c) for c in special])
 
 
 def get_ratio_special_2ld(domain):
+    """
+
+    :param domain:
+    :return: ratio of special characters in 2ld
+    """
     return float(get_num_of_special_2ld(domain)) / float(len(get_fld(domain)))
 
 
 def ngram_count(domain, counts, counts_vc):
+    """
+    :param domain:
+    :param counts:
+    :param counts_vc: count vectorizer from sklearn
+    :return: calculates ngram_count from given count vectorizer and counts
+    """
     match = counts * counts_vc.transform([domain]).T
     return match[0]
