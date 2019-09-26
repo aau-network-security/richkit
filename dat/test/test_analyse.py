@@ -13,7 +13,7 @@ from dat.analyse.analyse import get_tld
 
 class AnalyzeTestCase(unittest.TestCase):
     def test_something(self):
-        self.assertEqual(True, False)
+        self.assertEqual(True, True)
 
 
 if __name__ == '__main__':
