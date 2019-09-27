@@ -13,7 +13,7 @@ class OneGramDist(dict):
       url = url
       print('fetching one gram file from gist ...')
       lines = urllib.request.urlopen(cls.URL).readlines()
-      f = open(cls.FILEPATH, 'wb',encoding="utf8")
+      f = open(cls.FILEPATH, 'w',encoding="utf8")
       f.writelines(lines)
       f.close()
 
