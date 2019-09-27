@@ -9,4 +9,4 @@ from dat.retrieve import symantec
 
 def symantec_category(domain):
     """Returns the category from Symantec's BlueCoat service."""
-    return symantec.refetch_from_internet(domain)
+    return symantec.fetch_from_internet(domain)
