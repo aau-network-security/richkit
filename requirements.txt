@@ -30,7 +30,7 @@ mistune==0.8.4
 nbconvert==5.6.0
 nbformat==4.4.0
 netaddr==0.7.19
-notebook==5.4.0
+notebook==5.7.8
 numpy==1.17.2
 onetimepad==1.4
 pandocfilters==1.4.2
