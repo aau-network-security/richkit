@@ -29,7 +29,7 @@ class WordMatcher(object):
         print ('fetching WORD list from server ...')
         lines = urllib.request.urlopen(cls.MASTERURL).readlines()
 
-        f = open(cls.MASTERFILE, 'w',encoding="utf8")
+        f = open(cls.MASTERFILE, 'wb',encoding="utf8")
         f.writelines(lines)
         f.close()
 
