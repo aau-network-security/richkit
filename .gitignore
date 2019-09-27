@@ -47,7 +47,8 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
-
+.DS_Store
+dat/test/.DS_Store
 # Local data
 dat/retrieve/data/*.txt
 # Translations

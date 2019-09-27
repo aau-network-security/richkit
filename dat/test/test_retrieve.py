@@ -5,7 +5,7 @@ from dat.retrieve.symantec import fetch_categories
 from dat.retrieve.symantec import load_categories
 from dat.retrieve.symantec import categories_url
 
-class DatTestCase(unittest.TestCase):
+class RetrieveTestCase(unittest.TestCase):
 
     def test_fetch_categories(self, categories_file_path='categories_list.txt'):
         ## make sure that categories url is accessible and fetched correctly
@@ -34,3 +34,4 @@ class DatTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
