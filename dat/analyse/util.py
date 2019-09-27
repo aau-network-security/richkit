@@ -29,7 +29,7 @@ class WordMatcher(object):
         print ('fetching WORD list from server ...')
         lines = urllib.request.urlopen(cls.MASTERURL).readlines()
 
-        f = open(cls.MASTERFILE, 'wb')
+        f = open(cls.MASTERFILE, 'wb',encoding="utf8")
         f.writelines(lines)
         f.close()
 
@@ -98,12 +98,12 @@ def load_alexa(limit=None):
 def load_words(path_to_data="data/top-1m.csv"):
     TOP_1M_URL="https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
     if path.exists(path_to_data):
-        f = open(path_to_data, 'r')
+        f = open(path_to_data, 'r',encoding="utf8")
         lines = f.readlines()
         f.close()
     else:
         lines = urllib.request.urlopen(TOP_1M_URL).readlines()
-        f = open(path_to_data,'w')
+        f = open(path_to_data,'w',encoding="utf8")
         f.writelines(str(lines))
         f.close()
     # strip whitespaces
@@ -126,7 +126,7 @@ class TldMatcher(object):
     @classmethod
     def load_tlds(cls):
         try:
-            f = open(cls.MASTERFILE, 'r')
+            f = open(cls.MASTERFILE, 'r',encoding="utf8")
             lines = f.readlines()
         except FileNotFoundError as e:
             print("File not readable, not found %s",e)
