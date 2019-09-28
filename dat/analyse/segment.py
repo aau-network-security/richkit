@@ -3,7 +3,6 @@ import urllib.request, urllib.error, urllib.parse
 import os
 from dat.analyse.util import temp_directory
 
-
 class OneGramDist(dict):
 
    URL="https://gist.githubusercontent.com/mrturkmen06/d9d5f8bc35be8efd81c447f70ca99fbf/raw/cfa317d7bce53ba55ca8f9bf27aa3170038f99cf/one-grams.txt"
@@ -11,7 +10,7 @@ class OneGramDist(dict):
    @classmethod
    def fetch_one_grams(cls, url=None):
       url = url
-      print('fetching one gram file from gist ...')
+      print('Fetching one gram file from gist ..')
       lines = urllib.request.urlopen(cls.URL).readlines()
       f = open(cls.FILEPATH, 'wb')
       f.writelines(lines)
