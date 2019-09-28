@@ -1,9 +1,9 @@
-from os import path
-import urllib3
-import urllib.request, urllib.error, urllib.parse
-import wget
+import ssl
 import tempfile
-
+import urllib.error
+import urllib.parse
+import urllib.request
+from os import path
 
 
 class TempFile:
@@ -113,15 +113,22 @@ def load_words(path_to_data="data/top-1m.csv"):
     return words
 
 class TldMatcher(object):
-    # use class vars for lazy loading
-    MASTERURL = "https://publicsuffix.org/list/effective_tld_names.dat"
-    MASTERFILE = temp_directory.name+"effective_tld_names.dat"
+    MASTERURL = "http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1"
+    MASTERFILE = temp_directory.name + 'effective_tld_names_icann.dat'
     TLDS = None
 
     @classmethod
     def fetch_tlds(cls, url=None):
         url = url or cls.MASTERURL
-        wget.download(cls.MASTERURL,cls.MASTERFILE)
+
+        # grab master list
+        print('fetching TLD list from server ...')
+        gcontext = ssl.SSLContext()
+        lines = urllib.request.urlopen(url, context=gcontext).readlines()
+
+        f = open(cls.MASTERFILE, 'wb')
+        f.writelines(lines)
+        f.close()
 
     @classmethod
     def load_tlds(cls):
