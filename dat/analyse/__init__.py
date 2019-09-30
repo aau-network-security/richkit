@@ -29,7 +29,7 @@ def tld(domain):
     raise NotImplementedError()
 
 
-def 2ld(domain):
+def t2ld(domain):
     """Returns the Effective Second-Level Domain (2LD) (aka Apex Domain).
 
     The 2LD, aka the Apex Domain, is extracted from the domain, using
@@ -43,7 +43,7 @@ def 2ld(domain):
     raise NotImplementedError()
 
 
-def 2label(domain):
+def t2label(domain):
     """Returns the Effective 2-level label.
 
     .. todo:: Implement this.
@@ -53,7 +53,7 @@ def 2label(domain):
     raise NotImplementedError()
 
 
-def nld(domain, n)
+def nld(domain, n):
     """Returns the Effective N'th-Level Domain (eNLD).
 
     .. todo:: Implement this.
