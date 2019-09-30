@@ -15,6 +15,7 @@ exists.
 
 """
 
+from dat.analyse import analyse
 
 # aka tld
 def tld(domain):
@@ -26,10 +27,10 @@ def tld(domain):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_tld(domain)
 
 
-def t2ld(domain):
+def sld(domain):
     """Returns the Effective Second-Level Domain (2LD) (aka Apex Domain).
 
     The 2LD, aka the Apex Domain, is extracted from the domain, using
@@ -40,7 +41,7 @@ def t2ld(domain):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_sld(domain)
 
 
 def t2label(domain):
@@ -89,18 +90,20 @@ def depth(domain):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    domain_name_features = analyse.get_domain_name_features(domain)
+    return domain_name_features.get("num_tokens", "")
 
 
 # aka len
 def length(domain):
-    """Retuns the sum of count of characters for all labels.
+    """Returns the sum of count of characters for all labels.
 
     .. todo:: Implement this.
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    domain_name_features = analyse.get_domain_name_features(domain)
+    return domain_name_features.get("len_domain", "")
 
 
 def language(domain):
@@ -110,7 +113,7 @@ def language(domain):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_language(domain)
 
 
 # aka entropy2ld (approximately)
@@ -121,7 +124,7 @@ def entropy(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_entropy_2ld(s)
 
 
 # aka ratio_vowels_2ld (approximately)
@@ -132,7 +135,7 @@ def ratio_vowels(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_ratio_vowels_2ld(s)
 
 
 # aka num_vowels_2ld (approximately)
@@ -143,7 +146,7 @@ def number_vowels(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_num_of_vowels_2ld(s)
 
 
 # aka ratio_consonants_2ld (approximately)
@@ -154,7 +157,7 @@ def ratio_consonants(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_ratio_consonants_2ld(s)
 
 
 # aka num_consonants_2ld (approximately)
@@ -165,7 +168,7 @@ def number_consonants(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_num_of_consonants_2ld(s)
 
 
 # aka ratio_numeric_2ld (approximately)
@@ -198,7 +201,7 @@ def ratio_specials(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_ratio_special_2ld(s)
 
 
 # aka num_special_2ld (approximately)
@@ -209,7 +212,7 @@ def number_specials(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_num_of_special_2ld(s)
 
 
 # aka num_word_2ld (approximately)
@@ -220,26 +223,26 @@ def number_words(s):
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_num_words_2ld(s)
 
 
 # aka grams_alexa2ld
-def n_grams_alexa(s):
+def n_grams_alexa(domain):
     """Returns similarity to distribution of N-grams in Alexa Top 1M.
 
     .. todo:: Implement this.
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_grams_alexa_2ld(domain)
 
 
 # aka grams_dict2ld
-def n_grams_alexa(s):
+def n_grams_dict(domain):
     """Returns similarity to distribution of N-grams in English dictionary
 
     .. todo:: Implement this.
     .. todo:: Test this.
 
     """
-    raise NotImplementedError()
+    return analyse.get_grams_dict_2ld(domain)
