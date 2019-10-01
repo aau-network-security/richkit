@@ -23,8 +23,7 @@ def tld(domain):
 
     The eTLD is extracted from the domain,
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     return analyse.get_tld(domain)
@@ -37,8 +36,7 @@ def sld(domain):
     the `list of public suffixes <https://publicsuffix.org/list/>`_
     maintained by Mozilla
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     return analyse.get_sld(domain)
@@ -47,8 +45,7 @@ def sld(domain):
 def t2label(domain):
     """Returns the Effective 2-level label.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     raise NotImplementedError()
@@ -57,8 +54,8 @@ def t2label(domain):
 def nld(domain, n):
     """Returns the Effective N'th-Level Domain (eNLD).
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
+    :param n:
 
     """
     raise NotImplementedError()
@@ -67,8 +64,8 @@ def nld(domain, n):
 def nlabel(domain, n):
     """Returns the Effective N'th-level label.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
+    :param n:
 
     """
     raise NotImplementedError()
@@ -86,8 +83,7 @@ def depth(domain):
     effectively. With effectively two labels, the effective depth is
     two.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     domain_name_features = analyse.get_domain_name_features(domain)
@@ -98,8 +94,7 @@ def depth(domain):
 def length(domain):
     """Returns the sum of count of characters for all labels.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     domain_name_features = analyse.get_domain_name_features(domain)
@@ -109,8 +104,7 @@ def length(domain):
 def language(domain):
     """Returns the best gues for the language of the domain.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     return analyse.get_language(domain)
@@ -120,8 +114,7 @@ def language(domain):
 def entropy(s):
     """Returns the entropy of characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_entropy_2ld(s)
@@ -131,8 +124,7 @@ def entropy(s):
 def ratio_vowels(s):
     """Returns the ratio vowels to all characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_ratio_vowels_2ld(s)
@@ -142,8 +134,7 @@ def ratio_vowels(s):
 def number_vowels(s):
     """Returns the number vowels to all characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_num_of_vowels_2ld(s)
@@ -153,8 +144,7 @@ def number_vowels(s):
 def ratio_consonants(s):
     """Returns the ratio consonants to all characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_ratio_consonants_2ld(s)
@@ -164,8 +154,7 @@ def ratio_consonants(s):
 def number_consonants(s):
     """Returns the number consonants to all characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_num_of_consonants_2ld(s)
@@ -175,30 +164,28 @@ def number_consonants(s):
 def ratio_numerics(s):
     """Returns the ratio numeric characters to all characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
-    raise NotImplementedError()
+    return analyse.get_radio_numeric_2ld(s)
 
 
 # aka num_numeric_2ld (approximately)
 def number_numerics(s):
     """Returns the number numeric characters to all characters in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
-    raise NotImplementedError()
+    return analyse.get_num_numeric_2ld(s)
 
 
 # aka ratio_special_2ld (approximately)
 def ratio_specials(s):
     """Returns the ratio special characters to all characters in s.
+    The default special character list is "~`!@#$%^&*()_={}[]:>;',</?*-+"
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_ratio_special_2ld(s)
@@ -207,9 +194,9 @@ def ratio_specials(s):
 # aka num_special_2ld (approximately)
 def number_specials(s):
     """Returns the number special characters to all characters in s.
+    The default special character list is "~`!@#$%^&*()_={}[]:>;',</?*-+".
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_num_of_special_2ld(s)
@@ -219,8 +206,7 @@ def number_specials(s):
 def number_words(s):
     """Returns the number of English word found in s.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param s: Domain (string)
 
     """
     return analyse.get_num_words_2ld(s)
@@ -230,8 +216,7 @@ def number_words(s):
 def n_grams_alexa(domain):
     """Returns similarity to distribution of N-grams in Alexa Top 1M.
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     return analyse.get_grams_alexa_2ld(domain)
@@ -241,8 +226,7 @@ def n_grams_alexa(domain):
 def n_grams_dict(domain):
     """Returns similarity to distribution of N-grams in English dictionary
 
-    .. todo:: Implement this.
-    .. todo:: Test this.
+    :param domain: Domain (string)
 
     """
     return analyse.get_grams_dict_2ld(domain)
