@@ -12,6 +12,8 @@ from dat.analyse.analyse import get_entropy_2ld
 from dat.analyse.analyse import get_ratio_vowels_2ld
 from dat.analyse.analyse import get_ratio_special_2ld
 from dat.analyse.analyse import get_ratio_consonants_2ld
+from dat.analyse.analyse import get_num_numeric_2ld
+from dat.analyse.analyse import get_radio_numeric_2ld
 
 class TestAnalyse(unittest.TestCase):
 	def setUp(self):
@@ -70,3 +72,9 @@ class TestAnalyse(unittest.TestCase):
 
 	def test_get_ratio_special_2ld(self):
 		assert get_ratio_special_2ld(self.domain) == '0.0'
+
+	def test_get_num_numer_2ld(self):
+		assert get_num_numeric_2ld(self.domain) == '0'
+
+	def test_get_radio_numer_2ld(self):
+		assert get_radio_numeric_2ld(self.domain) == '0.0'
