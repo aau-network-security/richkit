@@ -29,6 +29,10 @@ def get_tld(domain):
 	return tld
 
 def get_sld(domain):
+	"""
+	:param domain:
+	:return:
+	"""
 	tldmatch = TldMatcher()
 	try:
 		sld = tldmatch.get_2ld(domain)
@@ -190,3 +194,20 @@ def ngram_count(domain, counts, counts_vc):
 	"""
 	match = counts * counts_vc.transform([domain]).T
 	return str(match[0])
+
+def get_num_numeric_2ld(s):
+	"""
+
+	:param domain:
+	:return: ratio of special characters in 2ld
+	"""
+	return str(len([c for c in s if c.isdigit()]))
+
+
+def get_radio_numeric_2ld(s):
+	"""
+
+	:param domain:
+	:return: ratio of special characters in 2ld
+	"""
+	return  str(float(get_num_numeric_2ld(s)) / float(len(get_sld(s))))
