@@ -31,7 +31,8 @@ Todo: Describe how the module is structured.
 
 # Features Function for analyse examples
 
-Below the functions for analyses with the respective outputs. This is the domain as input `www.support.gooogle.co.uk`
-
-- tld(domain) -> 'co.uk'                Returns the Effective Top-Level Domain (eTLD)
-- sld(domain) -> 'google.co.uk'         Returns the Effective Second-Level Domain (2LD)
+Below the functions for analyses with the respective outputs. This is the input domain `www.support.gooogle.co.uk`
+```
+- tld(domain) -> 'co.uk'
+- sld(domain) -> 'google.co.uk'
+```
