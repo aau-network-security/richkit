@@ -172,6 +172,11 @@ class TldMatcher(object):
         tlds = self.get_tld(url).split('.')
         return urls[-1 - len(tlds)]
 
+    def get_nld(self, url, n):
+        urls = url.split('.')
+        tlds = self.get_tld(url).split('.')
+        return urls[-n - len(tlds)]
+
 
 tldmatch = TldMatcher()
 

@@ -19,7 +19,8 @@ from dat.analyse import analyse
 
 # aka tld
 def tld(domain):
-    """Returns the Effective Top-Level Domain (eTLD) (aka Public Suffix).
+    """
+    Returns the Effective Top-Level Domain (eTLD) (aka Public Suffix).
 
     The eTLD is extracted from the domain,
 
@@ -30,7 +31,8 @@ def tld(domain):
 
 
 def sld(domain):
-    """Returns the Effective Second-Level Domain (2LD) (aka Apex Domain).
+    """
+    Returns the Effective Second-Level Domain (2LD) (aka Apex Domain).
 
     The 2LD, aka the Apex Domain, is extracted from the domain, using
     the `list of public suffixes <https://publicsuffix.org/list/>`_
@@ -42,39 +44,41 @@ def sld(domain):
     return analyse.get_sld(domain)
 
 
-def t2label(domain):
-    """Returns the Effective 2-level label.
+def sl_label(domain):
+    """
+    Returns the Effective 2-level label.
 
     :param domain: Domain (string)
 
     """
-    raise NotImplementedError()
+    return analyse.get_2l_label(domain)
 
 
 def nld(domain, n):
-    """Returns the Effective N'th-Level Domain (eNLD).
+    """
+    Returns the Effective N'th-Level Domain (eNLD).
 
     :param domain: Domain (string)
-    :param n:
+    :param n: N'th-Level (int)
 
     """
-    raise NotImplementedError()
+    return analyse.get_nld(domain, n)
 
 
-def nlabel(domain, n):
-    """Returns the Effective N'th-level label.
+def n_label(domain, n):
+    """
+    Returns the Effective N'th-level label.
 
     :param domain: Domain (string)
-    :param n:
+    :param n: N'th-Level (int)
 
     """
-    raise NotImplementedError()
+    return analyse.get_nld(domain, n)
 
 
-
-# aka num_tokens
 def depth(domain):
-    """Returns the effective depth of the domain,
+    """
+    Returns the effective depth of the domain,
 
     The depth is the number of labels in the domain.
 
@@ -90,9 +94,9 @@ def depth(domain):
     return domain_name_features.get("num_tokens", "")
 
 
-# aka len
 def length(domain):
-    """Returns the sum of count of characters for all labels.
+    """
+    Returns the sum of count of characters for all labels.
 
     :param domain: Domain (string)
 
@@ -102,7 +106,8 @@ def length(domain):
 
 
 def language(domain):
-    """Returns the best gues for the language of the domain.
+    """
+    Returns the best gues for the language of the domain.
 
     :param domain: Domain (string)
 
@@ -110,9 +115,9 @@ def language(domain):
     return analyse.get_language(domain)
 
 
-# aka entropy2ld (approximately)
 def entropy(s):
-    """Returns the entropy of characters in s.
+    """
+    Returns the entropy of characters in s.
 
     :param s: Domain (string)
 
@@ -120,9 +125,9 @@ def entropy(s):
     return analyse.get_entropy_2ld(s)
 
 
-# aka ratio_vowels_2ld (approximately)
 def ratio_vowels(s):
-    """Returns the ratio vowels to all characters in s.
+    """
+    Returns the ratio vowels to all characters in s.
 
     :param s: Domain (string)
 
@@ -130,9 +135,9 @@ def ratio_vowels(s):
     return analyse.get_ratio_vowels_2ld(s)
 
 
-# aka num_vowels_2ld (approximately)
 def number_vowels(s):
-    """Returns the number vowels to all characters in s.
+    """
+    Returns the number vowels to all characters in s.
 
     :param s: Domain (string)
 
@@ -140,9 +145,9 @@ def number_vowels(s):
     return analyse.get_num_of_vowels_2ld(s)
 
 
-# aka ratio_consonants_2ld (approximately)
 def ratio_consonants(s):
-    """Returns the ratio consonants to all characters in s.
+    """
+    Returns the ratio consonants to all characters in s.
 
     :param s: Domain (string)
 
@@ -150,9 +155,9 @@ def ratio_consonants(s):
     return analyse.get_ratio_consonants_2ld(s)
 
 
-# aka num_consonants_2ld (approximately)
 def number_consonants(s):
-    """Returns the number consonants to all characters in s.
+    """
+    Returns the number consonants to all characters in s.
 
     :param s: Domain (string)
 
@@ -160,9 +165,9 @@ def number_consonants(s):
     return analyse.get_num_of_consonants_2ld(s)
 
 
-# aka ratio_numeric_2ld (approximately)
 def ratio_numerics(s):
-    """Returns the ratio numeric characters to all characters in s.
+    """
+    Returns the ratio numeric characters to all characters in s.
 
     :param s: Domain (string)
 
@@ -170,9 +175,9 @@ def ratio_numerics(s):
     return analyse.get_radio_numeric_2ld(s)
 
 
-# aka num_numeric_2ld (approximately)
 def number_numerics(s):
-    """Returns the number numeric characters to all characters in s.
+    """
+    Returns the number numeric characters to all characters in s.
 
     :param s: Domain (string)
 
@@ -180,9 +185,9 @@ def number_numerics(s):
     return analyse.get_num_numeric_2ld(s)
 
 
-# aka ratio_special_2ld (approximately)
 def ratio_specials(s):
-    """Returns the ratio special characters to all characters in s.
+    """
+    Returns the ratio special characters to all characters in s.
     The default special character list is "~`!@#$%^&*()_={}[]:>;',</?*-+"
 
     :param s: Domain (string)
@@ -191,9 +196,9 @@ def ratio_specials(s):
     return analyse.get_ratio_special_2ld(s)
 
 
-# aka num_special_2ld (approximately)
 def number_specials(s):
-    """Returns the number special characters to all characters in s.
+    """
+    Returns the number special characters to all characters in s.
     The default special character list is "~`!@#$%^&*()_={}[]:>;',</?*-+".
 
     :param s: Domain (string)
@@ -202,9 +207,9 @@ def number_specials(s):
     return analyse.get_num_of_special_2ld(s)
 
 
-# aka num_word_2ld (approximately)
 def number_words(s):
-    """Returns the number of English word found in s.
+    """
+    Returns the number of English word found in s.
 
     :param s: Domain (string)
 
@@ -212,9 +217,9 @@ def number_words(s):
     return analyse.get_num_words_2ld(s)
 
 
-# aka grams_alexa2ld
 def n_grams_alexa(domain):
-    """Returns similarity to distribution of N-grams in Alexa Top 1M.
+    """
+    Returns similarity to distribution of N-grams in Alexa Top 1M.
 
     :param domain: Domain (string)
 
@@ -222,9 +227,9 @@ def n_grams_alexa(domain):
     return analyse.get_grams_alexa_2ld(domain)
 
 
-# aka grams_dict2ld
 def n_grams_dict(domain):
-    """Returns similarity to distribution of N-grams in English dictionary
+    """
+    Returns similarity to distribution of N-grams in English dictionary
 
     :param domain: Domain (string)
 
