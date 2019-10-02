@@ -29,3 +29,9 @@ Todo: Describe the data model of FQDN > APEX Domain > Public Suffix > TLD
 
 Todo: Describe how the module is structured.
 
+# Features Function for analyse examples
+
+Below the functions for analyses with the respective outputs. This is the domain as input `www.support.gooogle.co.uk`
+
+- tld(domain) -> 'co.uk'                Returns the Effective Top-Level Domain (eTLD)
+- sld(domain) -> 'google.co.uk'         Returns the Effective Second-Level Domain (2LD)
