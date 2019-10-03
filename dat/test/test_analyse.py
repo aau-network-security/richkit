@@ -22,7 +22,7 @@ class TestAnalyse(unittest.TestCase):
 	def test_get_domain_name_features(self):
 		domain_features  = get_domain_name_features(self.domain)
 		if (domain_features['num_tokens'] == '4') and \
-				(domain_features['len2ld']== '6') and \
+				(domain_features['len2ld']== '12') and \
 				(domain_features['len_domain']=='13'):
 			self.assertEqual(True,True)
 		else:
@@ -31,7 +31,7 @@ class TestAnalyse(unittest.TestCase):
 
 	def test_get_tld(self):
 		domain_tld = get_tld(self.domain)
-		assert domain_tld == "uk"
+		assert domain_tld == "co.uk"
 
 
 	def test_get_language(self):
@@ -40,7 +40,7 @@ class TestAnalyse(unittest.TestCase):
 
 	def test_get_entropy_2ld(self):
 		entropy = get_entropy_2ld(self.domain)
-		assert entropy == '1.9182958340544893'
+		assert entropy == '2.8553885422075336'
 
 	@unittest.skip("Skipping alexa test, tested locally")
 	def test_get_grams_alexa_2ld(self):
@@ -58,14 +58,17 @@ class TestAnalyse(unittest.TestCase):
 
 	def test_get_num_of_vowels_2ld(self):
 		vowels = get_num_of_vowels_2ld(self.domain)
-		assert  vowels == '3'
+		assert  vowels == '5'
+
 	def test_get_ratio_vowels_2ld(self):
 		ratio_vowels  = get_ratio_vowels_2ld(self.domain)
-		assert ratio_vowels == '0.5'
+		assert ratio_vowels == '0.4166666666666667'
+
 	def test_get_num_of_consonants_2ld(self):
-		assert get_num_of_consonants_2ld(self.domain) == '3'
+		assert get_num_of_consonants_2ld(self.domain) == '5'
+
 	def test_get_ratio_consonants_2ld(self):
-		assert get_ratio_consonants_2ld(self.domain) == '0.5'
+		assert get_ratio_consonants_2ld(self.domain) == '0.4166666666666667'
 
 	def test_get_num_of_special_2ld(self):
 		assert get_num_of_special_2ld(self.domain) == '0'

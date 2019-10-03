@@ -73,7 +73,7 @@ def n_label(domain, n):
     :param n: N'th-Level (int)
 
     """
-    return analyse.get_nld(domain, n)
+    return analyse.get_n_label(domain, n)
 
 
 def depth(domain):
