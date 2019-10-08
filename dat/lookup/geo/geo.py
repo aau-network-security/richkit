@@ -48,7 +48,7 @@ def get_asn(ip_address):
         asn_db_path = asn_db.get_db_path()
         reader = maxminddb.open_database(asn_db_path)
         result =  reader.get(ip_address)
-        country_code = str(result['autonomous_system_number'])
+        asn = str(result['autonomous_system_number'])
     except:
-        country_code = ""
-    return country_code
+        asn = ""
+    return asn
