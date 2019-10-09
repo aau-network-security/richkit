@@ -29,3 +29,28 @@ Todo: Describe the data model of FQDN > APEX Domain > Public Suffix > TLD
 
 Todo: Describe how the module is structured.
 
+# Features Function for analyse examples
+
+Below the functions for analyses with the respective outputs. This is the input domain `www.support.gooogle.co.uk`, s equal to the domain as well and n = `4`
+```
+- tld(domain) -> 'co.uk'
+- sld(domain) -> 'google.co.uk'
+- sl_label(domain) -> 'google'
+- nld(domain, n) -> 'www.support.gooogle.co.uk'
+- n_label(domain, n) -> 'www'
+- depth(domain) -> '5'
+- length(domain) -> '20'
+- language(domain) -> 'en'
+- entropy(s) -> '2.8553885422075336'
+- ratio_vowels(s) -> '0.4166666666666667'
+- number_vowels(s) -> '5'
+- ratio_consonants(s) -> '0.4166666666666667'
+- number_consonants(s) -> '5'
+- ratio_numerics(s) -> '0.0'
+- number_numerics(s) -> '0'
+- ratio_specials(s) -> '0.0'
+- number_specials(s) -> '0'
+- number_words(s) -> '0'
+- n_grams_alexa(domain) -> ''
+- n_grams_dict(domain) -> ''
+```
