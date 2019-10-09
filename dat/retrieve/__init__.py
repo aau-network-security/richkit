@@ -6,7 +6,28 @@ any sort. It comes without the "confidentiality contract" of
 
 """
 from dat.retrieve import symantec
+from dat.retrieve import dns
 
 def symantec_category(domain):
-    """Returns the category from Symantec's BlueCoat service."""
+    """
+    Returns the category from Symantec's BlueCoat service.
+    :param domain:
+    :return:
+    """
     return symantec.fetch_from_internet(domain)
+
+def dns_a(domain):
+    """
+    Return the A Records of a given domain
+    :param domain: domain (string)
+    :return: IP Addresses (list)
+    """
+    return dns.get_a_record(domain)
+
+def dns_ptr(ip_address):
+    """
+    Return the PTR record of a given IP address
+    :param ip_adress: IP Address (string)
+    :return: domains (list)
+    """
+    return dns.get_ptr_record(ip_address)
