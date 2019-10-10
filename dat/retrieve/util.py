@@ -12,30 +12,58 @@ class URLVoid(object):
 		url = "https://www.urlvoid.com/scan/" + self.domain
 		res = requests.get(url)
 		text = res.text
-		soup = BeautifulSoup(text, "lxml").find("table", class_="table table-custom table-striped")
-		all_tr = soup.find_all("tr")
-		value = {tr.find_all("td")[0].text:
-					 tr.find_all("td")[1].text.replace("\xa0", "")
-				 for tr in all_tr}
-
+		try:
+			soup = BeautifulSoup(text, "lxml").find("table", class_="table table-custom table-striped")
+			all_tr = soup.find_all("tr")
+			value = {tr.find_all("td")[0].text:
+						 tr.find_all("td")[1].text.replace("\xa0", "")
+					 for tr in all_tr}
+		except ModuleNotFoundError as me:
+			print("Opps ! Error : %s",me)
 		return value
 
 	def get_last_analysis_date(self):
-		return self.urlvoid_parser()["Last Analysis"][:-9]
+		try:
+			result = self.value["Last Analysis"][:-9]
+		except KeyError as ke:
+			print(f'Error while retrieving value; {ke} ')
+		return result
 
 	def domain_registration_date(self):
-		return self.value["Domain Registration"]
+		try:
+			result = self.value["Domain Registration"]
+		except KeyError as ke:
+			print(f' DRD: Error while retrieving value; {ke} ')
+		return result
 
 	def blacklist_status (self):
-		return self.value["Blacklist Status"]
+		try:
+			result = self.value["Blacklist Status"]
+		except KeyError as ke:
+			print(f' Blacklist status: Error while retrieving value; {ke} ')
+		return result
+
 
 	def get_asn(self):
-		return self.value["ASN"]
+		try:
+			result = self.value["ASN"]
+		except KeyError as ke:
+			print(f' ASN: Error while retrieving value; {ke} ')
+		return result
+
 
 	def get_server_location(self):
-		return self.value["Server Location"]
+		try:
+			result = self.value["Server Location"]
+		except KeyError as ke:
+			print(f' Server Location : Error while retrieving value; {ke} ')
+		return result
+
 
 	def get_detection_rate(self):
-		parts= self.blacklist_status().split("/")
-		return int(parts[0])/int(parts[1])*100
-
+		try:
+			parts = self.blacklist_status().split("/")
+			result = int(parts[0]) / int(parts[1]) * 100
+		except IndexError as ie:
+			print(f'Detection rate : Error while retrieving value; {ie} ')
+		return result
