@@ -2,7 +2,7 @@ import unittest
 from dat import analyse
 
 
-class TestAnalyse2(unittest.TestCase):
+class TestAnalyse(unittest.TestCase):
     def setUp(self):
         self.domain = {
             'www.google.co.uk': {
