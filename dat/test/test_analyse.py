@@ -2,6 +2,7 @@ import unittest
 from dat import analyse
 
 
+
 class TestAnalyse(unittest.TestCase):
     def setUp(self):
         self.domain = {
@@ -148,3 +149,5 @@ class TestAnalyse(unittest.TestCase):
     def test_get_grams_dict_2ld(self):
         grams_dict_2ld = analyse.n_grams_dict(self.domain)
         assert grams_dict_2ld == '25.77346214958408'
+        
+	

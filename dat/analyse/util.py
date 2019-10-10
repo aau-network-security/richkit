@@ -5,7 +5,6 @@ import urllib.parse
 import urllib.request
 from os import path
 
-
 class TempFile:
     tempfile = tempfile.TemporaryDirectory()
     def __init__(self):
