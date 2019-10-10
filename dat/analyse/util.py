@@ -2,7 +2,7 @@ from os import path
 import urllib3
 import urllib.request, urllib.error, urllib.parse
 import tempfile
-
+import wget
 class TempFile:
     tempfile = tempfile.TemporaryDirectory()
     def __init__(self):
