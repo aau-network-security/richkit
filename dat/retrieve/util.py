@@ -59,6 +59,12 @@ class URLVoid(object):
 			print(f' Server Location : Error while retrieving value; {ke} ')
 		return result
 
+	def get_ip_address(self):
+		try:
+			result = self.value["IP Address"]
+		except KeyError as ke:
+			print(f' IP Address: Error while retrieving value; {ke} ')
+		return result
 
 	def get_detection_rate(self):
 		try:
