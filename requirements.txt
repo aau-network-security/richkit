@@ -6,3 +6,4 @@ urllib3==1.25.6
 bs4==0.0.1
 lxml==4.4.1
 wget==3.2
+requests==2.22.0
