@@ -6,7 +6,8 @@ parties. The module might fetch resources, such as lists or
 databasese, but this must be done in a way that keeps the domain name
 confidential. Contrast this with `dat.retrieve`."""
 
-from dat.lookup.geo import geo
+from dat.lookup import geo
+
 
 def country(ip_address):
     """"
