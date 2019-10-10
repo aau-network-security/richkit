@@ -1,10 +1,7 @@
 from os import path
 import urllib3
 import urllib.request, urllib.error, urllib.parse
-import wget
 import tempfile
-
-
 
 class TempFile:
     tempfile = tempfile.TemporaryDirectory()
