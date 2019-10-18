@@ -47,8 +47,8 @@ def get_asn(ip_address):
         asn_db = MaxMind_ASN_DB()
         asn_db_path = asn_db.get_db_path()
         reader = maxminddb.open_database(asn_db_path)
-        result =  reader.get(ip_address)
-        asn = str(result['autonomous_system_number'])
+        result = reader.get(ip_address)
+        asn = "AS" + str(result['autonomous_system_number'])
     except:
         asn = ""
     return asn
