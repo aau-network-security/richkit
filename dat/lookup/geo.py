@@ -1,6 +1,6 @@
 import maxminddb
-from dat.lookup.geo.util import MaxMind_CC_DB
-from dat.lookup.geo.util import MaxMind_ASN_DB
+from dat.lookup.util import MaxMind_CC_DB
+from dat.lookup.util import MaxMind_ASN_DB
 
 def get_country(ip_address):
     """
@@ -16,7 +16,7 @@ def get_country(ip_address):
         result =  reader.get(ip_address)
         country_code = str(result['country']['iso_code'])
     except:
-        country_code = ""
+        country_code = ''
     return country_code
 
 def get_registered_country(ip_address):
@@ -33,7 +33,7 @@ def get_registered_country(ip_address):
         result =  reader.get(ip_address)
         country_code = str(result['registered_country']['iso_code'])
     except:
-        country_code = ""
+        country_code = ''
     return country_code
 
 def get_asn(ip_address):
@@ -48,7 +48,7 @@ def get_asn(ip_address):
         asn_db_path = asn_db.get_db_path()
         reader = maxminddb.open_database(asn_db_path)
         result = reader.get(ip_address)
-        asn = "AS" + str(result['autonomous_system_number'])
+        asn = str('AS' + str(result['autonomous_system_number']))
     except:
-        asn = ""
+        asn = ''
     return asn
