@@ -10,5 +10,5 @@ class LookupTestCase(unittest.TestCase):
         assert country == 'US'
 
     def test_asn(self):
-        asn = lookup.asn("8.8.8.")
+        asn = lookup.asn("8.8.8.8")
         assert asn == 'AS15169'
