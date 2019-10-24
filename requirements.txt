@@ -8,4 +8,4 @@ lxml==4.4.1
 requests==2.22.0
 whois==0.9.3
 pytest
-pytest-conv
+pytest-cov==2.8.1
