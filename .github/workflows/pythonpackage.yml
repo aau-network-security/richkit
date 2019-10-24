@@ -37,16 +37,14 @@ jobs:
         coverage run --source=dat -m unittest discover
     - name: Generate report through coverage
       run: |
-        coverage report > /Users/runner/hostedtoolcache/coverage_report.txt
+        coverage report > coverage_report.txt
     - name: Upload code coverage as artifact
       uses: actions/upload-artifact@v1
       with:
         name: coverage_report.txt
-        path: /Users/runner/hostedtoolcache/coverage_report.txt
+        path: coverage_report.txt
     - name: Build documentation
       run: |
         pip install sphinx
         cd docs
         make html
-    - name: Clean up temp/
-      run: rm -rf temp/
