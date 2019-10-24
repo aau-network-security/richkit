@@ -14,8 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - if: matrix.os == 'windows-latest'
-        shell: cmd
+    - name: Set shell for windows
+      if: matrix.os == 'windows-latest'
+      shell: cmd
     - run: mkdir -p temp/
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
