@@ -1,0 +1,3 @@
+[run]
+include = dat/test/*
+omit = *migrations*, *tests*
