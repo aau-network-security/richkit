@@ -10,11 +10,10 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.7]
-        os: [ubuntu-latest, macOS-latest]
+        os: [windows-latest,ubuntu-latest, macOS-latest]
 
     steps:
     - uses: actions/checkout@v1
-    - run: mkdir -p temp/
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
@@ -35,12 +34,12 @@ jobs:
         coverage run -m
     - name: Generate report through coverage
       run: |
-        coverage report > temp/coverage_report.txt
+        coverage report > /github/home/coverage_report.txt
     - name: Upload code coverage as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: coverage_report
-        path: temp/coverage_report.txt
+        name: coverage_report.txt
+        path: /github/home/coverage_report.txt
     - name: Build documentation
       run: |
         pip install sphinx
