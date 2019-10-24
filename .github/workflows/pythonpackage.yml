@@ -31,7 +31,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with coverage
       run: |
-        coverage run -m
+        coverage run --source=dat -m unittest discover
     - name: Generate report through coverage
       run: |
         coverage report > /github/home/coverage_report.txt
