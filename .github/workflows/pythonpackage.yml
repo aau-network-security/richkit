@@ -37,7 +37,7 @@ jobs:
         coverage run --source=dat -m unittest discover
     - name: Generate report through coverage
       run: |
-        coverage report > /github/home/coverage_report.txt
+        coverage report > /Users/runner/hostedtoolcache/coverage_report.txt
     - name: Upload code coverage as artifact
       uses: actions/upload-artifact@v1
       with:
