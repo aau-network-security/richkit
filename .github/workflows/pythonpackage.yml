@@ -31,8 +31,18 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip install pytest
         pytest
+    - name: Coverage
+      run: |
+        coverage run --source=dat -m unittest discover
+    - name: Generate report through coverage
+      run: |
+        coverage report > coverage_report.txt
+    - name: Upload code coverage as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: coverage_report.txt
+        path: coverage_report.txt
     - name: Build documentation
       run: |
         pip install sphinx
