@@ -50,8 +50,8 @@ class TestAnalyse(unittest.TestCase):
 		grams_dict_2ld  = get_grams_dict_2ld(self.domain)
 		assert grams_dict_2ld == '25.77346214958408'
 
-	def test_get_num_words_2ld(self,domain = 'www.google.co.uk'):
-		num_words_2ld = get_num_words_2ld(domain)
+	def test_get_num_words_2ld(self):
+		num_words_2ld = get_num_words_2ld(self.domain)
 		assert  num_words_2ld =='0'
 
 	def test_get_num_of_vowels_2ld(self):

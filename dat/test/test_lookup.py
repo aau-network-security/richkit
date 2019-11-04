@@ -1,5 +1,3 @@
-import sys
-#sys.path.extend(['/home/gian/Desktop/git-repos/domain-analysis-toolkit'])
 from dat import lookup
 import unittest
 

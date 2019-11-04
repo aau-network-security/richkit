@@ -1,41 +1,29 @@
 from os import path
-import urllib3
-import urllib.request, urllib.error, urllib.parse
-import wget
+import requests
 import tempfile
 
-
-
-class TempFile:
-    tempfile = tempfile.TemporaryDirectory()
-    def __init__(self):
-        self.tempfile=tempfile
-    def get_temporary_folder(self):
-        return self.tempfile.gettempdir()
-
-temp_directory = TempFile.tempfile
+temp_directory = tempfile.mkdtemp()
 
 class WordMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "http://www.greenteapress.com/thinkpython/code/words.txt"
-    MASTERFILE = temp_directory.name+"words.txt"
+    MASTERFILE = temp_directory + "/words.txt"
     WORDS = None
 
     @classmethod
     def fetch_words(cls, url=None):
         url = url or cls.MASTERURL
-
-        # grab master list
-        print ('fetching WORD list from server ...')
-        lines = urllib.request.urlopen(cls.MASTERURL).readlines()
-
-        f = open(cls.MASTERFILE, 'wb')
-        f.writelines(lines)
-        f.close()
+        print('Fetching WORD list from server ...')
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            with open(cls.MASTERFILE, 'wb') as file:
+                file.write(response.content)
+        else:
+            print('Error while downloading the WORD list ...')
 
     @classmethod
     def load_words(cls):
-        f = open(cls.MASTERFILE, 'r')
+        f = open(cls.MASTERFILE, 'r', encoding="utf8")
         lines = f.readlines()
         f.close()
 
@@ -98,14 +86,16 @@ def load_alexa(limit=None):
 def load_words(path_to_data="data/top-1m.csv"):
     TOP_1M_URL="https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
     if path.exists(path_to_data):
-        f = open(path_to_data, 'r',encoding="utf8")
+        f = open(path_to_data, 'r', encoding="utf8")
         lines = f.readlines()
         f.close()
     else:
-        lines = urllib.request.urlopen(TOP_1M_URL).readlines()
-        f = open(path_to_data,'w',encoding="utf8")
-        f.writelines(str(lines))
-        f.close()
+        response = requests.get(TOP_1M_URL, stream=True)
+        if response.status_code == 200:
+            with open(path_to_data, 'wb') as file:
+                file.write(response.content)
+        else:
+            print('Error while downloading the TOP 1M URL list ...')
     # strip whitespaces
     # only words with more than three letters are considered
     lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
@@ -115,21 +105,26 @@ def load_words(path_to_data="data/top-1m.csv"):
 class TldMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "https://publicsuffix.org/list/effective_tld_names.dat"
-    MASTERFILE = temp_directory.name+"effective_tld_names.dat"
+    MASTERFILE = temp_directory +"/effective_tld_names.dat"
     TLDS = None
 
     @classmethod
     def fetch_tlds(cls, url=None):
         url = url or cls.MASTERURL
-        wget.download(cls.MASTERURL,cls.MASTERFILE)
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            with open(cls.MASTERFILE, 'wb') as file:
+                file.write(response.content)
+        else:
+            print('Error while downloading the Public Suffix List ...')
 
     @classmethod
     def load_tlds(cls):
         try:
-            f = open(cls.MASTERFILE, 'r',encoding="utf8")
+            f = open(cls.MASTERFILE, 'r', encoding="utf8")
             lines = f.readlines()
         except FileNotFoundError as e:
-            print("File not readable, not found %s",e)
+            print("File not readable, not found %s", e)
             f.close()
         f.close()
 

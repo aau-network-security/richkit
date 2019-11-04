@@ -4,7 +4,6 @@ from collections import Counter
 import langid
 import numpy as np
 from dat.analyse.segment import segment
-from dat.analyse.util import get_2ld
 from sklearn.feature_extraction.text import CountVectorizer
 from dat.analyse.util import WordMatcher
 from dat.analyse.util import load_alexa
