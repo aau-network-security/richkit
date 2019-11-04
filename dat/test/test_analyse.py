@@ -1,6 +1,6 @@
 import unittest
 from dat import analyse
-
+from dat.analyse.util import TestEffect2LD
 
 
 class TestAnalyse(unittest.TestCase):
@@ -149,5 +149,58 @@ class TestAnalyse(unittest.TestCase):
     def test_get_grams_dict_2ld(self):
         grams_dict_2ld = analyse.n_grams_dict(self.domain)
         assert grams_dict_2ld == '25.77346214958408'
-        
-	
+
+    def test_correctly_tlds(self):
+        tests = TestEffect2LD()
+        test_list = tests.get_tests()
+        list = []
+
+        list_punycode_tests = [
+            'xn--85x722f.xn--55qx5d.cn',
+            'xn--85x722f.xn--fiqs8s',
+            'xn--55qx5d.cn',
+            'shishi.xn--55qx5d.cn',
+            'www.xn--85x722f.xn--fiqs8s',
+            'www.xn--85x722f.xn--55qx5d.cn',
+            'shishi.xn--fiqs8s'
+        ]
+
+        list_test_error = [
+            '公司.cn',
+            '中国',
+            'biz',
+            'jp',
+            'us',
+            'com',
+            'a.b.example.example',
+            'b.example.example',
+            'example.example',
+            '.example.com',
+            '.com',
+        ]
+
+        for i in test_list:
+            values = i.split(',')
+            input = values[0].replace("'", "")
+            expected = values[1].replace("'", "")
+            if expected == "None":
+                expected = None
+
+            if input in list_punycode_tests or input in list_test_error:
+                continue
+            else:
+                sld_value = analyse.sld(input)
+                #print(values[0], expected, sld_value)
+                a = sld_value == expected
+                if a:
+                   continue
+                else:
+                    list.append(input)
+        print(list)
+        print(len(list))
+        print(len(test_list))
+
+    def test_aa(self):
+        sld_value = analyse.sld('xn--85x722f.xn--55qx5d.cn')
+        print(sld_value)
+        assert sld_value == 'example.example'

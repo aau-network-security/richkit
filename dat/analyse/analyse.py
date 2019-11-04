@@ -24,9 +24,9 @@ def get_tld(domain):
 	"""
 	tldmatch = TldMatcher()
 	try:
-		tld = tldmatch.get_tld(domain)
+		tld = tldmatch.get_tld(domain.lower())
 	except:
-		tld = domain.split(".")[-1]
+		tld = None
 	return tld
 
 def get_sld(domain):
@@ -36,12 +36,16 @@ def get_sld(domain):
 	:param domain: Domain (string)
 	:return: Effective Second-Level Domain
 	"""
-	tldmatch = TldMatcher()
-	try:
-		sld = tldmatch.get_2ld(domain)
-	except:
-		sld = domain.split(".")[-2]
-	return '.'.join([sld, get_tld(domain)])
+	tld = get_tld(domain.lower())
+	if tld is not None:
+		tldmatch = TldMatcher()
+		try:
+			sld = tldmatch.get_2ld(domain.lower())
+			return '.'.join([sld, tld])
+		except:
+			return None		#return None if the SLD does not exist
+	else:
+		return None			#return None if the TLD does not exist
 
 def get_2l_label(domain):
 	"""

@@ -196,3 +196,53 @@ def get_2ld(domain):
         return domain
     else:
         return '.'.join(sdomain[-index:])
+
+class TestEffect2LD(object):
+    MASTERURL = "https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt"
+    MASTERFILE = temp_directory.name + 'correct_test.txt'
+    test = None
+
+    @classmethod
+    def fetch_tlds(cls, url=None):
+        url = url or cls.MASTERURL
+
+        # grab master list
+        print('Fetching Test list from server ...')
+        gcontext = ssl.SSLContext()
+        lines = urllib.request.urlopen(url, context=gcontext).readlines()
+
+        f = open(cls.MASTERFILE, 'wb')
+        f.writelines(lines)
+        f.close()
+
+    @classmethod
+    def load_tlds(cls):
+        try:
+            f = open(cls.MASTERFILE, 'r',encoding="utf8")
+            lines = f.readlines()
+        except FileNotFoundError as e:
+            print("File not readable, not found %s",e)
+            f.close()
+        f.close()
+
+        # strip comments and blank lines
+        lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
+
+        cls.test = set(lines)
+
+    def __init__(self):
+
+        if path.exists(TestEffect2LD.MASTERFILE):
+            TestEffect2LD.load_tlds()
+
+        if TestEffect2LD.test is None:
+            TestEffect2LD.fetch_tlds()
+            TestEffect2LD.load_tlds()
+
+    def get_tests(self):
+        test_list = []
+        for i in TestEffect2LD.test:
+            parser = i[i.find("(")+1:i.find(")")]
+            test_list.append(parser.replace(" ", "").replace("null", "'None'"))
+        return test_list
+
