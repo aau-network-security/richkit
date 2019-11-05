@@ -4,6 +4,7 @@ from dat.analyse.util import TestEffect2LD
 
 
 class TestAnalyse(unittest.TestCase):
+  
     def setUp(self):
         self.domain = {
             'www.google.co.uk': {
@@ -199,4 +200,3 @@ class TestAnalyse(unittest.TestCase):
                 continue
             else:
                 assert analyse.sld(input) == expected
-

@@ -8,5 +8,9 @@ any sort. It comes without the "confidentiality contract" of
 from dat.retrieve import symantec
 
 def symantec_category(domain):
-    """Returns the category from Symantec's BlueCoat service."""
+    """
+    Returns the category from Symantec's BlueCoat service.
+    :param domain:
+    :return:
+    """
     return symantec.fetch_from_internet(domain)
