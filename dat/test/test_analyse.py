@@ -153,8 +153,8 @@ class TestAnalyse(unittest.TestCase):
     def test_correctly_tlds(self):
         tests = TestEffect2LD()
         test_list = tests.get_tests()
-        list = []
 
+        #Test skipped for this list since punycode are not handled by this library
         list_punycode_tests = [
             'xn--85x722f.xn--55qx5d.cn',
             'xn--85x722f.xn--fiqs8s',
@@ -165,6 +165,7 @@ class TestAnalyse(unittest.TestCase):
             'shishi.xn--fiqs8s'
         ]
 
+        #Test skipped for obvious invalid domains
         list_test_error = [
             '公司.cn',
             '中国',
@@ -179,6 +180,14 @@ class TestAnalyse(unittest.TestCase):
             '.com',
         ]
 
+        #Test skipped for domains starting with esclamation point on the Public Suffix list
+        list_esclamation_point = [
+            'www.ck',
+            'www.city.kobe.jp',
+            'www.www.ck',
+            'city.kobe.jp'
+        ]
+
         for i in test_list:
             values = i.split(',')
             input = values[0].replace("'", "")
@@ -186,21 +195,8 @@ class TestAnalyse(unittest.TestCase):
             if expected == "None":
                 expected = None
 
-            if input in list_punycode_tests or input in list_test_error:
+            if input in list_punycode_tests or input in list_test_error or input in list_esclamation_point:
                 continue
             else:
-                sld_value = analyse.sld(input)
-                #print(values[0], expected, sld_value)
-                a = sld_value == expected
-                if a:
-                   continue
-                else:
-                    list.append(input)
-        print(list)
-        print(len(list))
-        print(len(test_list))
+                assert analyse.sld(input) == expected
 
-    def test_aa(self):
-        sld_value = analyse.sld('xn--85x722f.xn--55qx5d.cn')
-        print(sld_value)
-        assert sld_value == 'example.example'

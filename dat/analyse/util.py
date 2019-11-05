@@ -115,6 +115,7 @@ class TldMatcher(object):
     MASTERURL = "http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1"
     MASTERFILE = temp_directory.name + 'effective_tld_names_icann.dat'
     TLDS = None
+    No_TLDS = None
 
     @classmethod
     def fetch_tlds(cls, url=None):
@@ -140,9 +141,12 @@ class TldMatcher(object):
         f.close()
 
         # strip comments and blank lines
-        lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
+        stripped_lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
 
-        cls.TLDS = set(lines)
+        excluded_lines = [ln.strip('!') for ln in (ln.strip() for ln in lines) if len(ln) and ln[:1] == '!']
+
+        cls.TLDS = set(stripped_lines)
+        cls.No_TLDS = set(excluded_lines)
 
     def __init__(self):
 
@@ -160,9 +164,12 @@ class TldMatcher(object):
         for start in range(len(chunks) - 1, -1, -1):
             test = '.'.join(chunks[start:])
             startest = '.'.join(['*'] + chunks[start + 1:])
-
             if test in TldMatcher.TLDS or startest in TldMatcher.TLDS:
                 best_match = test
+
+        #return an Error since is not clear on the PS List which is the TLD of the domain marked with '!'
+        if best_match in TldMatcher.No_TLDS:
+            raise NotImplementedError()
 
         return best_match
 
