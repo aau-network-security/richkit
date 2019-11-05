@@ -1,4 +1,3 @@
-requests
 maxminddb
 numpy==1.17.2
 onetimepad==1.4
