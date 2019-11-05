@@ -17,23 +17,89 @@ def entropy(s):
 
 def get_tld(domain):
 	"""
-	:param domain:
-	:return:
+	Get the Effective Top-Level Domain (eTLD) (not the label)
+
+	:param domain: Domain (string)
+	:return: Effective Top-Level Domain (eTLD)
 	"""
 	tldmatch = TldMatcher()
 	try:
-		tld = tldmatch.gettld(domain)
+		tld = tldmatch.get_tld(domain)
 	except:
 		tld = domain.split(".")[-1]
 	return tld
 
 def get_sld(domain):
+	"""
+	Get the Effective Second-Level Domain (not the label)
+
+	:param domain: Domain (string)
+	:return: Effective Second-Level Domain
+	"""
+	tldmatch = TldMatcher()
+	try:
+		sld = tldmatch.get_2ld(domain)
+	except:
+		sld = domain.split(".")[-2]
+	return '.'.join([sld, get_tld(domain)])
+
+def get_2l_label(domain):
+	"""
+	Get the Effective 2-level label.
+
+	:param domain: Domain (string)
+	:return: Effective Second-Level label
+	"""
 	tldmatch = TldMatcher()
 	try:
 		sld = tldmatch.get_2ld(domain)
 	except:
 		sld = domain.split(".")[-2]
 	return sld
+
+def get_nld(domain, n):
+	"""
+	Get the Effective N'th-level Domain.
+
+	:param domain: Domain (string)
+	:param n: Label number (int)
+	:return: Effective N'th-level Domain
+	"""
+	if abs(n) == 1 :
+		nld = get_tld(domain)
+	elif len(domain.split('.')) <= n:
+		nld = None
+	else:
+		nld = ""
+		try:
+			for i in range(1, abs(n)):
+				nld = '.'.join([get_n_label(domain, i+1), nld])
+			nld = nld+get_tld(domain)
+		except IndexError:
+			nld = None
+	return nld
+
+def get_n_label(domain, n):
+	"""
+	Get the Effective N'th-level label.
+
+	:param domain: Domain (string)
+	:param n: Label number (int)
+	:return: Effective N'th-level label
+	"""
+	if abs(n) == 1 :
+		n_label = get_tld(domain)
+	elif abs(n) == 2:
+		n_label = get_2l_label(domain)
+	else:
+		tldmatch = TldMatcher()
+		try:
+			n_label = tldmatch.get_nld(domain, abs(n) - 1)
+		except IndexError:
+			n_label = None
+		except Exception:
+			n_label = domain.split(".")[-abs(n) -1]	
+	return n_label
 
 def get_domain_name_features(domain):
 	"""
@@ -189,3 +255,20 @@ def ngram_count(domain, counts, counts_vc):
 	"""
 	match = counts * counts_vc.transform([domain]).T
 	return str(match[0])
+
+def get_num_numeric_2ld(s):
+	"""
+
+	:param domain:
+	:return: ratio of special characters in 2ld
+	"""
+	return str(len([c for c in s if c.isdigit()]))
+
+
+def get_radio_numeric_2ld(s):
+	"""
+
+	:param domain:
+	:return: ratio of special characters in 2ld
+	"""
+	return  str(float(get_num_numeric_2ld(s)) / float(len(get_sld(s))))

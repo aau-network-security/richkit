@@ -4,6 +4,7 @@ import tempfile
 
 temp_directory = tempfile.mkdtemp()
 
+
 class WordMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "http://www.greenteapress.com/thinkpython/code/words.txt"
@@ -106,17 +107,20 @@ class TldMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "https://publicsuffix.org/list/effective_tld_names.dat"
     MASTERFILE = temp_directory +"/effective_tld_names.dat"
+
     TLDS = None
 
     @classmethod
     def fetch_tlds(cls, url=None):
         url = url or cls.MASTERURL
+
         response = requests.get(url, stream=True)
         if response.status_code == 200:
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
             print('Error while downloading the Public Suffix List ...')
+
 
     @classmethod
     def load_tlds(cls):
@@ -159,6 +163,11 @@ class TldMatcher(object):
         urls = url.split('.')
         tlds = self.get_tld(url).split('.')
         return urls[-1 - len(tlds)]
+
+    def get_nld(self, url, n):
+        urls = url.split('.')
+        tlds = self.get_tld(url).split('.')
+        return urls[-n - len(tlds)]
 
 
 tldmatch = TldMatcher()
