@@ -6,6 +6,7 @@ from dat.retrieve.symantec import load_categories
 from dat.retrieve.symantec import categories_url
 from dat.retrieve.util import URLVoid
 
+
 class RetrieveTestCase(unittest.TestCase):
     test_urls = {
         "google.co.uk": {
