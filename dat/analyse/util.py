@@ -109,6 +109,7 @@ class TldMatcher(object):
     MASTERFILE = temp_directory +"/effective_tld_names.dat"
 
     TLDS = None
+    No_TLDS = None
 
     @classmethod
     def fetch_tlds(cls, url=None):
@@ -133,9 +134,12 @@ class TldMatcher(object):
         f.close()
 
         # strip comments and blank lines
-        lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
+        stripped_lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
 
-        cls.TLDS = set(lines)
+        excluded_lines = [ln.strip('!') for ln in (ln.strip() for ln in lines) if len(ln) and ln[:1] == '!']
+
+        cls.TLDS = set(stripped_lines)
+        cls.No_TLDS = set(excluded_lines)
 
     def __init__(self):
 
@@ -156,6 +160,10 @@ class TldMatcher(object):
 
             if test in TldMatcher.TLDS or startest in TldMatcher.TLDS:
                 best_match = test
+
+        #return an Error since is not clear on the PS List which is the TLD of the domain marked with '!'
+        if best_match in TldMatcher.No_TLDS:
+            raise NotImplementedError()
 
         return best_match
 
@@ -189,3 +197,52 @@ def get_2ld(domain):
         return domain
     else:
         return '.'.join(sdomain[-index:])
+
+class TestEffect2LD(object):
+    MASTERURL = "https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt"
+    MASTERFILE = temp_directory + 'correct_test.txt'
+    test = None
+
+    @classmethod
+    def fetch_tlds(cls, url=None):
+        url = url or cls.MASTERURL
+
+        # grab master list
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            with open(cls.MASTERFILE, 'wb') as file:
+                file.write(response.content)
+        else:
+            print('Error while downloading the Test List ...')
+
+
+    @classmethod
+    def load_tlds(cls):
+        try:
+            f = open(cls.MASTERFILE, 'r',encoding="utf8")
+            lines = f.readlines()
+        except FileNotFoundError as e:
+            print("File not readable, not found %s",e)
+            f.close()
+        f.close()
+
+        # strip comments and blank lines
+        lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
+
+        cls.test = set(lines)
+
+    def __init__(self):
+
+        if path.exists(TestEffect2LD.MASTERFILE):
+            TestEffect2LD.load_tlds()
+
+        if TestEffect2LD.test is None:
+            TestEffect2LD.fetch_tlds()
+            TestEffect2LD.load_tlds()
+
+    def get_tests(self):
+        test_list = []
+        for i in TestEffect2LD.test:
+            parser = i[i.find("(")+1:i.find(")")]
+            test_list.append(parser.replace(" ", "").replace("null", "'None'"))
+        return test_list

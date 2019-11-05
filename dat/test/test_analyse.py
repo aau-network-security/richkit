@@ -1,7 +1,6 @@
 import unittest
 from dat import analyse
-
-
+from dat.analyse.util import TestEffect2LD
 
 class TestAnalyse(unittest.TestCase):
   
@@ -150,4 +149,53 @@ class TestAnalyse(unittest.TestCase):
     def test_get_grams_dict_2ld(self):
         grams_dict_2ld = analyse.n_grams_dict(self.domain)
         assert grams_dict_2ld == '25.77346214958408'
-        
+
+    def test_correctly_tlds(self):
+        tests = TestEffect2LD()
+        test_list = tests.get_tests()
+
+        # Test skipped for this list since punycode are not handled by this library
+        list_punycode_tests = [
+            'xn--85x722f.xn--55qx5d.cn',
+            'xn--85x722f.xn--fiqs8s',
+            'xn--55qx5d.cn',
+            'shishi.xn--55qx5d.cn',
+            'www.xn--85x722f.xn--fiqs8s',
+            'www.xn--85x722f.xn--55qx5d.cn',
+            'shishi.xn--fiqs8s'
+        ]
+
+        # Test skipped for obvious invalid domains
+        list_test_error = [
+            '公司.cn',
+            '中国',
+            'biz',
+            'jp',
+            'us',
+            'com',
+            'a.b.example.example',
+            'b.example.example',
+            'example.example',
+            '.example.com',
+            '.com',
+        ]
+
+        # Test skipped for domains starting with esclamation point on the Public Suffix list
+        list_esclamation_point = [
+            'www.ck',
+            'www.city.kobe.jp',
+            'www.www.ck',
+            'city.kobe.jp'
+        ]
+
+        for i in test_list:
+            values = i.split(',')
+            input = values[0].replace("'", "")
+            expected = values[1].replace("'", "")
+            if expected == "None":
+                expected = None
+
+            if input in list_punycode_tests or input in list_test_error or input in list_esclamation_point:
+                continue
+            else:
+                assert analyse.sld(input) == expected
