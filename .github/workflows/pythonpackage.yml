@@ -37,7 +37,7 @@ jobs:
         pytest
     - name: Coverage
       run: |
-        coverage run --source=dat -m unittest discover
+        coverage run --source=richkit -m unittest discover
     - name: Generate report through coverage
       run: |
         coverage report > coverage_report.txt
