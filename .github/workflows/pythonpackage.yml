@@ -2,9 +2,9 @@ name: Python package
 
 on: 
   push:
-    paths: 
-      - 'richkit/*'
-      - 'docs/*'
+    paths-ignore:
+      - 'README.md'
+      - 'LICENCE'
 jobs:
   test:
     runs-on: ${{ matrix.os }}
