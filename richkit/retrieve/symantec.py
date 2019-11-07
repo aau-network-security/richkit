@@ -31,7 +31,6 @@ from xml.etree.ElementTree import fromstring
 import urllib.request
 from urllib.request import urlopen, build_opener
 import re
-import onetimepad
 from pathlib import Path
 salt = '<if we want to anonymize urls than we can give hash to salt >'
 """
@@ -177,11 +176,6 @@ def check_for_local(url):
         if url in domains[key]:
             result = key
     return result
-
-
-def anonymize_url(URL):
-    anonURL = onetimepad.encrypt(URL, salt)
-    return anonURL
 
 
 def get_index(category):
