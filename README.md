@@ -1,4 +1,4 @@
-# Domain Analysis Toolkit
+# RichKit
 
 The Domain Analysis Toolkit (dat) is a python3 package that provides
 tools taking a domain name as input, and returns addtional information
