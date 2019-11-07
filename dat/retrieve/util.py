@@ -1,6 +1,12 @@
 import requests
 from bs4 import BeautifulSoup, NavigableString
 import whois
+import sys
+import logging
+logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    level=logging.DEBUG) ## default logging level is WARNING, making it DEBUG !
+logger = logging.getLogger(__name__)
 
 
 class URLVoid(object):
@@ -24,7 +30,7 @@ class URLVoid(object):
 						 tr.find_all("td")[1].text.replace("\xa0", "")
 					 for tr in all_tr}
 		except ModuleNotFoundError as me:
-			print("Opps ! Error : %s", me)
+			logger.error("Opps ! Error : %s", me)
 		return value
 
 	def get_last_analysis_date(self):
@@ -35,7 +41,7 @@ class URLVoid(object):
 		try:
 			result = self.value["Last Analysis"][:-9]
 		except KeyError as ke:
-			print(f'Error while retrieving value; {ke} ')
+			logger.error('Error while retrieving value',ke)
 		return result
 
 	def domain_registration_date(self):
@@ -46,7 +52,8 @@ class URLVoid(object):
 		try:
 			result = self.value["Domain Registration"]
 		except KeyError as ke:
-			print(f' DRD: Error while retrieving value; {ke} ')
+
+			logger.error(f' DRD: Error while retrieving value; %s ',ke)
 		return result
 
 	def blacklist_status(self):
@@ -57,7 +64,8 @@ class URLVoid(object):
 		try:
 			result = self.value["Blacklist Status"]
 		except KeyError as ke:
-			print(f' Blacklist status: Error while retrieving value; {ke} ')
+
+			logger.error(' Blacklist status: Error while retrieving value; %s ', ke)
 		return result
 
 	def get_asn(self):
@@ -68,7 +76,7 @@ class URLVoid(object):
 		try:
 			result = self.value["ASN"]
 		except KeyError as ke:
-			print(f' ASN: Error while retrieving value; {ke} ')
+			logger.error('ASN: Error while retrieving value; %s ',ke)
 		return result
 
 	def get_server_location(self):
@@ -79,7 +87,8 @@ class URLVoid(object):
 		try:
 			result = self.value["Server Location"]
 		except KeyError as ke:
-			print(f' Server Location : Error while retrieving value; {ke} ')
+
+			logger.error(' Server Location : Error while retrieving value; %s ',ke)
 		return result
 
 	def get_ip_address(self):
@@ -90,7 +99,7 @@ class URLVoid(object):
 		try:
 			result = self.value["IP Address"]
 		except KeyError as ke:
-			print(f' IP Address: Error while retrieving value; {ke} ')
+			logger.error(' IP Address: Error while retrieving value; %s ',ke)
 		return result
 
 	def get_detection_rate(self):
@@ -102,7 +111,7 @@ class URLVoid(object):
 			parts = self.blacklist_status().split("/")
 			result = int(parts[0]) / int(parts[1]) * 100
 		except IndexError as ie:
-			print(f'Detection rate : Error while retrieving value; {ie} ')
+			logger.error('Detection rate : Error while retrieving value; %s ',ie)
 		return result
 
 	def get_whois_info(self):

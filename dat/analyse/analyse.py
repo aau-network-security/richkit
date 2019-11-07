@@ -1,6 +1,5 @@
 import math
 from collections import Counter
-
 import langid
 import numpy as np
 from dat.analyse.segment import segment
@@ -9,7 +8,6 @@ from dat.analyse.util import WordMatcher
 from dat.analyse.util import load_alexa
 from dat.analyse.util import load_words
 from dat.analyse.util import TldMatcher
-
 
 def entropy(s):
     p, lns = Counter(s), float(len(s))

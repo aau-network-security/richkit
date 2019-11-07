@@ -1,7 +1,12 @@
 from os import path
 import requests
 import tempfile
-
+import sys
+import logging
+logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
 
 
@@ -14,13 +19,14 @@ class WordMatcher(object):
     @classmethod
     def fetch_words(cls, url=None):
         url = url or cls.MASTERURL
-        print('Fetching WORD list from server ...')
+
+        logger.info('Fetching word list from server ...')
         response = requests.get(url, stream=True)
         if response.status_code == 200:
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the WORD list ...')
+            logger.error('Error while downloading the word list response code %s ',str(response.status_code))
 
     @classmethod
     def load_words(cls):
@@ -34,7 +40,7 @@ class WordMatcher(object):
         cls.WORDS = {}
         for item in lines:
             cls.WORDS[item] = None
-        #cls.WORDS = set(lines)
+        # cls.WORDS = set(lines)
 
     def __init__(self):
 
@@ -96,7 +102,7 @@ def load_words(path_to_data="data/top-1m.csv"):
             with open(path_to_data, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the TOP 1M URL list ...')
+            logger.error('Error while downloading the TOP 1M URL list status code : %s',str(response.status_code))
     # strip whitespaces
     # only words with more than three letters are considered
     lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
@@ -120,7 +126,8 @@ class TldMatcher(object):
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the Public Suffix List ...')
+
+            logger.error('Error while downloading the Public Suffix List status code %s ',str(response.status_code))
 
 
     @classmethod
@@ -129,7 +136,7 @@ class TldMatcher(object):
             f = open(cls.MASTERFILE, 'r', encoding="utf8")
             lines = f.readlines()
         except FileNotFoundError as e:
-            print("File not readable, not found %s", e)
+            logger.exception('File not readable, not found %s', e)
             f.close()
         f.close()
 
@@ -213,7 +220,7 @@ class TestEffect2LD(object):
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the Test List ...')
+            logger.error('Error while downloading the Test List status code: %s',response.status_code)
 
 
     @classmethod
@@ -222,7 +229,8 @@ class TestEffect2LD(object):
             f = open(cls.MASTERFILE, 'r',encoding="utf8")
             lines = f.readlines()
         except FileNotFoundError as e:
-            print("File not readable, not found %s",e)
+
+            logger.error("File not readable, not found %s",e)
             f.close()
         f.close()
 
