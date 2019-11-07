@@ -1,18 +1,17 @@
-from setuptools import setup, findpackages
+import setuptools
 from os import path
-
-root = path.abspath(path.dirname(__path__))
+root = path.curdir
 with open(path.join(root, 'README.md'), encoding='utf-8') as f:
 	long_description = f.read()
 
-setup(
+setuptools.setup(
 	name='richkit',
 	description='Domain analysis toolkit',
 	version='0.0.1',
 	long_description=long_description,
 	long_description_content_type='text/markdown',
 	url='https://github.com/aau-network-security/richkit',
-	packages=findpackages(exclude=['docs', 'richkit/test']),
+	packages=setuptools.find_packages(exclude=['docs', 'richkit/test']),
 	project_urls={  # Optional
 		'Bug Reports': 'https://github.com/aau-network-security/richkit/issues',
 		'Funding'    : 'https://donate.pypi.org',
