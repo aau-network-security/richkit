@@ -1,4 +1,4 @@
-from dat import lookup
+from richkit import lookup
 import unittest
 
 class LookupTestCase(unittest.TestCase):

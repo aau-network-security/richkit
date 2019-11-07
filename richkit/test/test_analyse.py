@@ -1,5 +1,5 @@
 import unittest
-from dat import analyse
+from richkit import analyse
 from richkit.analyse.util import TestEffect2LD
 
 class TestAnalyse(unittest.TestCase):
