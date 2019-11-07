@@ -1,6 +1,6 @@
 import math
 import requests
-import os,sys
+import os
 from dat.analyse.util import temp_directory
 import logging
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
