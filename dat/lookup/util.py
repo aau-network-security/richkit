@@ -2,10 +2,15 @@ import requests
 import os, subprocess
 import time, calendar, shutil
 import tempfile
-
+import logging
+logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
 
 class MaxMind_CC_DB(object):
+
     """
     This class provides functions to download, extract and get the path of the
     Country database provided by MaxMind
@@ -14,25 +19,29 @@ class MaxMind_CC_DB(object):
     MASTERURL = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz"
     MASTERFILE = temp_directory + "/country.tar.gz"
 
+
+
+
     @classmethod
     def get_db(cls):
         """
         Download the Country database in zip format from the MaxMind website, then extract it
 
         """
-        print('Downloading the Country DB ...')
+        logger.info("Downloading MaxMind_CC_DB... ")
         response = requests.get(cls.MASTERURL, stream=True)
         if response.status_code == 200:
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the Country DB ...')
+            logger.error('Error while downloading the Country DB ...')
 
         if os.path.exists(cls.MASTERFILE):
             subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=temp_directory)
             time.sleep(2)
         else:
-            print('Error exctract DB.')
+            logger.error('Error exctract DB.')
+
 
     def __init__(self):
 
@@ -79,25 +88,26 @@ class MaxMind_ASN_DB():
         Download the Country database in zip format from the MaxMind website, then extract it
 
         """
-        print('Downloading the ASN DB ...')
+        logger.info('Downloading the ASN DB ... ')
         response = requests.get(cls.MASTERURL, stream=True)
         if response.status_code == 200:
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the ASN DB ...')
+            logger.error('Error while downloading the ASN DB ....')
 
         if os.path.exists(cls.MASTERFILE):
             subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=temp_directory)
             time.sleep(2)
         else:
-            print('Error exctract DB.')
+            logger.error('Error extract DB on get_db ')
+
 
     def __init__(self):
 
+
         self.path_db = temp_directory
         self.three_weeks = 1814400  # seconds of 3 weeks  1814400
-
         # check if the database already exists
         if MaxMind_ASN_DB.get_db_path(self) is None:
             MaxMind_ASN_DB.get_db()

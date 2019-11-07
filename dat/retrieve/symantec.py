@@ -31,9 +31,8 @@ from xml.etree.ElementTree import fromstring
 import urllib.request
 from urllib.request import urlopen, build_opener
 import re
-import onetimepad
 from pathlib import Path
-salt = '<if we want to anonymize urls than we can give hash to salt >'
+
 """
 Configuration
 Get one here: http://www1.k9webprotection.com/get-k9-web-protection-free
@@ -48,7 +47,7 @@ k9License = 'Replace_by_your_own_license'
 
 class LocalCategoryDB():
     def __init__(self):
-        ## mail.google.com:'Web Ads'
+
         self.url_to_category = read_categorized_file()
 
     def get_category(self, url):
@@ -162,7 +161,7 @@ def check_for_local(url):
     domains = dict()
     for i in read_categorized_file():
         line = i.split(',')
-        #     print(line[1])
+
         if len(line) == 2:
             if line[1] in domains:
                 # append tyhhe new number to the existing array at this slot
@@ -178,10 +177,6 @@ def check_for_local(url):
             result = key
     return result
 
-
-def anonymize_url(URL):
-    anonURL = onetimepad.encrypt(URL, salt)
-    return anonURL
 
 
 def get_index(category):

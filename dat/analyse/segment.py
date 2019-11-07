@@ -1,7 +1,12 @@
 import math
 import requests
-import os
+import os,sys
 from dat.analyse.util import temp_directory
+import logging
+logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 class OneGramDist(dict):
     URL = "https://gist.githubusercontent.com/mrturkmen06/d9d5f8bc35be8efd81c447f70ca99fbf/raw/cfa317d7bce53ba55ca8f9bf27aa3170038f99cf/one-grams.txt"
@@ -9,14 +14,18 @@ class OneGramDist(dict):
 
     @classmethod
     def fetch_one_grams(cls, url=None):
+        """
+
+        :param url: Fetching one groms file from given URL
+        """
         url = url or cls.URL
-        print('Fetching one gram file from gist ...')
+        logger.info('Fetching one gram file from gist ...')
         response = requests.get(url, stream=True)
         if response.status_code == 200:
             with open(cls.FILEPATH, 'wb') as file:
                 file.write(response.content)
         else:
-            print('Error while downloading the One Gram file ...')
+            logger.error('Error while downloading the One Gram file ...')
 
     def __init__(self, filename):
         self.gramCount = 0
@@ -36,7 +45,7 @@ class OneGramDist(dict):
 if os.path.exists(temp_directory + "/one-grams.txt"):
     singleWordProb = OneGramDist(temp_directory + "/one-grams.txt")
 else:
-    singleWordProb = OneGramDist.fetch_one_grams()
+    OneGramDist.fetch_one_grams()
 
 singleWordProb = OneGramDist(temp_directory + "/one-grams.txt")
 
@@ -46,6 +55,11 @@ def word_seq_fitness(words):
 
 
 def memoize(f):
+    """
+
+    :param f:
+    :return:
+    """
     cache = {}
 
     def memoizedFunction(*args):
@@ -59,6 +73,11 @@ def memoize(f):
 
 @memoize
 def segment(word):
+    """
+
+    :param word:
+    :return:
+    """
     if not word: return []
     word = word.lower()  # change to lower case
     allSegmentations = [[first] + segment(rest) for (first, rest) in splitPairs(word)]
@@ -72,4 +91,4 @@ def splitPairs(word, maxLen=20):
 @memoize
 def segment_with_prob(word):
     segmented = segment(word)
-    return (word_seq_fitness(segmented), segmented)
+    return word_seq_fitness(segmented), segmented
