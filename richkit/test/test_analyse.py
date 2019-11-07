@@ -1,6 +1,6 @@
 import unittest
 from dat import analyse
-from dat.analyse.util import TestEffect2LD
+from richkit.analyse.util import TestEffect2LD
 
 class TestAnalyse(unittest.TestCase):
   

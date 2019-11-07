@@ -106,7 +106,7 @@ def load_words(path_to_data="data/top-1m.csv"):
 class TldMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "https://publicsuffix.org/list/effective_tld_names.dat"
-    MASTERFILE = temp_directory +"/effective_tld_names.dat"
+    MASTERFILE = temp_directory +"/effective_tld_names.richkit"
 
     TLDS = None
     No_TLDS = None

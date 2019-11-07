@@ -2,10 +2,10 @@
 
 This module provides the ability to retrieve data on domain names of
 any sort. It comes without the "confidentiality contract" of
-`dat.lookup`.
+`richkit.lookup`.
 
 """
-from dat.retrieve import symantec
+from richkit.retrieve import symantec
 
 def symantec_category(domain):
     """

@@ -14,17 +14,17 @@ The functionality is organised in the following modules.
 
 Analysis
 --------
-.. automodule:: dat.analyse
+.. automodule:: richkit.analyse
                 :members:
 
 Lookup
 ------
-.. automodule:: dat.lookup
+.. automodule:: richkit.lookup
                 :members:
 
 Retrieve
 --------
-.. automodule:: dat.retrieve
+.. automodule:: richkit.retrieve
                 :members:
 
 Indices and tables

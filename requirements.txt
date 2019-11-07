@@ -1,6 +1,5 @@
 maxminddb
 numpy==1.17.2
-onetimepad==1.4
 scikit-learn==0.21.3
 langid==1.1.6
 urllib3==1.25.6

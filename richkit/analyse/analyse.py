@@ -3,12 +3,12 @@ from collections import Counter
 
 import langid
 import numpy as np
-from dat.analyse.segment import segment
+from richkit.analyse.segment import segment
 from sklearn.feature_extraction.text import CountVectorizer
-from dat.analyse.util import WordMatcher
-from dat.analyse.util import load_alexa
-from dat.analyse.util import load_words
-from dat.analyse.util import TldMatcher
+from richkit.analyse.util import WordMatcher
+from richkit.analyse.util import load_alexa
+from richkit.analyse.util import load_words
+from richkit.analyse.util import TldMatcher
 
 
 def entropy(s):

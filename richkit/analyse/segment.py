@@ -1,7 +1,7 @@
 import math
 import requests
 import os
-from dat.analyse.util import temp_directory
+from richkit.analyse.util import temp_directory
 
 class OneGramDist(dict):
     URL = "https://gist.githubusercontent.com/mrturkmen06/d9d5f8bc35be8efd81c447f70ca99fbf/raw/cfa317d7bce53ba55ca8f9bf27aa3170038f99cf/one-grams.txt"

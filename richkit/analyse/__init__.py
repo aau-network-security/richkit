@@ -1,7 +1,7 @@
 """Analysis and computations on domain names.
 
 This module provides functions that can be applied to a domain
-name. Similarly to `dat.lookup`, and in contrast to `dat.retrieve`,
+name. Similarly to `richkit.lookup`, and in contrast to `richkit.retrieve`,
 this is done without disclosing the domain name to third parties and
 breaching confidentiality.
 
@@ -15,7 +15,7 @@ exists.
 
 """
 
-from dat.analyse import analyse
+from richkit.analyse import analyse
 
 # aka tld
 def tld(domain):

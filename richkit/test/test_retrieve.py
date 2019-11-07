@@ -1,10 +1,10 @@
 import os.path
 import unittest
-from dat.retrieve.symantec import fetch_from_internet
-from dat.retrieve.symantec import fetch_categories
-from dat.retrieve.symantec import load_categories
-from dat.retrieve.symantec import categories_url
-from dat.retrieve.util import URLVoid
+from richkit.retrieve.symantec import fetch_from_internet
+from richkit.retrieve.symantec import fetch_categories
+from richkit.retrieve.symantec import load_categories
+from richkit.retrieve.symantec import categories_url
+from richkit.retrieve.util import URLVoid
 
 
 class RetrieveTestCase(unittest.TestCase):
