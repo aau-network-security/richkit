@@ -4,10 +4,9 @@ on:
   push:
     paths: 
       - 'richkit/*'
-
+      - 'docs/*'
 jobs:
-  build:
-
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 4
