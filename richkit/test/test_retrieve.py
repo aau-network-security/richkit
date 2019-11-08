@@ -18,7 +18,11 @@ class RetrieveTestCase(unittest.TestCase):
             "detection_rate": 0,
             "ip_address": "172.217.19.227",
             "a_record": ['172.217.19.195', '172.217.17.67'],
-            "ptr_record": ['ams16s30-in-f67.1e100.net.', 'ams16s31-in-f3.1e100.net.', 'ams16s30-in-f3.1e100.net.']
+            "ptr_record": [
+                'ams16s30-in-f67.1e100.net.',
+                'ams16s31-in-f3.1e100.net.',
+                'ams16s30-in-f3.1e100.net.'
+            ]
         },
         "facebook.com": {
             "domain_registration": "1997-03-29",
@@ -32,11 +36,11 @@ class RetrieveTestCase(unittest.TestCase):
         },
     }
 
-    def test_fetch_categories(self, categories_file_path='categories_list.txt'):
+    def test_fetch_categories(self, file_path='categories_list.txt'):
         # make sure that categories url is accessible and fetched correctly
-        categories = fetch_categories(categories_url, categories_file_path)
+        categories = fetch_categories(categories_url, file_path)
         assert categories != {}
-        os.remove(categories_file_path)
+        os.remove(file_path)
 
     def test_load_categories(self, categories_file_path='categories_list.txt'):
         if os.path.isfile(categories_file_path):
@@ -46,10 +50,22 @@ class RetrieveTestCase(unittest.TestCase):
         if os.path.isfile(categories_file_path):
             os.remove(categories_file_path)
 
-    def test_fetch_from_internet(self, categories_file_path='categories_list.txt',
-                                 categorized_url_path='categorized_urls.txt'):
-        domain_categories = {"Search Engines/Portals": ["www.bing.com", "www.google.com", "www.yandex.com"],
-                             "Social Networking": ["www.facebook.com", "www.twitter.com"]}
+    def test_fetch_from_internet(
+            self,
+            categories_file_path='categories_list.txt',
+            categorized_url_path='categorized_urls.txt'
+    ):
+        domain_categories = {
+            "Search Engines/Portals": [
+                "www.bing.com",
+                "www.google.com",
+                "www.yandex.com"
+            ],
+            "Social Networking": [
+                "www.facebook.com",
+                "www.twitter.com"
+            ]
+        }
         for category, url_list in domain_categories.items():
             for url in url_list:
                 assert fetch_from_internet(url, categories_file_path, categorized_url_path) == category

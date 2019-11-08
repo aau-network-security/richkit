@@ -1,6 +1,7 @@
 from richkit import lookup
 import unittest
 
+
 class LookupTestCase(unittest.TestCase):
 
     def test_country(self):
