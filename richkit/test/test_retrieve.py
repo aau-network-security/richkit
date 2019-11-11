@@ -98,11 +98,13 @@ class RetrieveTestCase(unittest.TestCase):
             instance = URLVoid(k)
             assert instance.blacklist_status() == v["blacklist_status"]
 
+    @unittest.skip("A Record change every time")
     def test_a_record(self):
         for k, v in self.test_urls.items():
             instance = dns.get_a_record(k)
             assert instance[0] in v["a_record"]
 
+    @unittest.skip("PTR Record change every time")
     def test_ptr_record(self):
         for k, v in self.test_urls.items():
             instance = dns.get_ptr_record(v["a_record"][0])
