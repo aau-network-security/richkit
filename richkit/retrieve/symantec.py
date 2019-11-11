@@ -2,14 +2,14 @@
 
 This is generated to get categories of given urls, normally it fetches
 category from symantec web service then saves it to local file which
-is called `categorized_urls` under `richkit/retrieve/data/`
+is called `categorized_urls` under `dat/retrieve/data/`
 
 
 How to use:
 
 >>> # Import necesseary functions and make a call as demonstrated given below
->>> from richkit.retrieve.symantec import fetch_from_internet
->>> from richkit.retrieve.symantec import LocalCategoryDB
+>>> from dat.retrieve.symantec import fetch_from_internet
+>>> from dat.retrieve.symantec import LocalCategoryDB
 >>> 
 >>> urls = ["www.aau.dk","www.github.com","www.google.com"]
 >>> 
@@ -32,13 +32,13 @@ import urllib.request
 from urllib.request import urlopen, build_opener
 import re
 from pathlib import Path
-salt = '<if we want to anonymize urls than we can give hash to salt >'
+
 """
 Configuration
 Get one here: http://www1.k9webprotection.com/get-k9-web-protection-free
 """
 categories_url = "https://gitlab.com/snippets/1740321/raw"
-data_path = Path("richkit/retrieve/data/")
+data_path = Path("dat/retrieve/data/")
 categories_file_path=data_path / "categories_list.txt"
 categorized_urls_file =data_path / "categorized_urls.txt"
 
@@ -47,7 +47,7 @@ k9License = 'Replace_by_your_own_license'
 
 class LocalCategoryDB():
     def __init__(self):
-        ## mail.google.com:'Web Ads'
+
         self.url_to_category = read_categorized_file()
 
     def get_category(self, url):
@@ -161,7 +161,7 @@ def check_for_local(url):
     domains = dict()
     for i in read_categorized_file():
         line = i.split(',')
-        #     print(line[1])
+
         if len(line) == 2:
             if line[1] in domains:
                 # append tyhhe new number to the existing array at this slot
@@ -176,6 +176,7 @@ def check_for_local(url):
         if url in domains[key]:
             result = key
     return result
+
 
 
 def get_index(category):

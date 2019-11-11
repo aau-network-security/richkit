@@ -1,6 +1,5 @@
 import math
 from collections import Counter
-
 import langid
 import numpy as np
 from richkit.analyse.segment import segment
@@ -9,7 +8,6 @@ from richkit.analyse.util import WordMatcher
 from richkit.analyse.util import load_alexa
 from richkit.analyse.util import load_words
 from richkit.analyse.util import TldMatcher
-
 
 def entropy(s):
     p, lns = Counter(s), float(len(s))
