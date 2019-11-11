@@ -1,7 +1,6 @@
 # richkit
 
-The Domain Analysis Toolkit (dat) is a python3 package that provides
-tools taking a domain name as input, and returns addtional information
+Richkit is a python3 package that provides tools taking a domain name as input, and returns addtional information
 on that domain. It can be an analysis of the domain itself, looked up
 from data-bases, retrieved from other services, or some combination
 thereof.
