@@ -26,6 +26,8 @@ wheels/
 MANIFEST
 .idea/*
 .idea
+
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -48,9 +50,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 .DS_Store
-dat/test/.DS_Store
+richkit/test/.DS_Store
 # Local data
-dat/retrieve/data/*.txt
+richkit/retrieve/data/*.txt
 # Translations
 *.mo
 *.pot

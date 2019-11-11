@@ -1,9 +1,10 @@
 import unittest
-from dat import analyse
-from dat.analyse.util import TestEffect2LD
+from richkit import analyse
+from richkit.analyse.util import TestEffect2LD
+
 
 class TestAnalyse(unittest.TestCase):
-  
+
     def setUp(self):
         self.domain = {
             'www.google.co.uk': {
@@ -154,7 +155,8 @@ class TestAnalyse(unittest.TestCase):
         tests = TestEffect2LD()
         test_list = tests.get_tests()
 
-        # Test skipped for this list since punycode are not handled by this library
+        # Test skipped for the following list
+        # Punycode are not handled by this library
         list_punycode_tests = [
             'xn--85x722f.xn--55qx5d.cn',
             'xn--85x722f.xn--fiqs8s',
@@ -180,7 +182,8 @@ class TestAnalyse(unittest.TestCase):
             '.com',
         ]
 
-        # Test skipped for domains starting with esclamation point on the Public Suffix list
+        # Test skipped for the following domains list
+        # They start with esclamation point on the Public Suffix list
         list_esclamation_point = [
             'www.ck',
             'www.city.kobe.jp',
@@ -195,7 +198,9 @@ class TestAnalyse(unittest.TestCase):
             if expected == "None":
                 expected = None
 
-            if input in list_punycode_tests or input in list_test_error or input in list_esclamation_point:
+            if input in list_punycode_tests or \
+               input in list_test_error or \
+               input in list_esclamation_point:
                 continue
             else:
                 assert analyse.sld(input) == expected

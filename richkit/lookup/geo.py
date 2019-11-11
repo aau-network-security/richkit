@@ -1,6 +1,6 @@
 import maxminddb
-from dat.lookup.util import MaxMind_CC_DB
-from dat.lookup.util import MaxMind_ASN_DB
+from richkit.lookup.util import MaxMind_CC_DB
+from richkit.lookup.util import MaxMind_ASN_DB
 
 def get_country(ip_address):
     """
