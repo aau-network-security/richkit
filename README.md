@@ -23,10 +23,13 @@ In order to install richikit just type in the terminal `pip install richkit`
 
 The following codes can be used to retrieve the TLD and the URL category, respectively.
 
-```
+```python3
 from richkit.analyse import tld
 
-print(tld("www.aau.dk"))
+urls = ["www.aau.dk","www.github.com","www.google.com"]
+
+for url in urls:
+   print(tld(url))
 ```
 
 ```python3
