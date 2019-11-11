@@ -25,6 +25,7 @@ setuptools.setup(
                       'lxml==4.4.1',
                       'requests==2.22.0',
                       'pytest',
+                      'dnspython',
                       'coverage'],
     python_requires='>=3.5',
     author=['Ahmet Turkmen', 'Gian Marco Mennecozzi ', 'Egon Kidmose'],
