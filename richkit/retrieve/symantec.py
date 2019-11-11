@@ -8,8 +8,8 @@ is called `categorized_urls` under `dat/retrieve/data/`
 How to use:
 
 >>> # Import necesseary functions and make a call as demonstrated given below
->>> from dat.retrieve.symantec import fetch_from_internet
->>> from dat.retrieve.symantec import LocalCategoryDB
+>>> from richkit.retrieve.symantec import fetch_from_internet
+>>> from richkit.retrieve.symantec import LocalCategoryDB
 >>> 
 >>> urls = ["www.aau.dk","www.github.com","www.google.com"]
 >>> 
