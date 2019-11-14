@@ -1,5 +1,8 @@
 # richkit
 
+![](https://github.com/aau-network-security/richkit/workflows/.github/workflows/testpackage.yml/badge.svg) [![Documentation Status](https://readthedocs.org/projects/richkit/badge/?version=latest)](https://richkit.readthedocs.io/en/latest/?badge=latest)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  [![Issues](https://img.shields.io/github/issues/aau-network-security/richkit?style=flat-square)](https://github.com/aau-network-security/richkit/issues)
+
+
 Richkit is a python3 package that provides tools taking 
 a domain name as input, and returns addtional information
 on that domain. It can be an analysis of the domain itself, looked up
