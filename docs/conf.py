@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'richkit'
 copyright = '2019, <<<AUTHORS>>>'
 author = '<<<AUTHORS>>>'
+master_doc = 'index'
 
 
 # -- General configuration ---------------------------------------------------
