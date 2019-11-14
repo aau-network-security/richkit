@@ -1,7 +1,7 @@
-Welcome to dat's documentation!
+Welcome to rickit's documentation!
 ===============================
 
-.. automodule:: dat
+.. automodule:: richkit
 
 .. toctree::
    :maxdepth: 2
