@@ -60,6 +60,16 @@ def nld(domain, n):
 
     :param domain: Domain (string)
     :param n: N'th-Level (int)
+    
+    Usage: 
+      
+      from richkit.analyse import nld
+      
+      ## returns second level domain ... 
+      print(nld("www.google.com", 2))
+      
+      ## returns top level domain
+      print(nld("www.google.com",1))
 
     """
     return analyse.get_nld(domain, n)
@@ -68,7 +78,7 @@ def nld(domain, n):
 def n_label(domain, n):
     """
     Returns the Effective N'th-level label.
-
+        
     :param domain: Domain (string)
     :param n: N'th-Level (int)
 
