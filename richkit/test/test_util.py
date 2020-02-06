@@ -14,7 +14,7 @@ def rm_recursive(pth):
         if child.is_file():
             child.unlink()
         else:
-            rm_tree(child)
+            rm_recursive(child)
     # Handle current pth
     if pth.is_file():
         pth.unlink()
@@ -80,7 +80,7 @@ class MaxMind_CC_DBTestCase(unittest.TestCase):
             "/download/geoip/database/GeoLite2-Country.tar.gz"
         )
 
-        with pytest.raises(ConnectionError):
+        with self.assertRaises(ConnectionError):
             #TODO: Can the error logs from this be supressed from here?
             MaxMind_CC_DB.get_db()
 
@@ -89,7 +89,7 @@ class MaxMind_CC_DBTestCase(unittest.TestCase):
         MaxMind_CC_DB.MASTERURL = MaxMind_CC_DB.MASTERURL.replace(
             '?', "THIS_URL_IS_WRONG")
 
-        with pytest.raises(Exception):
+        with self.assertRaises(Exception):
             #TODO: Can the error logs from this be supressed from here?
             MaxMind_CC_DB.get_db()
 
