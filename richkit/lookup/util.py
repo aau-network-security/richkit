@@ -9,7 +9,7 @@ logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
 """
 Lookups in the MaxMind GeoLite2 databases.
 
-A credentials are required as per [#GeoLite2_CCPA_GDPR]_:
+A license key is required as per [#GeoLite2_CCPA_GDPR]_:
 
 #. Sign up for a MaxMind account (no purchase required): https://www.maxmind.com/en/geolite2/signup
 #. Set your password and create a license key: https://www.maxmind.com/en/accounts/current/license-key
@@ -111,7 +111,14 @@ class MaxMind_ASN_DB():
 
     """
 
-    MASTERURL = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz"
+    MASTERURL = ( # https://dev.maxmind.com/geoip/geoipupdate/#Direct_Downloads
+        "https://download.maxmind.com/app/geoip_download?"
+        "edition_id=GeoLite2-ASN&"
+        "license_key={license_key}&"
+        "suffix=tar.gz"
+    ).format(
+        license_key=os.environ['MAXMIND_LICENSE_KEY'],
+    )
     MASTERFILE = temp_directory + "/asn.tar.gz"
 
     @classmethod
@@ -120,13 +127,26 @@ class MaxMind_ASN_DB():
         Download the Country database in zip format from the MaxMind website, then extract it
 
         """
-        logger.info('Downloading the ASN DB ... ')
-        response = requests.get(cls.MASTERURL, stream=True)
+        logger.debug('Downloading the ASN DB ... ')
+        try:
+            response = requests.get(cls.MASTERURL, stream=True)
+        except Exception as e:
+            logger.error('Reraising Exception raised by requests.get ({})'.format(e))
+            raise e
+
         if response.status_code == 200:
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            logger.error('Error while downloading the ASN DB ....')
+            msg = (
+                'Error while downloading the ASN DB '
+                '(Status Code={}): {}'
+            ).format(
+                response.status_code,
+                response.text,
+            )
+            logger.error(msg)
+            raise Exception(msg)
 
         if os.path.exists(cls.MASTERFILE):
             subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=temp_directory)
