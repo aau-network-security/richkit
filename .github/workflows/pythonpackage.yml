@@ -38,6 +38,8 @@ jobs:
       run: |
         pytest
     - name: Coverage
+      env:
+        MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
         coverage run --source=richkit -m unittest discover
     - name: Generate report through coverage
