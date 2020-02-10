@@ -3,9 +3,7 @@ from bs4 import BeautifulSoup, NavigableString
 import whois
 import sys
 import logging
-logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    level=logging.DEBUG) ## default logging level is WARNING, making it DEBUG !
+
 logger = logging.getLogger(__name__)
 
 

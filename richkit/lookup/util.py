@@ -3,9 +3,7 @@ import os, subprocess
 import time, calendar, shutil
 import tempfile
 import logging
-logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    level=logging.DEBUG)
+
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
 
