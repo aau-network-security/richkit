@@ -45,14 +45,14 @@ The following codes can be used to retrieve the TLD and the URL category, respec
 
 - Retriving effective top level domain of a given url: 
   
-      ```python3
-      from richkit.analyse import tld
+  ```python3
+  from richkit.analyse import tld
 
-      urls = ["www.aau.dk","www.github.com","www.google.com"]
+  urls = ["www.aau.dk","www.github.com","www.google.com"]
 
-      for url in urls:
-         print(tld(url))
-      ```
+  for url in urls:
+     print(tld(url))
+  ```
 - Retriving category of a given url : 
 
    ```python3
