@@ -189,6 +189,6 @@ class MaxMind_ASN_DB():
                 temp_directory,
                 sorted_dir[0],
                 "GeoLite2-ASN.mmdb",
-            )
+            ))
         else:
             return None
