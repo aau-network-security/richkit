@@ -29,6 +29,8 @@ Richkit is a python3 package that provides tools taking a domain name as input, 
 
 The purpose of richkit is to provide a reusable library of domain name-related analysis, lookups, and retrieval functions, that are shared within the Network Security research group at Aalborg University, and also availble to the public for reuse and modification.
 
+Documentation can be found at https://richkit.readthedocs.io/en/latest/.
+
 
 ## Requirements
 
