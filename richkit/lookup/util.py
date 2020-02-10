@@ -3,6 +3,8 @@ import os, subprocess
 import time, calendar, shutil
 import tempfile
 import logging
+from pathlib import Path
+
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M',
                     level=logging.DEBUG)
@@ -38,7 +40,7 @@ class MaxMind_CC_DB(object):
     ).format(
         license_key=os.environ['MAXMIND_LICENSE_KEY'],
     )
-    MASTERFILE = temp_directory + "/country.tar.gz"
+    MASTERFILE = str(Path(temp_directory, "country.tar.gz"))
 
 
     @classmethod
@@ -99,7 +101,11 @@ class MaxMind_CC_DB(object):
         filtered_dir = [x for x in os.listdir(self.path_db) if x.startswith('GeoLite2-Country_')]
         sorted_dir = sorted(filtered_dir, reverse=True)
         if sorted_dir:
-            return temp_directory + "/" + sorted_dir[0] + "/GeoLite2-Country.mmdb"
+            return str(Path(
+                temp_directory,
+                sorted_dir[0],
+                "GeoLite2-Country.mmdb",
+            ))
         else:
             return None
 
@@ -119,7 +125,7 @@ class MaxMind_ASN_DB():
     ).format(
         license_key=os.environ['MAXMIND_LICENSE_KEY'],
     )
-    MASTERFILE = temp_directory + "/asn.tar.gz"
+    MASTERFILE = str(Path(temp_directory, "asn.tar.gz"))
 
     @classmethod
     def get_db(cls):
@@ -179,6 +185,10 @@ class MaxMind_ASN_DB():
         filtered_dir = [x for x in os.listdir(self.path_db) if x.startswith('GeoLite2-ASN_')]
         sorted_dir = sorted(filtered_dir, reverse=True)
         if sorted_dir:
-            return temp_directory + "/" + sorted_dir[0] + "/GeoLite2-ASN.mmdb"
+            return str(Path(
+                temp_directory,
+                sorted_dir[0],
+                "GeoLite2-ASN.mmdb",
+            )
         else:
             return None
