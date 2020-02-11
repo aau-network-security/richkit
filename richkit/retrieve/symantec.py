@@ -2,7 +2,7 @@
 
 This is generated to get categories of given urls, normally it fetches
 category from symantec web service then saves it to local file which
-is called `categorized_urls` under `dat/retrieve/data/`
+is called `categorized_urls` under `richkit/retrieve/data/`
 
 
 How to use:
@@ -38,9 +38,9 @@ Configuration
 Get one here: http://www1.k9webprotection.com/get-k9-web-protection-free
 """
 categories_url = "https://gitlab.com/snippets/1740321/raw"
-data_path = Path("dat/retrieve/data/")
-categories_file_path=data_path / "categories_list.txt"
-categorized_urls_file =data_path / "categorized_urls.txt"
+data_path = Path("richkit/retrieve/data/")
+categories_file_path = data_path / "categories_list.txt"
+categorized_urls_file = data_path / "categorized_urls.txt"
 
 k9License = 'Replace_by_your_own_license'
 
