@@ -5,12 +5,12 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-ASN_REGEX = re.compile('AS\d{1,10}') # RFC 6793 specifies 32 bit
-                                     # integer. The convention, of
-                                     # unknown origin, is to prefix
-                                     # "AS" to the decimal form
-                                     # integer. \d{1,10} is a rough
-                                     # approximation of 4,294,967,295
+ASN_REGEX = re.compile('AS\\d{1,10}') # RFC 6793 specifies 32 bit
+                                      # integer. The convention, of
+                                      # unknown origin, is to prefix
+                                      # "AS" to the decimal form
+                                      # integer. \d{1,10} is a rough
+                                      # approximation of 4,294,967,295
 
 class URLVoid(object):
 
