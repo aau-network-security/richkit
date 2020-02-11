@@ -25,27 +25,28 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
-    - name: Coverage
-      run: |
-        coverage run --source=richkit -m unittest discover
-    - name: Generate report through coverage
-      run: |
-        coverage report > coverage_report.txt
-    - name: Upload code coverage as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: coverage_report.txt
-        path: coverage_report.txt
+    # TEMPORARY FOR TESTING PURPOSES - THIS IS NOT INTENDED FOR MERGE INTO MASTER
+    # - name: Lint with flake8
+    #   run: |
+    #     pip install flake8
+    #     # stop the build if there are Python syntax errors or undefined names
+    #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+    #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    # - name: Test with pytest
+    #   run: |
+    #     pytest
+    # - name: Coverage
+    #   run: |
+    #     coverage run --source=richkit -m unittest discover
+    # - name: Generate report through coverage
+    #   run: |
+    #     coverage report > coverage_report.txt
+    # - name: Upload code coverage as artifact
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: coverage_report.txt
+    #     path: coverage_report.txt
     - name: Doctest on README
       run: |
         python -m doctest -v README.md
