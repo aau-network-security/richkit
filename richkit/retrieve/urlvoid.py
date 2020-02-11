@@ -1,8 +1,16 @@
 from bs4 import BeautifulSoup
 import logging
+import re
 import requests
 
 logger = logging.getLogger(__name__)
+
+ASN_REGEX = re.compile('AS\d{1,10}') # RFC 6793 specifies 32 bit
+                                     # integer. The convention, of
+                                     # unknown origin, is to prefix
+                                     # "AS" to the decimal form
+                                     # integer. \d{1,10} is a rough
+                                     # approximation of 4,294,967,295
 
 class URLVoid(object):
 
@@ -70,7 +78,17 @@ class URLVoid(object):
             result = self.value["ASN"]
         except KeyError as ke:
             logger.error('ASN: Error while retrieving value; %s ',ke)
-        return result
+        m = ASN_REGEX.search(result)
+        if m is None:
+            logger.errror(
+                "Failed to parse ASN for {} from \"{}\"".format(
+                    self.domain,
+                    result,
+                )
+            )
+            return None
+        else:
+            return m.group()
 
     def get_server_location(self):
         """

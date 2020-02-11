@@ -13,7 +13,7 @@ class RetrieveTestCase(unittest.TestCase):
         "google.co.uk": {
             "domain_registration": "1999-02-14",
             "blacklist_status": "0/36",
-            "ASN": "AS15169 Google LLC",
+            "ASN": "AS15169",
             "server_location": " (US) United States",
             "detection_rate": 0,
             "ip_address": "172.217.19.227",
@@ -27,7 +27,7 @@ class RetrieveTestCase(unittest.TestCase):
         "facebook.com": {
             "domain_registration": "1997-03-29",
             "blacklist_status": "0/36",
-            "ASN": "AS32934 Facebook, Inc.",
+            "ASN": "AS32934",
             "server_location": " (US) United States",
             "detection_rate": 0,
             "ip_address": "157.240.21.35",
