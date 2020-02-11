@@ -4,7 +4,7 @@ from richkit.retrieve.symantec import fetch_from_internet
 from richkit.retrieve.symantec import fetch_categories
 from richkit.retrieve.symantec import load_categories
 from richkit.retrieve.symantec import categories_url
-from richkit.retrieve.util import URLVoid
+from richkit.retrieve.urlvoid import URLVoid
 from richkit.retrieve import dns
 
 
