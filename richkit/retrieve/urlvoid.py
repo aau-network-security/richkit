@@ -86,7 +86,7 @@ class URLVoid(object):
             logger.error('ASN: Error while retrieving value; %s ', ke)
         m = ASN_REGEX.search(result)
         if m is None:
-            logger.errror(
+            logger.error(
                 "Failed to parse ASN for {} from \"{}\"".format(
                     self.domain,
                     result,

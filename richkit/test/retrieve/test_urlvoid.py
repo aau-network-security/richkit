@@ -52,6 +52,27 @@ class URLVoidTestCase(unittest.TestCase):
             instance = URLVoid(k)
             assert instance.get_asn() == v["ASN"]
 
+        class StubURLVoid(URLVoid):
+            def __init__(self, asn):
+                self.domain = None
+                self.value = {'ASN': asn}
+
+        self.assertIsNone(StubURLVoid('AZ1 Not a valid ASN').get_asn())
+        self.assertEqual(StubURLVoid('AS1').get_asn(), 'AS1')
+        self.assertEqual(StubURLVoid('AS1 Random-Test-Text').get_asn(), 'AS1')
+        self.assertEqual(StubURLVoid('AS1234567890').get_asn(), 'AS1234567890')
+        # Strictly speaking, the below tests are correct, but covering them
+        # is deemed unnecessary complex:
+        # self.assertIsNone(
+        #     StubURLVoid('AS12345678901').get_asn(),
+        #     ("Failed to reject ASN of 10 decimal digits (One more digit that"
+        #      "possible with RFC 6793)"),
+        # )
+        # self.assertIsNone(
+        #     StubURLVoid('AS4294967295').get_asn(),
+        #     "Failed to reject ASN 0xFFFFFFFF + 0x1 (RFC 6793 max value + 1)",
+        # )
+
     def test_blacklist_status(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
