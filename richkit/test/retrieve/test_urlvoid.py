@@ -2,6 +2,7 @@ from richkit.retrieve.urlvoid import URLVoid
 
 import unittest
 
+
 class URLVoidTestCase(unittest.TestCase):
     test_urls = {
         "google.co.uk": {
@@ -33,7 +34,8 @@ class URLVoidTestCase(unittest.TestCase):
     def test_domain_registration_date(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
-            assert instance.domain_registration_date()[:-15] == v["domain_registration"]
+            assert instance.domain_registration_date()[:-15] \
+                == v["domain_registration"]
 
     def test_get_detection_rate(self):
         for k, v in self.test_urls.items():
@@ -55,19 +57,6 @@ class URLVoidTestCase(unittest.TestCase):
             instance = URLVoid(k)
             assert instance.blacklist_status() == v["blacklist_status"]
 
-    @unittest.skip("A Record change every time")
-    def test_a_record(self):
-        for k, v in self.test_urls.items():
-            instance = dns.get_a_record(k)
-            assert instance[0] in v["a_record"]
-
-    @unittest.skip("PTR Record change every time")
-    def test_ptr_record(self):
-        for k, v in self.test_urls.items():
-            instance = dns.get_ptr_record(v["a_record"][0])
-            print(instance)
-            assert instance[0] in v["ptr_record"]
 
 if __name__ == '__main__':
     unittest.main()
-    

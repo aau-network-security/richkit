@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def get_whois_info(domain):
     """
 
@@ -10,9 +11,9 @@ def get_whois_info(domain):
     """
     d = whois.query(domain)
     result = {
-            "d_name"           : d.name,
+            "d_name": d.name,
             "d_expiration_date": d.expiration_date,
-            "d_last_updated"   : d.last_updated,
-            "d_registrar"      : d.registrar
+            "d_last_updated": d.last_updated,
+            "d_registrar": d.registrar
     }
     return result
