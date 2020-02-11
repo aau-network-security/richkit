@@ -54,4 +54,4 @@ jobs:
       run: |
         pip install sphinx
         cd docs
-        make html
+        O="-W --keep-going" make html
