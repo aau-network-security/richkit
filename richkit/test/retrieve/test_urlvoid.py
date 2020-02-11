@@ -2,6 +2,7 @@ from richkit.retrieve.urlvoid import URLVoid
 
 import unittest
 
+
 class URLVoidTestCase(unittest.TestCase):
     test_urls = {
         "google.co.uk": {
@@ -33,7 +34,8 @@ class URLVoidTestCase(unittest.TestCase):
     def test_domain_registration_date(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
-            assert instance.domain_registration_date()[:-15] == v["domain_registration"]
+            assert instance.domain_registration_date()[:-15] \
+                == v["domain_registration"]
 
     def test_get_detection_rate(self):
         for k, v in self.test_urls.items():
@@ -58,4 +60,3 @@ class URLVoidTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    

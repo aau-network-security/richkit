@@ -7,6 +7,7 @@ import unittest
 
 import os.path
 
+
 class SymantecTestCase(unittest.TestCase):
 
     def test_fetch_categories(self, file_path='categories_list.txt'):
@@ -41,10 +42,13 @@ class SymantecTestCase(unittest.TestCase):
         }
         for category, url_list in domain_categories.items():
             for url in url_list:
-                assert fetch_from_internet(url, categories_file_path, categorized_url_path) == category
+                assert fetch_from_internet(
+                    url, categories_file_path, categorized_url_path
+                ) == category
         if os.path.isfile(categories_file_path):
             os.remove(categories_file_path)
         os.remove(categorized_url_path)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -5,12 +5,11 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-ASN_REGEX = re.compile('AS\d{1,10}') # RFC 6793 specifies 32 bit
-                                     # integer. The convention, of
-                                     # unknown origin, is to prefix
-                                     # "AS" to the decimal form
-                                     # integer. \d{1,10} is a rough
-                                     # approximation of 4,294,967,295
+# RFC 6793 specifies 32 bit integer. The convention, of unknown origin,
+# is to prefix "AS" to the decimal form integer. \d{1,10} is a rough
+# approximation of 4,294,967,295
+ASN_REGEX = re.compile('AS\\d{1,10}')
+
 
 class URLVoid(object):
 
@@ -27,10 +26,15 @@ class URLVoid(object):
         res = requests.get(url)
         text = res.text
         try:
-            soup = BeautifulSoup(text, "lxml").find("table", class_="table table-custom table-striped")
+            soup = BeautifulSoup(
+                text, "lxml"
+            ).find(
+                "table",
+                class_="table table-custom table-striped"
+            )
             all_tr = soup.find_all("tr")
             value = {tr.find_all("td")[0].text:
-                         tr.find_all("td")[1].text.replace("\xa0", "")
+                     tr.find_all("td")[1].text.replace("\xa0", "")
                      for tr in all_tr}
         except ModuleNotFoundError as me:
             logger.error("Opps ! Error : %s", me)
@@ -44,7 +48,7 @@ class URLVoid(object):
         try:
             result = self.value["Last Analysis"][:-9]
         except KeyError as ke:
-            logger.error('Error while retrieving value',ke)
+            logger.error('Error while retrieving value', ke)
         return result
 
     def domain_registration_date(self):
@@ -55,18 +59,20 @@ class URLVoid(object):
         try:
             result = self.value["Domain Registration"]
         except KeyError as ke:
-            logger.error(f' DRD: Error while retrieving value; %s ',ke)
+            logger.error(' DRD: Error while retrieving value; %s ', ke)
         return result
 
     def blacklist_status(self):
         """
 
-        :return: Blacklist status among 36 services which are enable in URLVOID itself.
+        :return: Blacklist status among 36 services which are enable
+        in URLVOID itself.
         """
         try:
             result = self.value["Blacklist Status"]
         except KeyError as ke:
-            logger.error(' Blacklist status: Error while retrieving value; %s ', ke)
+            logger.error(
+                ' Blacklist status: Error while retrieving value; %s ', ke)
         return result
 
     def get_asn(self):
@@ -77,7 +83,7 @@ class URLVoid(object):
         try:
             result = self.value["ASN"]
         except KeyError as ke:
-            logger.error('ASN: Error while retrieving value; %s ',ke)
+            logger.error('ASN: Error while retrieving value; %s ', ke)
         m = ASN_REGEX.search(result)
         if m is None:
             logger.errror(
@@ -98,7 +104,8 @@ class URLVoid(object):
         try:
             result = self.value["Server Location"]
         except KeyError as ke:
-            logger.error(' Server Location : Error while retrieving value; %s ',ke)
+            logger.error(
+                ' Server Location : Error while retrieving value; %s ', ke)
         return result
 
     def get_ip_address(self):
@@ -109,7 +116,7 @@ class URLVoid(object):
         try:
             result = self.value["IP Address"]
         except KeyError as ke:
-            logger.error(' IP Address: Error while retrieving value; %s ',ke)
+            logger.error(' IP Address: Error while retrieving value; %s ', ke)
         return result
 
     def get_detection_rate(self):
@@ -121,5 +128,6 @@ class URLVoid(object):
             parts = self.blacklist_status().split("/")
             result = int(parts[0]) / int(parts[1]) * 100
         except IndexError as ie:
-            logger.error('Detection rate : Error while retrieving value; %s ',ie)
+            logger.error(
+                'Detection rate : Error while retrieving value; %s ', ie)
         return result
