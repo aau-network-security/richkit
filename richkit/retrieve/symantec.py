@@ -25,13 +25,14 @@ import ast
 import json
 import glob
 import os
-import sys
 from json import dumps
 from xml.etree.ElementTree import fromstring
 import urllib.request
 from urllib.request import urlopen, build_opener
 import re
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 """
 Configuration
@@ -68,16 +69,16 @@ def fetch_categories(categories_url=categories_url, local_categories_path=catego
         data = json.load(r)
         d = dict([('%02x' % c['num'], c['name']) for c in data])
     except urllib.error.HTTPError as e:
-        sys.stderr.write('Cannot fetch categories, HTTP error: %s\n' % str(e.code))
+        logger.error('Cannot fetch categories, HTTP error: %s\n' % str(e.code))
     except urllib.error.URLError as e:
-        sys.stderr.write('Cannot fetch categories, URL error: %s\n' % str(e.reason))
+        logger.error('Cannot fetch categories, URL error: %s\n' % str(e.reason))
     try:
         f = open(local_categories_path, 'w')
         f.write(dumps(d))
         f.close()
     except Exception as e:
         f.close()
-        sys.stderr.write('Cannot save categories: %s\n' % e)
+        logger.error('Cannot save categories: %s\n' % e)
     return d
 
 
@@ -134,12 +135,12 @@ def fetch_from_internet(url,categories_file_path=categories_file_path,categorize
             write_to_local_file(url + "," + re.sub('\n', '', result),categorized_urls_file)
         elif dirc is not None:
             cats = _chunks(dirc.text)
-            sys.stdout.write(
+            logger.debug(
                 '%s,%s\n' % (hostname, [check_local_categories_file_exists(categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]))
             result = [check_local_categories_file_exists(categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]
             write_to_local_file(url + "," + re.sub('\n', '', result),categorized_urls_file)
         else:
-            sys.stderr.write('Cannot get category for %s\n' % hostname)
+            logger.error('Cannot get category for %s\n' % hostname)
 
     return re.sub('\n', '', result)
 
