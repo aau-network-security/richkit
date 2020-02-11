@@ -73,6 +73,9 @@ The following codes can be used to retrieve the TLD and the URL category, respec
     ...     if url_category=='':
     ...         url_category=fetch_from_internet(url)
     ...     print(url_category)
+    Education
+    Technology/Internet
+    Search Engines/Portals
     
     ```
 
