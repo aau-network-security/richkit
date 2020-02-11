@@ -32,6 +32,7 @@ jobs:
             echo "Failed because the number of errors from flake8 increased (This: $FLAKE8_ERROR_CNT Previously: $FLAKE8_ERROR_LIMIT)" 1>&2
             false
         fi
+        echo "Number of validation errors from flake8 is: $FLAKE8_ERROR_CNT (Limit is: $FLAKE8_ERROR_LIMIT)"
   test:
     runs-on: ${{ matrix.os }}
     strategy:
