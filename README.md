@@ -46,30 +46,35 @@ In order to install richikit just type in the terminal `pip install richkit`
 The following codes can be used to retrieve the TLD and the URL category, respectively.
 
 - Retriving effective top level domain of a given url: 
-  
-  ```python3
-  from richkit.analyse import tld
 
-  urls = ["www.aau.dk","www.github.com","www.google.com"]
+    ```python3
+    >>> from richkit.analyse import tld
+    >>> urls = ["www.aau.dk","www.github.com","www.google.com"]
+    >>>
+    >>> for url in urls:
+    ...     print(tld(url))
+    dk
+    com
+    com
+    
+    ```
 
-  for url in urls:
-     print(tld(url))
-  ```
-- Retriving category of a given url : 
+- Retriving category of a given url:
 
-   ```python3
-   from richkit.retrieve.symantec import fetch_from_internet
-   from richkit.retrieve.symantec import LocalCategoryDB
-
-   urls = ["www.aau.dk","www.github.com","www.google.com"]
-
-   local_db = LocalCategoryDB()
-   for url in urls:
-      url_category=local_db.get_category(url)
-      if url_category=='':
-         url_category=fetch_from_internet(url)
-      print(url_category)
-   ```
+    ```python3
+    >>> from richkit.retrieve.symantec import fetch_from_internet
+    >>> from richkit.retrieve.symantec import LocalCategoryDB
+    >>>
+    >>> urls = ["www.aau.dk","www.github.com","www.google.com"]
+    >>>
+    >>> local_db = LocalCategoryDB()
+    >>> for url in urls:
+    ...     url_category=local_db.get_category(url)
+    ...     if url_category=='':
+    ...         url_category=fetch_from_internet(url)
+    ...     print(url_category)
+    
+    ```
 
 ## Modules
 

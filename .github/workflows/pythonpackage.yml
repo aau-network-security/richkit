@@ -46,6 +46,9 @@ jobs:
       with:
         name: coverage_report.txt
         path: coverage_report.txt
+    - name: Doctest on README
+      run: |
+        python -m doctest -v README.md
     - name: Build documentation
       run: |
         pip install sphinx
