@@ -7,18 +7,20 @@ is called `categorized_urls` under `richkit/retrieve/data/`
 
 How to use:
 
->>> # Import necesseary functions and make a call as demonstrated given below
->>> from richkit.retrieve.symantec import fetch_from_internet
->>> from richkit.retrieve.symantec import LocalCategoryDB
->>> 
->>> urls = ["www.aau.dk","www.github.com","www.google.com"]
->>> 
->>> local_db = LocalCategoryDB()
->>> for url in urls:
->>>     url_category=local_db.get_category(url)
->>>     if url_category=='':
->>>         url_category=fetch_from_internet(url)
->>>     print(url_category)
+    >>> # Import necesseary functions and make a call as demonstrated given below
+    >>> from richkit.retrieve.symantec import fetch_from_internet
+    >>> from richkit.retrieve.symantec import LocalCategoryDB
+    >>>
+    >>> urls = ["www.aau.dk","www.github.com","www.google.com"]
+    >>>
+    >>> local_db = LocalCategoryDB()
+    >>> for url in urls:
+    ...     url_category=local_db.get_category(url)
+    ...     if url_category=='':
+    ...         url_category=fetch_from_internet(url)
+    ...     print(url_category)
+    Technology/Internet
+    Search Engines/Portals
 
 """
 import ast
@@ -40,7 +42,7 @@ Configuration
 Get one here: http://www1.k9webprotection.com/get-k9-web-protection-free
 """
 categories_url = "https://gitlab.com/snippets/1740321/raw"
-data_path = Path("richkit/retrieve/data/")
+data_path = Path(os.path.dirname(__file__), 'data')
 categories_file_path = data_path / "categories_list.txt"
 categorized_urls_file = data_path / "categorized_urls.txt"
 
