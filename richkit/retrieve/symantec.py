@@ -19,6 +19,7 @@ How to use:
     ...     if url_category=='':
     ...         url_category=fetch_from_internet(url)
     ...     print(url_category)
+    Education
     Technology/Internet
     Search Engines/Portals
 
