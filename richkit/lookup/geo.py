@@ -2,6 +2,7 @@ import maxminddb
 from richkit.lookup.util import MaxMind_CC_DB
 from richkit.lookup.util import MaxMind_ASN_DB
 
+
 def get_country(ip_address):
     """
     Return the country code of a given IP address
@@ -13,11 +14,12 @@ def get_country(ip_address):
         country_code_db = MaxMind_CC_DB()
         country_code_db_path = country_code_db.get_db_path()
         reader = maxminddb.open_database(country_code_db_path)
-        result =  reader.get(ip_address)
+        result = reader.get(ip_address)
         country_code = str(result['country']['iso_code'])
     except:
         country_code = ''
     return country_code
+
 
 def get_registered_country(ip_address):
     """
@@ -35,6 +37,7 @@ def get_registered_country(ip_address):
     except:
         country_code = ''
     return country_code
+
 
 def get_asn(ip_address):
     """
