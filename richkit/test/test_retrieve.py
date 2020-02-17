@@ -12,8 +12,8 @@ class RetrieveTestCase(unittest.TestCase):
     test_urls = {
         "google.co.uk": {
             "domain_registration": "1999-02-14",
-            "blacklist_status": "0/36",
-            "ASN": "AS15169 Google LLC",
+            "blacklist_status": "0/34",
+            "ASN": "AS15169 GOOGLE",
             "server_location": " (US) United States",
             "detection_rate": 0,
             "ip_address": "172.217.19.227",
