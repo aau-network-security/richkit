@@ -1,3 +1,4 @@
+from richkit.retrieve.symantec import read_categorized_file
 from richkit.retrieve.symantec import fetch_from_internet
 from richkit.retrieve.symantec import fetch_categories
 from richkit.retrieve.symantec import load_categories
@@ -7,8 +8,10 @@ import unittest
 
 import os.path
 
-
 class SymantecTestCase(unittest.TestCase):
+
+    def test_read_categorized_file(self):
+        self.assertIsInstance(read_categorized_file(), dict)
 
     def test_fetch_categories(self, file_path='categories_list.txt'):
         # make sure that categories url is accessible and fetched correctly
