@@ -23,7 +23,8 @@ A license key is required as per [#GeoLite2_CCPA_GDPR]_:
 """
 
 logger = logging.getLogger(__name__)
-temp_directory = tempfile.mkdtemp()
+directory = os.getcwd().split("richkit")
+maxmind_directory = directory[0] + "/richkit/richkit/lookup/data"
 
 class MaxMind_CC_DB(object):
 
@@ -40,7 +41,7 @@ class MaxMind_CC_DB(object):
     ).format(
         license_key=os.environ['MAXMIND_LICENSE_KEY'],
     )
-    MASTERFILE = str(Path(temp_directory, "country.tar.gz"))
+    MASTERFILE = str(Path(maxmind_directory, "country.tar.gz"))
 
 
     @classmethod
@@ -71,7 +72,7 @@ class MaxMind_CC_DB(object):
             raise Exception(msg)
 
         if os.path.exists(cls.MASTERFILE):
-            subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=temp_directory)
+            subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=maxmind_directory)
             time.sleep(2)
         else:
             logger.error('Error exctract DB.')
@@ -79,7 +80,7 @@ class MaxMind_CC_DB(object):
 
     def __init__(self):
 
-        self.path_db = temp_directory
+        self.path_db = maxmind_directory
         self.three_weeks = 1814400  # seconds of 3 weeks  1814400
 
         # check if the database already exists
@@ -102,7 +103,7 @@ class MaxMind_CC_DB(object):
         sorted_dir = sorted(filtered_dir, reverse=True)
         if sorted_dir:
             return str(Path(
-                temp_directory,
+                maxmind_directory,
                 sorted_dir[0],
                 "GeoLite2-Country.mmdb",
             ))
@@ -125,7 +126,7 @@ class MaxMind_ASN_DB():
     ).format(
         license_key=os.environ['MAXMIND_LICENSE_KEY'],
     )
-    MASTERFILE = str(Path(temp_directory, "asn.tar.gz"))
+    MASTERFILE = str(Path(maxmind_directory, "asn.tar.gz"))
 
     @classmethod
     def get_db(cls):
@@ -155,7 +156,7 @@ class MaxMind_ASN_DB():
             raise Exception(msg)
 
         if os.path.exists(cls.MASTERFILE):
-            subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=temp_directory)
+            subprocess.Popen(['tar', '-xzf', cls.MASTERFILE], cwd=maxmind_directory)
             time.sleep(2)
         else:
             logger.error('Error extract DB on get_db ')
@@ -164,7 +165,7 @@ class MaxMind_ASN_DB():
     def __init__(self):
 
 
-        self.path_db = temp_directory
+        self.path_db = maxmind_directory
         self.three_weeks = 1814400  # seconds of 3 weeks  1814400
         # check if the database already exists
         if MaxMind_ASN_DB.get_db_path(self) is None:
@@ -186,7 +187,7 @@ class MaxMind_ASN_DB():
         sorted_dir = sorted(filtered_dir, reverse=True)
         if sorted_dir:
             return str(Path(
-                temp_directory,
+                maxmind_directory,
                 sorted_dir[0],
                 "GeoLite2-ASN.mmdb",
             ))

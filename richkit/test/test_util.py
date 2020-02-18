@@ -27,7 +27,7 @@ def rm_recursive(pth):
 class stub_MaxMind_CC_DB(MaxMind_CC_DB):
     """Stub with minimal __init__, to not hit error there."""
     def __init__(self):
-        self.path_db = util.temp_directory
+        self.path_db = util.maxmind_directory
 
 
 class MaxMind_CC_DBTestCase(unittest.TestCase):
@@ -36,7 +36,7 @@ class MaxMind_CC_DBTestCase(unittest.TestCase):
     def setUp(self):
         MaxMind_CC_DB.MASTERURL = ORIG_CC_MASTERURL
 
-        for el in Path(util.temp_directory).glob('*'):
+        for el in Path(util.maxmind_directory).glob('*'):
             rm_recursive(el)
 
 
@@ -107,7 +107,7 @@ class MaxMind_CC_DBTestCase(unittest.TestCase):
 class stub_MaxMind_ASN_DB(MaxMind_ASN_DB):
     """Stub with minimal __init__, to not hit error there."""
     def __init__(self):
-        self.path_db = util.temp_directory
+        self.path_db = util.maxmind_directory
 
 
 class MaxMind_ASN_DBTestCase(unittest.TestCase):
@@ -116,7 +116,7 @@ class MaxMind_ASN_DBTestCase(unittest.TestCase):
     def setUp(self):
         MaxMind_ASN_DB.MASTERURL = ORIG_ASN_MASTERURL
 
-        for el in Path(util.temp_directory).glob('*'):
+        for el in Path(util.maxmind_directory).glob('*'):
             rm_recursive(el)
 
 
