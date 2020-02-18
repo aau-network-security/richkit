@@ -29,6 +29,8 @@ Richkit is a python3 package that provides tools taking a domain name as input, 
 
 The purpose of richkit is to provide a reusable library of domain name-related analysis, lookups, and retrieval functions, that are shared within the Network Security research group at Aalborg University, and also availble to the public for reuse and modification.
 
+Documentation can be found at https://richkit.readthedocs.io/en/latest/.
+
 
 ## Requirements
 
@@ -45,14 +47,14 @@ The following codes can be used to retrieve the TLD and the URL category, respec
 
 - Retriving effective top level domain of a given url: 
   
-      ```python3
-      from richkit.analyse import tld
+  ```python3
+  from richkit.analyse import tld
 
-      urls = ["www.aau.dk","www.github.com","www.google.com"]
+  urls = ["www.aau.dk","www.github.com","www.google.com"]
 
-      for url in urls:
-         print(tld(url))
-      ```
+  for url in urls:
+     print(tld(url))
+  ```
 - Retriving category of a given url : 
 
    ```python3

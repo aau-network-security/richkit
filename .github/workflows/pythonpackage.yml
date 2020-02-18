@@ -53,9 +53,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Test with pytest
+      env:
+        MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
         pytest
     - name: Coverage
+      env:
+        MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
         coverage run --source=richkit -m unittest discover
     - name: Generate report through coverage
