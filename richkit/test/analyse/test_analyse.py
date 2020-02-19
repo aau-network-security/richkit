@@ -44,7 +44,7 @@ class TestEffect2LD():
 
         cls.test = set(lines)
 
-    def __init__(self):
+    def load(self):
 
         if path.exists(TestEffect2LD.MASTERFILE):
             TestEffect2LD.load_tlds()
@@ -59,9 +59,6 @@ class TestEffect2LD():
             parser = i[i.find("(")+1:i.find(")")]
             test_list.append(parser.replace(" ", "").replace("null", "'None'"))
         return test_list
-
-
-tests = TestEffect2LD()
 
 
 class TestAnalyse(unittest.TestCase):
@@ -213,7 +210,8 @@ class TestAnalyse(unittest.TestCase):
         assert grams_dict_2ld == '25.77346214958408'
 
     def test_correctly_tlds(self):
-
+        tests = TestEffect2LD()
+        tests.load()
         test_list = tests.get_tests()
 
         # Test skipped for the following list
