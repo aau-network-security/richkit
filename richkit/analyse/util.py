@@ -1,7 +1,6 @@
 from os import path
 import requests
 import tempfile
-import sys
 import logging
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M',
@@ -187,6 +186,7 @@ class TldMatcher(object):
 
 tldmatch = TldMatcher()
 
+
 def get_2ld(domain):
     """
     Finds 2LD for given FQDN
@@ -205,52 +205,3 @@ def get_2ld(domain):
     else:
         return '.'.join(sdomain[-index:])
 
-class TestEffect2LD(object):
-    MASTERURL = "https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt"
-    MASTERFILE = temp_directory + 'correct_test.txt'
-    test = None
-
-    @classmethod
-    def fetch_tlds(cls, url=None):
-        url = url or cls.MASTERURL
-
-        # grab master list
-        response = requests.get(url, stream=True)
-        if response.status_code == 200:
-            with open(cls.MASTERFILE, 'wb') as file:
-                file.write(response.content)
-        else:
-            logger.error('Error while downloading the Test List status code: %s',response.status_code)
-
-
-    @classmethod
-    def load_tlds(cls):
-        try:
-            f = open(cls.MASTERFILE, 'r',encoding="utf8")
-            lines = f.readlines()
-        except FileNotFoundError as e:
-
-            logger.error("File not readable, not found %s",e)
-            f.close()
-        f.close()
-
-        # strip comments and blank lines
-        lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
-
-        cls.test = set(lines)
-
-    def __init__(self):
-
-        if path.exists(TestEffect2LD.MASTERFILE):
-            TestEffect2LD.load_tlds()
-
-        if TestEffect2LD.test is None:
-            TestEffect2LD.fetch_tlds()
-            TestEffect2LD.load_tlds()
-
-    def get_tests(self):
-        test_list = []
-        for i in TestEffect2LD.test:
-            parser = i[i.find("(")+1:i.find(")")]
-            test_list.append(parser.replace(" ", "").replace("null", "'None'"))
-        return test_list
