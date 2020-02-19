@@ -1,7 +1,6 @@
 import requests
 import os, subprocess
 import time, calendar, shutil
-import tempfile
 import logging
 from pathlib import Path
 
@@ -25,6 +24,7 @@ A license key is required as per [#GeoLite2_CCPA_GDPR]_:
 logger = logging.getLogger(__name__)
 directory = os.getcwd().split("richkit")
 maxmind_directory = directory[0] + "/richkit/richkit/lookup/data"
+Path(maxmind_directory).mkdir(parents=True, exist_ok=True)
 
 class MaxMind_CC_DB(object):
 
