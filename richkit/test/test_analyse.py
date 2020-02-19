@@ -61,6 +61,9 @@ class TestEffect2LD():
         return test_list
 
 
+tests = TestEffect2LD()
+
+
 class TestAnalyse(unittest.TestCase):
 
     def setUp(self):
@@ -210,7 +213,7 @@ class TestAnalyse(unittest.TestCase):
         assert grams_dict_2ld == '25.77346214958408'
 
     def test_correctly_tlds(self):
-        tests = TestEffect2LD()
+
         test_list = tests.get_tests()
 
         # Test skipped for the following list
