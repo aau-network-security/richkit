@@ -73,22 +73,11 @@ jobs:
     - name: Test with pytest
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
+     
+    - name: Coverage report
       run: |
-        pytest
-    - name: Coverage
-      env:
-        MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
-      run: |
-        coverage run --source=richkit -m unittest discover
-    - name: Generate report through coverage
-      run: |
-        coverage report > coverage_report.txt
-    - name: Upload code coverage as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: coverage_report.txt
-        path: coverage_report.txt
-
+        coverage report --fail-under=79
+ 
     - name: Doctest
       run: |
         python -m doctest -v README.md
@@ -99,6 +88,7 @@ jobs:
         cd docs
         make coverage
         python -c "from pathlib import Path; print(Path('_build/coverage/python.txt').read_text())"
+        coverage report --fail-under=79
     - name: Build documentation
       run: |
         cd docs
