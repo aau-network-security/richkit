@@ -59,13 +59,11 @@ jobs:
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        check_result=$(flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics | wc -l)
-        if [[ check_result -gt 480 ]]
-        then
-          exit 1
-        else:
-          exit 0
-        fi
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        bash -c "pip install \
+          coverage \
+          pytest \
+        "
     - name: Test with pytest
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
