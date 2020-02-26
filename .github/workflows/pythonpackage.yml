@@ -54,6 +54,11 @@ jobs:
         pip install -r requirements.txt
 
     - name: Check with flake8
+        bash -c "pip install \
+          sphinx \
+        "
+
+    - name: Lint with flake8
       run: |
         pip install flake8
         # stop the build if there are Python syntax errors or undefined names
@@ -64,6 +69,7 @@ jobs:
           coverage \
           pytest \
         "
+
     - name: Test with pytest
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
@@ -82,8 +88,18 @@ jobs:
       with:
         name: coverage_report.txt
         path: coverage_report.txt
+
+    - name: Doctest
+      run: |
+        python -m doctest -v README.md
+        cd docs
+        make doctest
+    - name: Documentation coverage
+      run: |
+        cd docs
+        make coverage
+        python -c "from pathlib import Path; print(Path('_build/coverage/python.txt').read_text())"
     - name: Build documentation
       run: |
-        pip install sphinx
         cd docs
         make html
