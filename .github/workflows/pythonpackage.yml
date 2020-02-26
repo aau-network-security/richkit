@@ -53,7 +53,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Check with flake8
+    - name: Install sphinx
+      run: |
         bash -c "pip install \
           sphinx \
         "
