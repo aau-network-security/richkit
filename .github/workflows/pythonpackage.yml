@@ -53,11 +53,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Install sphinx
-      run: |
-        bash -c "pip install \
-          sphinx \
-        "
 
     - name: Lint with flake8
       run: |
@@ -74,7 +69,8 @@ jobs:
     - name: Test with pytest
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
-     
+      run: |
+        pytest
     - name: Coverage report
       run: |
         coverage report --fail-under=79
@@ -92,5 +88,6 @@ jobs:
         coverage report --fail-under=79
     - name: Build documentation
       run: |
+        pip install sphinx
         cd docs
         make html
