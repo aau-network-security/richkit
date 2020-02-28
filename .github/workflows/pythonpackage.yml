@@ -33,6 +33,7 @@ jobs:
             false
         fi
         echo "Number of validation errors from flake8 is: $FLAKE8_ERROR_CNT (Limit is: $FLAKE8_ERROR_LIMIT)"
+
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -52,6 +53,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install \\
+            coverage \\
+            pytest \\
+            sphinx
 
     - name: Test with pytest
       env:
@@ -74,6 +79,5 @@ jobs:
         python -c "from pathlib import Path; print(Path('_build/coverage/python.txt').read_text())" # this prints dosctring coverage report
     - name: Build documentation
       run: |
-        pip install sphinx
         cd docs
         make html
