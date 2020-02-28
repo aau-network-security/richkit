@@ -72,6 +72,8 @@ jobs:
         cd docs
         make doctest
     - name: Documentation coverage
+      env:
+        MAXMIND_LICENSE_KEY: DUMMY: A valid license is not needed here
       run: |
         cd docs
         make coverage
