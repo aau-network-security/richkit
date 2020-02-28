@@ -73,7 +73,6 @@ class URLVoidTestCase(unittest.TestCase):
         #     "Failed to reject ASN 0xFFFFFFFF + 0x1 (RFC 6793 max value + 1)",
         # )
 
-    @unittest.expectedFailure
     def test_blacklist_status(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
