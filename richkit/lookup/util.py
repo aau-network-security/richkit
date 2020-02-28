@@ -3,6 +3,24 @@ import os, subprocess
 import time, calendar, shutil
 import tempfile
 import logging
+from pathlib import Path
+
+logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    level=logging.DEBUG)
+"""
+Lookups in the MaxMind GeoLite2 databases.
+
+A license key is required as per [#GeoLite2_CCPA_GDPR]_:
+
+#. Sign up for a MaxMind account (no purchase required): https://www.maxmind.com/en/geolite2/signup
+#. Set your password and create a license key: https://www.maxmind.com/en/accounts/current/license-key
+#. Setup your download mechanism by using our GeoIP Update program or creating a direct download script: https://dev.maxmind.com/geoip/geoipupdate/#Direct_Downloads
+
+.. rubric:: Footnotes
+
+.. [#GeoLite2_CCPA_GDPR] https://blog.maxmind.com/2019/12/18/significant-changes-to-accessing-and-using-geolite2-databases/
+"""
 
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()

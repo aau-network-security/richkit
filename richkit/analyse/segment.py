@@ -3,7 +3,9 @@ import requests
 import os
 from richkit.analyse.util import temp_directory
 import logging
-
+logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class OneGramDist(dict):
