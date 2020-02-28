@@ -5,9 +5,6 @@ import tempfile
 import logging
 from pathlib import Path
 
-logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    level=logging.DEBUG)
 """
 Lookups in the MaxMind GeoLite2 databases.
 
