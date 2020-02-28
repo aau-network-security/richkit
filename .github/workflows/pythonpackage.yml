@@ -68,6 +68,8 @@ jobs:
         coverage report --fail-under=79
  
     - name: Doctest
+      env:
+        MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
         python -m doctest -v README.md
         cd docs
