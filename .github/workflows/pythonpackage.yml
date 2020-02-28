@@ -71,8 +71,7 @@ jobs:
       run: |
         cd docs
         make coverage
-        python -c "from pathlib import Path; print(Path('_build/coverage/python.txt').read_text())"
-        coverage report --fail-under=79
+        python -c "from pathlib import Path; print(Path('_build/coverage/python.txt').read_text())" # this prints dosctring coverage report
     - name: Build documentation
       run: |
         pip install sphinx
