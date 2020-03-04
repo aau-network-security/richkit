@@ -1,6 +1,5 @@
-import maxminddb
-from richkit.lookup.util import MaxMind_CC_DB
-from richkit.lookup.util import MaxMind_ASN_DB
+from richkit.lookup.util import MaxMindDB
+import os
 
 def get_country(ip_address):
     """
@@ -10,10 +9,16 @@ def get_country(ip_address):
 
     """
     try:
-        country_code_db = MaxMind_CC_DB()
-        country_code_db_path = country_code_db.get_db_path()
-        reader = maxminddb.open_database(country_code_db_path)
-        result =  reader.get(ip_address)
+        country_code_db = MaxMindDB((
+                "https://download.maxmind.com/app/geoip_download?"
+                "edition_id=GeoLite2-Country&"
+                "license_key={license_key}&"
+                "suffix=tar.gz"
+            ).format(
+                license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            ), "cc"
+        )
+        result = country_code_db.get_data(ip_address)
         country_code = str(result['country']['iso_code'])
     except:
         country_code = ''
@@ -27,14 +32,21 @@ def get_registered_country(ip_address):
 
     """
     try:
-        country_code_db = MaxMind_CC_DB()
-        country_code_db_path = country_code_db.get_db_path()
-        reader = maxminddb.open_database(country_code_db_path)
-        result =  reader.get(ip_address)
+        country_code_db = MaxMindDB((
+                "https://download.maxmind.com/app/geoip_download?"
+                "edition_id=GeoLite2-Country&"
+                "license_key={license_key}&"
+                "suffix=tar.gz"
+            ).format(
+                license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            ), "cc"
+        )
+        result = country_code_db.get_data(ip_address)
         country_code = str(result['registered_country']['iso_code'])
     except:
         country_code = ''
     return country_code
+
 
 def get_asn(ip_address):
     """
@@ -44,10 +56,16 @@ def get_asn(ip_address):
 
     """
     try:
-        asn_db = MaxMind_ASN_DB()
-        asn_db_path = asn_db.get_db_path()
-        reader = maxminddb.open_database(asn_db_path)
-        result = reader.get(ip_address)
+        country_code_db = MaxMindDB((
+                "https://download.maxmind.com/app/geoip_download?"
+                "edition_id=GeoLite2-ASN&"
+                "license_key={license_key}&"
+                "suffix=tar.gz"
+            ).format(
+                license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            ), "asn"
+        )
+        result = country_code_db.get_data(ip_address)
         asn = str('AS' + str(result['autonomous_system_number']))
     except:
         asn = ''
