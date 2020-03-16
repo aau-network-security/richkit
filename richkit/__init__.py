@@ -1,7 +1,7 @@
-"""dat is the Domain Analysis Toolkit
+"""richkit is the Domain Enrichment Kit
 
 See the `README
-<https://github.com/aau-network-security/domain-analysis-toolkit/blob/master/README.md>`_
+<https://github.com/aau-network-security/richkit/blob/master/README.md>`_
 for a general introduction.
 
 """
