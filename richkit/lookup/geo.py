@@ -21,8 +21,9 @@ def get_country(ip_address):
         result = country_code_db.get_data(ip_address)
         country_code = str(result['country']['iso_code'])
     except:
-        country_code = ''
+        country_code = None
     return country_code
+
 
 def get_registered_country(ip_address):
     """
@@ -44,7 +45,7 @@ def get_registered_country(ip_address):
         result = country_code_db.get_data(ip_address)
         country_code = str(result['registered_country']['iso_code'])
     except:
-        country_code = ''
+        country_code = None
     return country_code
 
 
@@ -68,5 +69,5 @@ def get_asn(ip_address):
         result = country_code_db.get_data(ip_address)
         asn = str('AS' + str(result['autonomous_system_number']))
     except:
-        asn = ''
+        asn = None
     return asn

@@ -34,6 +34,8 @@ class MaxMindDB:
     This class provides functions to download, extract and get data from MaxMind DBs
     """
 
+    # Dict to lookup const's, structured like this:
+    # name given by MaxMind, name of the extracted DB, directory of the downloaded file from MaxMind
     helpers = {
         "asn": ['GeoLite2-ASN_', 'GeoLite2-ASN.mmdb', str(Path(maxmind_directory, "asn.tar.gz"))],
         "cc": ['GeoLite2-Country_', 'GeoLite2-Country.mmdb', str(Path(maxmind_directory, "cc.tar.gz"))]
@@ -52,7 +54,7 @@ class MaxMindDB:
 
     def get_db(self):
         """
-        Download the Country database in zip format from the MaxMind website, then extract it
+        Download the MaxMind database in zip format from the MaxMind website
 
         """
         logger.debug('Downloading the '+self.helpers[self.query][2]+' DB ... ')
@@ -75,12 +77,19 @@ class MaxMindDB:
             )
             logger.error(msg)
             raise Exception(msg)
+        self.unpack()
 
+    def unpack(self):
+        """
+        Extract MaxMind DB
+        """
         if os.path.exists(self.helpers[self.query][2]):
             subprocess.Popen(['tar', '-xzf', self.helpers[self.query][2]], cwd=maxmind_directory)
             time.sleep(2)
         else:
-            logger.error('Error extract DB on get_db ')
+            msg = 'Error extract DB on get_db '
+            logger.error(msg)
+            raise Exception(msg)
 
     def get_db_path(self):
         """

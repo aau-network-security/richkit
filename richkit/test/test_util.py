@@ -2,7 +2,7 @@ from richkit.lookup import util
 from richkit.lookup.util import MaxMindDB
 import os
 import unittest
-
+import logging
 from pathlib import Path
 from requests.exceptions import ConnectionError
 
@@ -22,16 +22,19 @@ def rm_recursive(pth):
         pth.rmdir()
 
 
-class stub_MaxMindDB(MaxMindDB):
+class StubMaxMindDB(MaxMindDB):
     """Stub with minimal __init__, to not hit error there."""
     def __init__(self):
         self.path_db = util.maxmind_directory
         self.query = "cc"
 
 
-class MaxMind_DBTestCase(unittest.TestCase):
+class MaxMindDBTestCase(unittest.TestCase):
 
     def setUp(self):
+        # Remove the logging for tests
+        logging.disable(logging.CRITICAL)
+
         MaxMindDB.MASTERURL = (
                 "https://download.maxmind.com/app/geoip_download?"
                 "edition_id=GeoLite2-Country&"
@@ -49,7 +52,7 @@ class MaxMind_DBTestCase(unittest.TestCase):
         self.assertIsNotNone(obj)
 
     def test_get_db_path(self):
-        s = stub_MaxMindDB()
+        s = StubMaxMindDB()
 
         # No db present
         p = s.get_db_path()
@@ -82,7 +85,6 @@ class MaxMind_DBTestCase(unittest.TestCase):
         )
 
         with self.assertRaises(ConnectionError):
-            #TODO: Can the error logs from this be supressed from here?
             MaxMindDB(MaxMindDB.MASTERURL, "cc").get_db()
 
         # When URL is bad
@@ -90,11 +92,25 @@ class MaxMind_DBTestCase(unittest.TestCase):
             '?', "THIS_URL_IS_WRONG")
 
         with self.assertRaises(Exception):
-            #TODO: Can the error logs from this be supressed from here?
             MaxMindDB.get_db()
+
+        # When all is fine:
+        self.setUp()
+        s = StubMaxMindDB()
+        s.get_db()
+        # Check if file is present
+        p = s.get_db_path()
+        self.assertIsNotNone(p, "get_db did not a path to the db")
+        self.assertTrue(Path(p).exists())
+
+    def test_extracted_db(self):
+        s = StubMaxMindDB()
+        # When fail to extract the DB
+        with self.assertRaises(Exception):
+            s.unpack()
 
     def test_is_outdated(self):
         obj = MaxMindDB(MaxMindDB.MASTERURL, "cc")
-        assert obj.is_outdated() == False
+        self.assertFalse(obj.is_outdated())
 
 
