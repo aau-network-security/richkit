@@ -6,7 +6,7 @@ with open(path.join(root, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name='richkit',
-    description='Domain analysis toolkit',
+    description='Domain enrichment kit ',
     version='latest',
     long_description=long_description,
     long_description_content_type='text/markdown',

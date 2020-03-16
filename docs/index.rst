@@ -1,4 +1,4 @@
-Welcome to rickit's documentation!
+Welcome to richkit's documentation!
 ==================================
 
 .. automodule:: richkit
