@@ -1,14 +1,12 @@
 from richkit.retrieve.urlvoid import URLVoid
 
-import unittest
+import unittest,re
 
 
 class URLVoidTestCase(unittest.TestCase):
     test_urls = {
         "google.co.uk": {
             "domain_registration": "1999-02-14",
-            # checking number of blacklist status is not required, because the number of services where URLvoid uses may change over time.
-            # therefore, the test has been removed
             "blacklist_status": "0/36",
             "ASN": "AS15169",
             "server_location": " (US) United States",
@@ -75,6 +73,11 @@ class URLVoidTestCase(unittest.TestCase):
         #     "Failed to reject ASN 0xFFFFFFFF + 0x1 (RFC 6793 max value + 1)",
         # )
 
+    def test_blacklist_status(self):
+        for k, v in self.test_urls.items():
+            instance = URLVoid(k)
+            blacklist_status = instance.blacklist_status()
+            assert re.match(r'[0]/\d*',blacklist_status)
 
 if __name__ == '__main__':
     unittest.main()
