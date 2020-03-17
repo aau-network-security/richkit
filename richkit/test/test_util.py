@@ -1,13 +1,11 @@
 from richkit.lookup import util
-from richkit.lookup.util import MaxMind_CC_DB
-from richkit.lookup.util import MaxMind_ASN_DB
-ORIG_CC_MASTERURL = MaxMind_CC_DB.MASTERURL
-ORIG_ASN_MASTERURL = MaxMind_ASN_DB.MASTERURL
-
+from richkit.lookup.util import MaxMindDB
+import os
 import unittest
-
+import logging
 from pathlib import Path
 from requests.exceptions import ConnectionError
+
 
 def rm_recursive(pth):
     pth = Path(pth)
@@ -24,33 +22,40 @@ def rm_recursive(pth):
         pth.rmdir()
 
 
-class stub_MaxMind_CC_DB(MaxMind_CC_DB):
+class StubMaxMindDB(MaxMindDB):
     """Stub with minimal __init__, to not hit error there."""
     def __init__(self):
-        self.path_db = util.temp_directory
+        self.path_db = util.maxmind_directory
+        self.query = "cc"
 
 
-class MaxMind_CC_DBTestCase(unittest.TestCase):
-
+class MaxMindDBTestCase(unittest.TestCase):
 
     def setUp(self):
-        MaxMind_CC_DB.MASTERURL = ORIG_CC_MASTERURL
+        # Remove the logging for tests
+        logging.disable(logging.CRITICAL)
 
-        for el in Path(util.temp_directory).glob('*'):
+        MaxMindDB.MASTERURL = (
+                "https://download.maxmind.com/app/geoip_download?"
+                "edition_id=GeoLite2-Country&"
+                "license_key={license_key}&"
+                "suffix=tar.gz"
+            ).format(
+                license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            )
+
+        for el in Path(util.maxmind_directory).glob('*'):
             rm_recursive(el)
 
-
     def test_init(self):
-        obj = MaxMind_CC_DB()
+        obj = MaxMindDB(MaxMindDB.MASTERURL, "cc")
         self.assertIsNotNone(obj)
 
-
     def test_get_db_path(self):
-        s = stub_MaxMind_CC_DB()
+        s = StubMaxMindDB()
 
         # No db present
         p = s.get_db_path()
-
         self.assertIsNone(p)
 
         # Single db present
@@ -58,7 +63,7 @@ class MaxMind_CC_DBTestCase(unittest.TestCase):
         folder.mkdir()
         db_file = Path(folder, 'GeoLite2-Country.mmdb')
         db_file.touch()
-        p = MaxMind_CC_DB.get_db_path(s)
+        p = MaxMindDB.get_db_path(s)
 
         self.assertEqual(p, str(db_file))
 
@@ -67,118 +72,45 @@ class MaxMind_CC_DBTestCase(unittest.TestCase):
         folder.mkdir()
         db_file = Path(folder, 'GeoLite2-Country.mmdb')
         db_file.touch()
-        p = MaxMind_CC_DB.get_db_path(s)
+        p = MaxMindDB.get_db_path(s)
 
         self.assertEqual(p, str(db_file))
-
 
     def test_get_db(self):
 
         # When DNS fails:
-        MaxMind_CC_DB.MASTERURL = (
+        MaxMindDB.MASTERURL = (
             "https://this_domain_does_not_exist.local"
             "/download/geoip/database/GeoLite2-Country.tar.gz"
         )
 
         with self.assertRaises(ConnectionError):
-            #TODO: Can the error logs from this be supressed from here?
-            MaxMind_CC_DB.get_db()
+            MaxMindDB(MaxMindDB.MASTERURL, "cc").get_db()
 
         # When URL is bad
-        MaxMind_CC_DB.MASTERURL = ORIG_CC_MASTERURL
-        MaxMind_CC_DB.MASTERURL = MaxMind_CC_DB.MASTERURL.replace(
+        MaxMindDB.MASTERURL = MaxMindDB.MASTERURL.replace(
             '?', "THIS_URL_IS_WRONG")
 
         with self.assertRaises(Exception):
-            #TODO: Can the error logs from this be supressed from here?
-            MaxMind_CC_DB.get_db()
+            MaxMindDB.get_db()
 
         # When all is fine:
-        MaxMind_CC_DB.MASTERURL = ORIG_CC_MASTERURL
-        # Fetch it
-        s = stub_MaxMind_CC_DB()
+        self.setUp()
+        s = StubMaxMindDB()
         s.get_db()
         # Check if file is present
         p = s.get_db_path()
         self.assertIsNotNone(p, "get_db did not a path to the db")
         self.assertTrue(Path(p).exists())
 
-
-class stub_MaxMind_ASN_DB(MaxMind_ASN_DB):
-    """Stub with minimal __init__, to not hit error there."""
-    def __init__(self):
-        self.path_db = util.temp_directory
-
-
-class MaxMind_ASN_DBTestCase(unittest.TestCase):
-
-
-    def setUp(self):
-        MaxMind_ASN_DB.MASTERURL = ORIG_ASN_MASTERURL
-
-        for el in Path(util.temp_directory).glob('*'):
-            rm_recursive(el)
-
-
-    def test_init(self):
-        obj = MaxMind_ASN_DB()
-        self.assertIsNotNone(obj)
-
-
-    def test_get_db_path(self):
-        s = stub_MaxMind_ASN_DB()
-
-        # No db present
-        p = s.get_db_path()
-
-        self.assertIsNone(p)
-
-        # Single db present
-        folder = Path(s.path_db, 'GeoLite2-ASN_DUMMYFOLDER_1970')
-        folder.mkdir()
-        db_file = Path(folder, 'GeoLite2-ASN.mmdb')
-        db_file.touch()
-        p = MaxMind_ASN_DB.get_db_path(s)
-
-        self.assertEqual(p, str(db_file))
-
-        # Two dbs present
-        folder = Path(s.path_db, 'GeoLite2-ASN_DUMMYFOLDER_2040')
-        folder.mkdir()
-        db_file = Path(folder, 'GeoLite2-ASN.mmdb')
-        db_file.touch()
-        p = MaxMind_ASN_DB.get_db_path(s)
-
-        self.assertEqual(p, str(db_file))
-
-
-    def test_get_db(self):
-
-        # When DNS fails:
-        MaxMind_ASN_DB.MASTERURL = (
-            "https://this_domain_does_not_exist.local"
-            "/download/geoip/database/GeoLite2-ASN.tar.gz"
-        )
-
-        with self.assertRaises(ConnectionError):
-            #TODO: Can the error logs from this be supressed from here?
-            MaxMind_ASN_DB.get_db()
-
-        # When URL is bad
-        MaxMind_ASN_DB.MASTERURL = ORIG_ASN_MASTERURL
-        MaxMind_ASN_DB.MASTERURL = MaxMind_ASN_DB.MASTERURL.replace(
-            '?', "THIS_URL_IS_WRONG")
-
+    def test_extracted_db(self):
+        s = StubMaxMindDB()
+        # When fail to extract the DB
         with self.assertRaises(Exception):
-            #TODO: Can the error logs from this be supressed from here?
-            MaxMind_ASN_DB.get_db()
+            s.unpack()
 
-        # When all is fine:
-        MaxMind_ASN_DB.MASTERURL = ORIG_ASN_MASTERURL
-        # Fetch it
-        s = stub_MaxMind_ASN_DB()
-        s.get_db()
-        # Check if file is present
-        p = s.get_db_path()
-        self.assertIsNotNone(p, "get_db did not a path to the db")
-        self.assertTrue(Path(p).exists())
+    def test_is_outdated(self):
+        obj = MaxMindDB(MaxMindDB.MASTERURL, "cc")
+        self.assertFalse(obj.is_outdated())
+
+
