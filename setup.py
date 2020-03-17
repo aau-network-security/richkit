@@ -30,7 +30,7 @@ setuptools.setup(
     python_requires='>=3.5',
     author=['Ahmet Turkmen', 'Gian Marco Mennecozzi ', 'Egon Kidmose'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.5',
