@@ -1,7 +1,6 @@
 from os import path
 import requests
 import tempfile
-import sys
 import logging
 
 logger = logging.getLogger(__name__)
@@ -13,6 +12,7 @@ class WordMatcher(object):
     MASTERURL = "http://www.greenteapress.com/thinkpython/code/words.txt"
     MASTERFILE = temp_directory + "/words.txt"
     WORDS = None
+    count = 0
 
     @classmethod
     def fetch_words(cls, url=None):
@@ -41,6 +41,12 @@ class WordMatcher(object):
         # cls.WORDS = set(lines)
 
     def __init__(self):
+
+        # check if the class has been initialised
+        if self.__class__.count > 0:
+            return
+        else:
+            self.__class__.count += 1
 
         if path.exists(WordMatcher.MASTERFILE):
             WordMatcher.load_words()
@@ -114,6 +120,7 @@ class TldMatcher(object):
 
     TLDS = None
     No_TLDS = None
+    count = 0
 
     @classmethod
     def fetch_tlds(cls, url=None):
@@ -147,6 +154,12 @@ class TldMatcher(object):
         cls.No_TLDS = set(excluded_lines)
 
     def __init__(self):
+
+        # check if the class has been initialised
+        if self.__class__.count > 0:
+            return
+        else:
+            self.__class__.count += 1
 
         if path.exists(TldMatcher.MASTERFILE):
             TldMatcher.load_tlds()
