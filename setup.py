@@ -6,8 +6,8 @@ with open(path.join(root, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name='richkit',
-    description='Domain analysis toolkit',
-    version='latest',
+    description='Domain enrichment kit ',
+    version='1.1.0-Beta',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/aau-network-security/richkit',
@@ -30,7 +30,7 @@ setuptools.setup(
     python_requires='>=3.5',
     author=['Ahmet Turkmen', 'Gian Marco Mennecozzi ', 'Egon Kidmose'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.5',

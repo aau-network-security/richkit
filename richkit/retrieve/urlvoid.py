@@ -65,7 +65,7 @@ class URLVoid(object):
     def blacklist_status(self):
         """
 
-        :return: Blacklist status among 36 services which are enable
+        :return: Blacklist status among 36 services or more which are enable
         in URLVOID itself.
         """
         try:

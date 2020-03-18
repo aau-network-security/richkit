@@ -1,10 +1,9 @@
-Welcome to rickit's documentation!
-===============================
+Welcome to richkit's documentation!
+==================================
 
 .. automodule:: richkit
 
 .. toctree::
-   :maxdepth: 2
    :caption: Contents:
 
 Modules
@@ -22,10 +21,19 @@ Lookup
 .. automodule:: richkit.lookup
                 :members:
 
+.. automodule:: richkit.lookup.geo
+                :members:
+
 Retrieve
 --------
 .. automodule:: richkit.retrieve
                 :members:
+
+.. automodule:: richkit.retrieve.dns
+                :members:
+
+.. automodule:: richkit.retrieve.symantec
+                :members: fetch_from_internet, LocalCategoryDB
 
 Indices and tables
 ==================

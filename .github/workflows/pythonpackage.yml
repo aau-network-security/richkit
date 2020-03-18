@@ -6,6 +6,34 @@ on:
       - 'README.md'
       - 'LICENCE'
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install flake8
+      run: pip install flake8
+    - name: Check for syntax errors or undefined names
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    - name: Lint with flake8
+      run: |
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127
+    - name: Check that number of pep8 violations is not going up
+      run: |
+        # test that number of violations does not increase
+        FLAKE8_ERROR_CNT=$(flake8 . -qq --count --exit-zero --max-complexity=10 --max-line-length=127)
+        FLAKE8_ERROR_LIMIT=308
+        if [ "$FLAKE8_ERROR_CNT" -gt "$FLAKE8_ERROR_LIMIT" ] ; then
+            echo "Failed because the number of errors from flake8 increased (This: $FLAKE8_ERROR_CNT Previously: $FLAKE8_ERROR_LIMIT)" 1>&2
+            false
+        fi
+        echo "Number of validation errors from flake8 is: $FLAKE8_ERROR_CNT (Limit is: $FLAKE8_ERROR_LIMIT)"
+
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -25,33 +53,32 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        pip install coverage pytest sphinx
+
     - name: Test with pytest
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
-        pytest
-    - name: Coverage
+        coverage run --source=richkit -m pytest
+    - name: Coverage report
+      run: |
+        coverage report --fail-under=79
+ 
+    - name: Doctest
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
-        coverage run --source=richkit -m unittest discover
-    - name: Generate report through coverage
+        python -m doctest -v README.md
+        cd docs
+        make doctest
+    - name: Documentation coverage
+      env:
+        MAXMIND_LICENSE_KEY: "DUMMY: A valid license is not needed here"
       run: |
-        coverage report > coverage_report.txt
-    - name: Upload code coverage as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: coverage_report.txt
-        path: coverage_report.txt
+        cd docs
+        make coverage
+        python -c "from pathlib import Path; print(Path('_build/coverage/python.txt').read_text())" # this prints dosctring coverage report
     - name: Build documentation
       run: |
-        pip install sphinx
         cd docs
         make html

@@ -6,12 +6,13 @@ this is done without disclosing the domain name to third parties and
 breaching confidentiality.
 
 .. note:: For this entire module, we adopt the notion of effective
-Top-Level Domains (eTLD), effective Second-Level Domain (e2LD), etc.
-"Effective" refers to the practice where the public sufffic is
-considered the effective TLD, and counted as one label. The `list of
-public suffixes <https://publicsuffix.org/list/>`_, maintained by
-Mozilla, is used as the definitive truth on what public suffixes
-exists.
+          Top-Level Domains (eTLD), effective Second-Level Domain
+          (e2LD), etc. "Effective" refers to the practice where the
+          public sufffic is considered the effective TLD, and counted
+          as one label. The `list of public suffixes
+          <https://publicsuffix.org/list/>`_, maintained by Mozilla,
+          is used as the definitive truth on what public suffixes
+          exists.
 
 """
 
@@ -60,6 +61,16 @@ def nld(domain, n):
 
     :param domain: Domain (string)
     :param n: N'th-Level (int)
+    
+    Usage: 
+      
+      from richkit.analyse import nld
+      
+      ## returns second level domain ... 
+      print(nld("www.google.com", 2))
+      
+      ## returns top level domain
+      print(nld("www.google.com",1))
 
     """
     return analyse.get_nld(domain, n)
@@ -68,7 +79,7 @@ def nld(domain, n):
 def n_label(domain, n):
     """
     Returns the Effective N'th-level label.
-
+        
     :param domain: Domain (string)
     :param n: N'th-Level (int)
 
@@ -82,10 +93,10 @@ def depth(domain):
 
     The depth is the number of labels in the domain.
 
-    .. example:: `google.co.uk` is "effectively a 2LD. `google` is one
-    label. The public suffix of `co.uk` is considered one label
-    effectively. With effectively two labels, the effective depth is
-    two.
+    :Example: `google.co.uk` is "effectively a 2LD. `google` is one
+              label. The public suffix of `co.uk` is considered one
+              label effectively. With effectively two labels, the
+              effective depth is two.
 
     :param domain: Domain (string)
 
