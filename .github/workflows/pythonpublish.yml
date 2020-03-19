@@ -23,8 +23,8 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PIP_TOKEN }}
       run: |
         python setup.py sdist bdist_wheel
-        twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-  ## Initialize release process && use TestPyPi to perform and check upload first before uploading to pypi.org
+        twine upload  dist/*
+  ## Initialize release process
     - name: Checkout code
       uses: actions/checkout@master
     - name: Create Release
