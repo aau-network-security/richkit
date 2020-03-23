@@ -1,5 +1,4 @@
-from dns import reversename
-from dns import resolver
+import dns
 import logging
 
 logger = logging.getLogger(__name__)
@@ -13,7 +12,7 @@ def get_a_record(domain):
     """
     try:
         a_record = []
-        result = resolver.query(domain, 'A')
+        result = dns.resolver.query(domain, 'A')
         for ip in result:
             a_record.append(ip.to_text())
         return a_record
@@ -30,8 +29,8 @@ def get_ptr_record(ip_address):
     """
     try:
         ptr_record = []
-        addr = reversename.from_address(ip_address)
-        result = resolver.query(addr, 'PTR')
+        addr = dns.reversename.from_address(ip_address)
+        result = dns.resolver.query(addr, 'PTR')
         for ip in result:
             ptr_record.append(ip.to_text())
         return ptr_record
