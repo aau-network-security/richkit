@@ -3,6 +3,7 @@ import json
 import logging
 import statistics
 from datetime import datetime
+from richkit.analyse import tld, sld, sl_label, depth, length
 
 logger = logging.getLogger(__name__)
 
@@ -90,19 +91,48 @@ class DomainCertificates:
 
             cert["ValidationL"] = policy_list
             cert["SANFeatures"] = dict({
+                'util': SAN_list,
                 'DomainCount': len(SAN_list),
-                'UniqueApexCount': None,
-                'UniqueSLDCount': None,
-                'ShortestSAN': len(min(SAN_list)),
-                'LongestSAN': len(max(SAN_list)),
+                'UniqueApexCount': unique_apex(SAN_list),
+                'UniqueSLDCount': unique_sld(SAN_list),
+                'ShortestSAN': int(min([length(row) for row in SAN_list])),
+                'LongestSAN': int(max([length(row) for row in SAN_list])),
                 'SANsMean': statistics.mean([len(row) for row in SAN_list]),
-                'MinSublabels': None,
-                'MaxSublabels': None,
-                'MeanSublabels': None,
-                'UniqueTLDsCount': None,
-                'UniqueTLDsDomainCount': None,
-                'ApexLCS': None,
+                'MinSublabels': min([int(depth(row)) - 2 for row in SAN_list]),
+                'MaxSublabels': max([int(depth(row)) - 2 for row in SAN_list]),
+                'MeanSublabels': statistics.mean([int(depth(row)) for row in SAN_list]),
+                'UniqueTLDsCount': unique_tld(SAN_list),
+                'UniqueTLDsDomainCount': unique_tld(SAN_list) / len(SAN_list),
+                'ApexLCS': None,        # Don't need to implement
                 'LenApexLCS': None,
                 'LenApexLCSnorm': None
             })
-            print(cert)
+
+        return self.certificates_features
+
+
+def unique_apex(sans):
+    """
+    Number of unique apex/root domains covered by the certificate
+    :param sans: List of Subject Alternative Name
+    """
+    apex = [sld(san) for san in sans]
+    return len(set(apex))
+
+
+def unique_tld(sans):
+    """
+    Number of unique apex/root domains covered by the certificate
+    :param sans: List of Subject Alternative Name
+    """
+    get_tlds = [tld(san) for san in sans]
+    return len(set(get_tlds))
+
+
+def unique_sld(sans):
+    """
+    Number of unique apex/root domains covered by the certificate
+    :param sans: List of Subject Alternative Name
+    """
+    get_sld = [sl_label(san) for san in sans]
+    return len(set(get_sld))
