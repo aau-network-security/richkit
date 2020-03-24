@@ -2,14 +2,14 @@ import unittest
 from datetime import datetime
 from richkit.retrieve import whois as wh
 
+class WhoisTestCase(unittest.TestCase):
 
-class URLVoidTestCase(unittest.TestCase):
     def setUp(self):
         self.domains = ["www.google.com", "www.cloudflare.com"]
 
     # .dk domains give unknownTld exception !
 
-    def test_info(self):
+    def test_get_whois_info(self):
         # last updated field skipped since it could be None
         for i in self.domains:
             whois_info = wh.get_whois_info(i)

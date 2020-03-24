@@ -7,7 +7,6 @@ any sort. It comes without the "confidentiality contract" of
 """
 from richkit.retrieve import symantec
 from richkit.retrieve import dns
-from richkit.retrieve import whois
 
 def symantec_category(domain):
     """
