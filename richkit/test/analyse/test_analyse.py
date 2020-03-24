@@ -219,7 +219,7 @@ class TestAnalyse(unittest.TestCase):
     def test_get_grams_dict_2ld(self):
         for k, v in self.domain.items():
             grams_dict_2ld = analyse.n_grams_dict(k)
-            assert grams_dict_2ld ==str(v['n_grams_2ld'])
+            assert grams_dict_2ld == str(v['n_grams_2ld'])
 
 
     def test_correctly_tlds(self):

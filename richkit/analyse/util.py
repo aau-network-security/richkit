@@ -1,4 +1,3 @@
-import time
 from os import path
 from pathlib import Path
 import requests
@@ -73,6 +72,8 @@ def load_alexa(limit=None):
     """
     alexa_domains = set()
     alexa_top_1m = data_folder
+    if not path.exists(alexa_top_1m):
+        alexa_top_1m = fetch_alexa_data()
     with open(alexa_top_1m) as f:
         for line in f:
             line = line.strip()
@@ -97,31 +98,46 @@ def load_alexa(limit=None):
     alexa_slds = set([get_2ld(el) for el in alexa_domains])
 
     return alexa_slds
+def load_words(path_to_data=data_folder):
+   if not path.exists(path_to_data):
+       fetch_alexa_data()
 
-def load_words(path_to_data = data_folder):
-    TOP_1M_URL="https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
-    global lines
+   lines = read_local()
+
+    # strip whitespaces
+    # only words with more than three letters are considered
+   lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
+   words = set(lines)
+   return words
+
+def read_local(path_to_data=data_folder):
     if path.exists(path_to_data):
         f = open(path_to_data, 'r', encoding="utf8")
         lines = f.readlines()
         f.close()
     else:
-        response = requests.get(TOP_1M_URL, stream=True)
-        if response.status_code == 200:
-            with open(path_to_data, 'wb+') as file:
-                file.write(response.content)
-        else:
-            logger.error('Error while downloading the TOP 1M URL list status code : %s',str(response.status_code))
-    # strip whitespaces
-    # only words with more than three letters are considered
-    lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
-    words = set(lines)
-    return words
+        lines = []
+    return lines
+
+def fetch_alexa_data(path_to_data=data_folder):
+
+    top_1m_url = "https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
+
+    response = requests.get(top_1m_url, stream=True)
+    if response.status_code == 200:
+        with open(path_to_data, 'wb+') as file:
+            file.write(response.content)
+    else:
+        logger.error('Error while downloading the TOP 1M URL list status code : %s',
+                    str(response.status_code))
+    return path_to_data
+
+
 
 class TldMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "https://publicsuffix.org/list/effective_tld_names.dat"
-    MASTERFILE = temp_directory +"/effective_tld_names.dat"
+    MASTERFILE = temp_directory + "/effective_tld_names.dat"
 
     TLDS = None
     No_TLDS = None
@@ -137,8 +153,8 @@ class TldMatcher(object):
                 file.write(response.content)
         else:
 
-            logger.error('Error while downloading the Public Suffix List status code %s ',str(response.status_code))
-
+            logger.error('Error while downloading the Public Suffix List status code %s ',
+                         str(response.status_code))
 
     @classmethod
     def load_tlds(cls):
