@@ -26,8 +26,8 @@ jobs:
     - name: Check that number of pep8 violations is not going up
       run: |
         # test that number of violations does not increase
-        FLAKE8_ERROR_CNT=$(flake8 . -qq --count --exit-zero --max-complexity=10 --max-line-length=127)
-        FLAKE8_ERROR_LIMIT=308
+        FLAKE8_ERROR_CNT=$(flake8 . -qq --count --exit-zero --max-complexity=10 --max-line-length=127 --exclude venv,__pycache__,docs/source/conf.py,old,build,dist)
+        FLAKE8_ERROR_LIMIT=30
         if [ "$FLAKE8_ERROR_CNT" -gt "$FLAKE8_ERROR_LIMIT" ] ; then
             echo "Failed because the number of errors from flake8 increased (This: $FLAKE8_ERROR_CNT Previously: $FLAKE8_ERROR_LIMIT)" 1>&2
             false
