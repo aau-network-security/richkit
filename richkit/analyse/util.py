@@ -1,7 +1,11 @@
+import time
 from os import path
+from pathlib import Path
 import requests
 import tempfile
 import logging
+
+data_folder = Path("data/top-1m.csv").absolute()
 
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
@@ -68,8 +72,8 @@ def load_alexa(limit=None):
 
     """
     alexa_domains = set()
-    path = "top-1m.csv"
-    with open(path) as f:
+    alexa_top_1m = data_folder
+    with open(alexa_top_1m) as f:
         for line in f:
             line = line.strip()
             sline = line.split(',')
@@ -94,8 +98,9 @@ def load_alexa(limit=None):
 
     return alexa_slds
 
-def load_words(path_to_data="data/top-1m.csv"):
+def load_words(path_to_data = data_folder):
     TOP_1M_URL="https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
+    global lines
     if path.exists(path_to_data):
         f = open(path_to_data, 'r', encoding="utf8")
         lines = f.readlines()
@@ -103,7 +108,7 @@ def load_words(path_to_data="data/top-1m.csv"):
     else:
         response = requests.get(TOP_1M_URL, stream=True)
         if response.status_code == 200:
-            with open(path_to_data, 'wb') as file:
+            with open(path_to_data, 'wb+') as file:
                 file.write(response.content)
         else:
             logger.error('Error while downloading the TOP 1M URL list status code : %s',str(response.status_code))

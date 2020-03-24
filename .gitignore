@@ -53,6 +53,7 @@ coverage.xml
 richkit/test/.DS_Store
 # Local data
 richkit/retrieve/data/*.txt
+richkit/test/analyse/data/*.csv
 # Translations
 *.mo
 *.pot

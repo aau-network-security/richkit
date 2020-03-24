@@ -1,4 +1,6 @@
 import unittest
+from pathlib import Path
+
 from richkit import analyse
 from os import path
 import requests
@@ -9,6 +11,20 @@ logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
+def rm_recursive(pth):
+    pth = Path(pth)
+    # Recurse
+    for child in pth.glob('*'):
+        if child.is_file():
+            child.unlink()
+        else:
+            rm_recursive(child)
+    # Handle current pth
+    if pth.is_file():
+        pth.unlink()
+    else:
+        pth.rmdir()
 
 class TestEffect2LD():
     temp_directory = tempfile.mkdtemp()
@@ -85,6 +101,8 @@ class TestAnalyse(unittest.TestCase):
                 'ratio_special_2ld': 0.0,
                 'num_numeric_2ld': 0,
                 'radio_numeric_2ld': 0.0,
+                'n_grams_2ld': 100.64708682408921,
+                'n_grams_2ld_alexa': 100.39251250792265
             },
             'www.intranet.es.aau.dk': {
                 'num_tokens': 5,
@@ -106,8 +124,12 @@ class TestAnalyse(unittest.TestCase):
                 'ratio_special_2ld': 0.0,
                 'num_numeric_2ld': 0,
                 'radio_numeric_2ld': 0.0,
+                'n_grams_2ld': 15.663239668199637,
+                'n_grams_2ld_alexa': 13.206136808545434
             }
         }
+        self.data_path = "data/"
+
 
     def test_tld(self):
         for k, v in self.domain.items():
@@ -199,15 +221,18 @@ class TestAnalyse(unittest.TestCase):
             domain_number_words = analyse.number_words(k)
             assert domain_number_words == str(v['num_words_2ld'])
 
-    @unittest.skip("Skipping alexa test, tested locally")
     def test_get_grams_alexa_2ld(self):
-        alexa_grams = analyse.n_grams_alexa(self.domain)
-        assert alexa_grams == ''
+        for k, v in self.domain.items():
+            alexa_grams_2ld = analyse.n_grams_alexa(k)
+            assert alexa_grams_2ld == str(v['n_grams_2ld_alexa'])
+        rm_recursive(self.data_path)
 
-    @unittest.skip("Skipping dict test since no data folder")
+
     def test_get_grams_dict_2ld(self):
-        grams_dict_2ld = analyse.n_grams_dict(self.domain)
-        assert grams_dict_2ld == '25.77346214958408'
+        for k, v in self.domain.items():
+            grams_dict_2ld = analyse.n_grams_dict(k)
+            assert grams_dict_2ld ==str(v['n_grams_2ld'])
+        rm_recursive(self.data_path)
 
     def test_correctly_tlds(self):
         tests = TestEffect2LD()

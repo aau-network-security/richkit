@@ -152,6 +152,7 @@ def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
 	:param : domain, analyzer, ngram_range
 	:return: grams of second level domain
 	"""
+
 	alexa_slds = load_alexa()
 	alexa_vc = CountVectorizer(analyzer=analyzer,
 							   ngram_range=ngram_range,
@@ -177,7 +178,7 @@ def get_grams_dict_2ld(domain):
 	counts_matrix = dict_vc.fit_transform(words)
 	dict_counts = np.log10(counts_matrix.sum(axis=0).getA1())
 	grams_dict2ld = ngram_count(get_sld(domain), dict_counts, dict_vc)
-	return str(grams_dict2ld)
+	return grams_dict2ld
 
 
 def get_num_words_2ld(domain):
