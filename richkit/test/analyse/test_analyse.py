@@ -13,7 +13,6 @@ logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
 logger = logging.getLogger(__name__)
 
 
-
 class TestEffect2LD():
     temp_directory = tempfile.mkdtemp()
     MASTERURL = "https://raw.githubusercontent.com/publicsuffix/list/master/tests/test_psl.txt"
@@ -30,16 +29,17 @@ class TestEffect2LD():
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            logger.error('Error while downloading the Test List status code: %s',response.status_code)
+            logger.error('Error while downloading the Test List status code: %s',
+                         response.status_code)
 
     @classmethod
     def load_tlds(cls):
         try:
-            f = open(cls.MASTERFILE, 'r',encoding="utf8")
+            f = open(cls.MASTERFILE, 'r', encoding="utf8")
             lines = f.readlines()
         except FileNotFoundError as e:
 
-            logger.error("File not readable, not found %s",e)
+            logger.error("File not readable, not found %s", e)
             f.close()
         f.close()
 
@@ -117,7 +117,6 @@ class TestAnalyse(unittest.TestCase):
             }
         }
         self.data_path = "data/"
-
 
     def test_tld(self):
         for k, v in self.domain.items():
@@ -214,13 +213,10 @@ class TestAnalyse(unittest.TestCase):
             alexa_grams_2ld = analyse.n_grams_alexa(k)
             assert alexa_grams_2ld == str(v['n_grams_2ld_alexa'])
 
-
-
     def test_get_grams_dict_2ld(self):
         for k, v in self.domain.items():
             grams_dict_2ld = analyse.n_grams_dict(k)
             assert grams_dict_2ld == str(v['n_grams_2ld'])
-
 
     def test_correctly_tlds(self):
         tests = TestEffect2LD()

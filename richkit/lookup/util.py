@@ -1,5 +1,6 @@
 import requests
-import os, subprocess
+import os
+import subprocess
 import time
 from datetime import datetime, timedelta
 import logging
@@ -93,7 +94,8 @@ class MaxMindDB:
         Return the ASN Database path if exists
 
         """
-        filtered_dir = [x for x in os.listdir(self.path_db) if x.startswith(self.helpers[self.query][0])]
+        filtered_dir = [x for x in os.listdir(
+            self.path_db) if x.startswith(self.helpers[self.query][0])]
         sorted_dir = sorted(filtered_dir, reverse=True)
         if sorted_dir:
             return str(Path(

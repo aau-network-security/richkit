@@ -13,6 +13,7 @@ import os.path
 DATA_FOLDER = Path('richkit/retrieve/data')
 CAT_URLS_FILE = DATA_FOLDER / 'categorized_urls.txt'
 
+
 class SymantecTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -90,6 +91,7 @@ class SymantecTestCase(unittest.TestCase):
         if os.path.isfile(categories_file_path):
             os.remove(categories_file_path)
         os.remove(categorized_url_path)
+
 
 if __name__ == '__main__':
     unittest.main()

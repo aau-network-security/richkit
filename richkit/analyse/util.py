@@ -27,7 +27,8 @@ class WordMatcher(object):
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            logger.error('Error while downloading the word list response code %s ',str(response.status_code))
+            logger.error('Error while downloading the word list response code %s ',
+                         str(response.status_code))
 
     @classmethod
     def load_words(cls):
@@ -65,6 +66,7 @@ class WordMatcher(object):
                 num += 1
         return num
 
+
 def load_alexa(limit=None):
     """
     Reads top @limit number of popular domains based on alexa.com
@@ -98,17 +100,20 @@ def load_alexa(limit=None):
     alexa_slds = set([get_2ld(el) for el in alexa_domains])
 
     return alexa_slds
-def load_words(path_to_data=data_folder):
-   if not path.exists(path_to_data):
-       fetch_alexa_data()
 
-   lines = read_local()
+
+def load_words(path_to_data=data_folder):
+    if not path.exists(path_to_data):
+        fetch_alexa_data()
+
+    lines = read_local()
 
     # strip whitespaces
     # only words with more than three letters are considered
-   lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
-   words = set(lines)
-   return words
+    lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
+    words = set(lines)
+    return words
+
 
 def read_local(path_to_data=data_folder):
     if path.exists(path_to_data):
@@ -118,6 +123,7 @@ def read_local(path_to_data=data_folder):
     else:
         lines = []
     return lines
+
 
 def fetch_alexa_data(path_to_data=data_folder):
 
@@ -129,9 +135,8 @@ def fetch_alexa_data(path_to_data=data_folder):
             file.write(response.content)
     else:
         logger.error('Error while downloading the TOP 1M URL list status code : %s',
-                    str(response.status_code))
+                     str(response.status_code))
     return path_to_data
-
 
 
 class TldMatcher(object):
@@ -169,7 +174,8 @@ class TldMatcher(object):
         # strip comments and blank lines
         stripped_lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
 
-        excluded_lines = [ln.strip('!') for ln in (ln.strip() for ln in lines) if len(ln) and ln[:1] == '!']
+        excluded_lines = [ln.strip('!') for ln in (ln.strip()
+                                                   for ln in lines) if len(ln) and ln[:1] == '!']
 
         cls.TLDS = set(stripped_lines)
         cls.No_TLDS = set(excluded_lines)
@@ -200,7 +206,7 @@ class TldMatcher(object):
             if test in TldMatcher.TLDS or startest in TldMatcher.TLDS:
                 best_match = test
 
-        #return an Error since is not clear on the PS List which is the TLD of the domain marked with '!'
+        # return an Error since is not clear on the PS List which is the TLD of the domain marked with '!'
         if best_match in TldMatcher.No_TLDS:
             raise NotImplementedError()
 
@@ -237,4 +243,3 @@ def get_2ld(domain):
         return domain
     else:
         return '.'.join(sdomain[-index:])
-
