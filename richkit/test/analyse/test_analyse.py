@@ -1,3 +1,4 @@
+import os
 import unittest
 from pathlib import Path
 
@@ -12,19 +13,6 @@ logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
 logger = logging.getLogger(__name__)
 
 
-def rm_recursive(pth):
-    pth = Path(pth)
-    # Recurse
-    for child in pth.glob('*'):
-        if child.is_file():
-            child.unlink()
-        else:
-            rm_recursive(child)
-    # Handle current pth
-    if pth.is_file():
-        pth.unlink()
-    else:
-        pth.rmdir()
 
 class TestEffect2LD():
     temp_directory = tempfile.mkdtemp()
@@ -225,14 +213,14 @@ class TestAnalyse(unittest.TestCase):
         for k, v in self.domain.items():
             alexa_grams_2ld = analyse.n_grams_alexa(k)
             assert alexa_grams_2ld == str(v['n_grams_2ld_alexa'])
-        rm_recursive(self.data_path)
+
 
 
     def test_get_grams_dict_2ld(self):
         for k, v in self.domain.items():
             grams_dict_2ld = analyse.n_grams_dict(k)
             assert grams_dict_2ld ==str(v['n_grams_2ld'])
-        rm_recursive(self.data_path)
+
 
     def test_correctly_tlds(self):
         tests = TestEffect2LD()

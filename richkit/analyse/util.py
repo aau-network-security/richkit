@@ -5,7 +5,7 @@ import requests
 import tempfile
 import logging
 
-data_folder = Path("data/top-1m.csv").absolute()
+data_folder = Path("top-1m.csv").absolute()
 
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
