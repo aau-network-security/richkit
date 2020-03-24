@@ -89,6 +89,15 @@ class DomainCertificates:
                 if policy_index in row:
                     policy_list.append(row[len(policy_index):])
 
+            # Calculating the LCS
+            apex = [sld(san) for san in SAN_list]
+            lcs_num = 0
+            for i in apex:
+                for j in apex:
+                    current_lcs = lcs(i, j)
+                    if current_lcs > lcs_num:
+                        lcs_num = current_lcs
+
             cert["ValidationL"] = policy_list
             cert["SANFeatures"] = dict({
                 'util': SAN_list,
@@ -104,8 +113,8 @@ class DomainCertificates:
                 'UniqueTLDsCount': unique_tld(SAN_list),
                 'UniqueTLDsDomainCount': unique_tld(SAN_list) / len(SAN_list),
                 'ApexLCS': None,        # Don't need to implement
-                'LenApexLCS': None,
-                'LenApexLCSnorm': None
+                'LenApexLCS': lcs_num,
+                'LenApexLCSnorm': lcs_num / int(max([length(row) for row in SAN_list]))
             })
 
         return self.certificates_features
@@ -136,3 +145,27 @@ def unique_sld(sans):
     """
     get_sld = [sl_label(san) for san in sans]
     return len(set(get_sld))
+
+
+def lcs(x, y):
+    """
+    The longest common substring (LCS)
+    :param x: First string
+    :param y: Second string
+    """
+    # find the length of the strings
+    m = len(x)
+    n = len(y)
+
+    L = [[None] * (n + 1) for i in range(m + 1)]
+
+    for i in range(m + 1):
+        for j in range(n + 1):
+            if i == 0 or j == 0:
+                L[i][j] = 0
+            elif x[i - 1] == y[j - 1]:
+                L[i][j] = L[i - 1][j - 1] + 1
+            else:
+                L[i][j] = max(L[i - 1][j], L[i][j - 1])
+
+    return L[m][n]
