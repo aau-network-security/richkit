@@ -10,7 +10,7 @@ from richkit.lookup import geo
 
 
 def country(ip_address):
-    """"
+    """
     Return the country code of a given IP Address
 
     :param ip_address: IP Address (string)
@@ -18,9 +18,17 @@ def country(ip_address):
     return geo.get_country(ip_address)
 
 def asn(ip_address):
-    """"
+    """
     Return the Autonomous System Number of a given IP Address
 
     :param ip_address: IP Address (string)
     """
     return geo.get_asn(ip_address)
+
+def registered_country(ip_address):
+    """
+    Return the registered country code of a given IP Address
+
+    :param ip_address: IP Address (string)
+    """
+    return geo.get_registered_country(ip_address)
