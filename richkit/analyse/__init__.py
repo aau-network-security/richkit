@@ -19,6 +19,8 @@ breaching confidentiality.
 from richkit.analyse import analyse
 
 # aka tld
+
+
 def tld(domain):
     """
     Returns the Effective Top-Level Domain (eTLD) (aka Public Suffix).
@@ -61,14 +63,14 @@ def nld(domain, n):
 
     :param domain: Domain (string)
     :param n: N'th-Level (int)
-    
+
     Usage: 
-      
+
       from richkit.analyse import nld
-      
+
       ## returns second level domain ... 
       print(nld("www.google.com", 2))
-      
+
       ## returns top level domain
       print(nld("www.google.com",1))
 
@@ -79,7 +81,7 @@ def nld(domain, n):
 def n_label(domain, n):
     """
     Returns the Effective N'th-level label.
-        
+
     :param domain: Domain (string)
     :param n: N'th-Level (int)
 

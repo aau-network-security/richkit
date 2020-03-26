@@ -8,7 +8,6 @@ any sort. It comes without the "confidentiality contract" of
 from richkit.retrieve import symantec
 from richkit.retrieve import dns
 
-
 def symantec_category(domain):
     """
     Returns the category from Symantec's BlueCoat service.
@@ -34,3 +33,4 @@ def dns_ptr(ip_address):
     :return: domains (list)
     """
     return dns.get_ptr_record(ip_address)
+

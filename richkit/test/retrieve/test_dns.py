@@ -4,18 +4,21 @@ import unittest
 
 
 class DNSTestCase(unittest.TestCase):
-    @unittest.skip("A Record change every time")
-    def test_a_record(self):
-        for k, v in self.test_urls.items():
-            instance = dns.get_a_record(k)
-            assert instance[0] in v["a_record"]
+    # Since A record change every time, just checking whether we are retrieving a record or not
+    def setUp(self):
+        self.test_urls = ["www.google.co.uk", "www.cloudflare.com", "www.intranet.es.aau.dk"]
+        self.test_ips = ["8.8.8.8", "8.8.4.4", "1.1.1.1"]
 
-    @unittest.skip("PTR Record change every time")
+    def test_a_record(self):
+        for url in self.test_urls:
+            instance = dns.get_a_record(url)
+            assert instance[0] is not None
+
+    # Since PTR record change every time, just checking whether we are retrieving a record or not
     def test_ptr_record(self):
-        for k, v in self.test_urls.items():
-            instance = dns.get_ptr_record(v["a_record"][0])
-            print(instance)
-            assert instance[0] in v["ptr_record"]
+        for url in self.test_ips:
+            instance = dns.get_ptr_record(url)
+            assert instance[0] is not None
 
 
 if __name__ == '__main__':

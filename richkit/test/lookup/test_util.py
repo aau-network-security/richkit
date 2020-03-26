@@ -24,6 +24,7 @@ def rm_recursive(pth):
 
 class StubMaxMindDB(MaxMindDB):
     """Stub with minimal __init__, to not hit error there."""
+
     def __init__(self):
         self.path_db = util.maxmind_directory
         self.query = "cc"
@@ -36,13 +37,13 @@ class MaxMindDBTestCase(unittest.TestCase):
         logging.disable(logging.CRITICAL)
 
         MaxMindDB.MASTERURL = (
-                "https://download.maxmind.com/app/geoip_download?"
-                "edition_id=GeoLite2-Country&"
-                "license_key={license_key}&"
-                "suffix=tar.gz"
-            ).format(
-                license_key=os.environ['MAXMIND_LICENSE_KEY'],
-            )
+            "https://download.maxmind.com/app/geoip_download?"
+            "edition_id=GeoLite2-Country&"
+            "license_key={license_key}&"
+            "suffix=tar.gz"
+        ).format(
+            license_key=os.environ['MAXMIND_LICENSE_KEY'],
+        )
 
         for el in Path(util.maxmind_directory).glob('*'):
             rm_recursive(el)
@@ -112,5 +113,3 @@ class MaxMindDBTestCase(unittest.TestCase):
     def test_is_outdated(self):
         obj = MaxMindDB(MaxMindDB.MASTERURL, "cc")
         self.assertFalse(obj.is_outdated())
-
-

@@ -1,7 +1,10 @@
 from os import path
+from pathlib import Path
 import requests
 import tempfile
 import logging
+
+data_folder = Path("top-1m.csv").absolute()
 
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
@@ -24,7 +27,8 @@ class WordMatcher(object):
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            logger.error('Error while downloading the word list response code %s ',str(response.status_code))
+            logger.error('Error while downloading the word list response code %s ',
+                         str(response.status_code))
 
     @classmethod
     def load_words(cls):
@@ -62,14 +66,17 @@ class WordMatcher(object):
                 num += 1
         return num
 
+
 def load_alexa(limit=None):
     """
     Reads top @limit number of popular domains based on alexa.com
 
     """
     alexa_domains = set()
-    path = "top-1m.csv"
-    with open(path) as f:
+    alexa_top_1m = data_folder
+    if not path.exists(alexa_top_1m):
+        alexa_top_1m = fetch_alexa_data()
+    with open(alexa_top_1m) as f:
         for line in f:
             line = line.strip()
             sline = line.split(',')
@@ -94,29 +101,48 @@ def load_alexa(limit=None):
 
     return alexa_slds
 
-def load_words(path_to_data="data/top-1m.csv"):
-    TOP_1M_URL="https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
-    if path.exists(path_to_data):
-        f = open(path_to_data, 'r', encoding="utf8")
-        lines = f.readlines()
-        f.close()
-    else:
-        response = requests.get(TOP_1M_URL, stream=True)
-        if response.status_code == 200:
-            with open(path_to_data, 'wb') as file:
-                file.write(response.content)
-        else:
-            logger.error('Error while downloading the TOP 1M URL list status code : %s',str(response.status_code))
+
+def load_words(path_to_data=data_folder):
+    if not path.exists(path_to_data):
+        fetch_alexa_data()
+
+    lines = read_local()
+
     # strip whitespaces
     # only words with more than three letters are considered
     lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) > 3]
     words = set(lines)
     return words
 
+
+def read_local(path_to_data=data_folder):
+    if path.exists(path_to_data):
+        f = open(path_to_data, 'r', encoding="utf8")
+        lines = f.readlines()
+        f.close()
+    else:
+        lines = []
+    return lines
+
+
+def fetch_alexa_data(path_to_data=data_folder):
+
+    top_1m_url = "https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
+
+    response = requests.get(top_1m_url, stream=True)
+    if response.status_code == 200:
+        with open(path_to_data, 'wb+') as file:
+            file.write(response.content)
+    else:
+        logger.error('Error while downloading the TOP 1M URL list status code : %s',
+                     str(response.status_code))
+    return path_to_data
+
+
 class TldMatcher(object):
     # use class vars for lazy loading
     MASTERURL = "https://publicsuffix.org/list/effective_tld_names.dat"
-    MASTERFILE = temp_directory +"/effective_tld_names.dat"
+    MASTERFILE = temp_directory + "/effective_tld_names.dat"
 
     TLDS = None
     No_TLDS = None
@@ -132,8 +158,8 @@ class TldMatcher(object):
                 file.write(response.content)
         else:
 
-            logger.error('Error while downloading the Public Suffix List status code %s ',str(response.status_code))
-
+            logger.error('Error while downloading the Public Suffix List status code %s ',
+                         str(response.status_code))
 
     @classmethod
     def load_tlds(cls):
@@ -148,7 +174,8 @@ class TldMatcher(object):
         # strip comments and blank lines
         stripped_lines = [ln for ln in (ln.strip() for ln in lines) if len(ln) and ln[:2] != '//']
 
-        excluded_lines = [ln.strip('!') for ln in (ln.strip() for ln in lines) if len(ln) and ln[:1] == '!']
+        excluded_lines = [ln.strip('!') for ln in (ln.strip()
+                                                   for ln in lines) if len(ln) and ln[:1] == '!']
 
         cls.TLDS = set(stripped_lines)
         cls.No_TLDS = set(excluded_lines)
@@ -179,7 +206,7 @@ class TldMatcher(object):
             if test in TldMatcher.TLDS or startest in TldMatcher.TLDS:
                 best_match = test
 
-        #return an Error since is not clear on the PS List which is the TLD of the domain marked with '!'
+        # return an Error since is not clear on the PS List which is the TLD of the domain marked with '!'
         if best_match in TldMatcher.No_TLDS:
             raise NotImplementedError()
 
@@ -216,4 +243,3 @@ def get_2ld(domain):
         return domain
     else:
         return '.'.join(sdomain[-index:])
-

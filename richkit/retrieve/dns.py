@@ -19,7 +19,7 @@ def get_a_record(domain):
         return a_record
     except Exception as ex:
         logger.error(ex)
-        return "None"
+        return None
 
 
 def get_ptr_record(ip_address):
@@ -37,4 +37,4 @@ def get_ptr_record(ip_address):
         return ptr_record
     except Exception as ex:
         logger.error(ex)
-        return "None"
+        return None

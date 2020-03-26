@@ -1,6 +1,7 @@
 from richkit.retrieve.urlvoid import URLVoid
 
-import unittest,re
+import unittest
+import re
 
 
 class URLVoidTestCase(unittest.TestCase):
@@ -77,7 +78,8 @@ class URLVoidTestCase(unittest.TestCase):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
             blacklist_status = instance.blacklist_status()
-            assert re.match(r'[0]/\d*',blacklist_status)
+            assert re.match(r'[0]/\d*', blacklist_status)
+
 
 if __name__ == '__main__':
     unittest.main()

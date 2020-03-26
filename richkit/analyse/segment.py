@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class OneGramDist(dict):
     URL = "https://gist.githubusercontent.com/mrturkmen06/d9d5f8bc35be8efd81c447f70ca99fbf/raw/cfa317d7bce53ba55ca8f9bf27aa3170038f99cf/one-grams.txt"
     FILEPATH = temp_directory + "/one-grams.txt"
@@ -76,7 +77,8 @@ def segment(word):
     :param word:
     :return:
     """
-    if not word: return []
+    if not word:
+        return []
     word = word.lower()  # change to lower case
     allSegmentations = [[first] + segment(rest) for (first, rest) in splitPairs(word)]
     return max(allSegmentations, key=word_seq_fitness)

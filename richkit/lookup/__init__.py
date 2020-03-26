@@ -17,6 +17,7 @@ def country(ip_address):
     """
     return geo.get_country(ip_address)
 
+
 def asn(ip_address):
     """
     Return the Autonomous System Number of a given IP Address
@@ -24,6 +25,7 @@ def asn(ip_address):
     :param ip_address: IP Address (string)
     """
     return geo.get_asn(ip_address)
+
 
 def registered_country(ip_address):
     """
