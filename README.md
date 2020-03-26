@@ -93,17 +93,15 @@ Richkit define a set of functions categorized by the following modules:
 Contributions are most welcome.
 
 We use the [gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+
 branching strategy, so if you plan to push a branch to this repository
 please follow that. Note that we test branch names with
-`.githooks/check-branch-name.py` and encourage something like this for
-your local `.git/hooks/pre-commit`, to catch unacceptable branch names
-(assuming `python>=3.6` and `bash`):
+`.githooks/check-branch-name.py`. The git pre-commit hook can be used
+to automatically check this on commit. An example that can be used
+directly as follows is available on linux, and can be enabled like
+this (assuming `python>=3.6` and `bash`):
 
-    #!/usr/bin/env bash
-    python3 .githooks/check-branch-name.py "$(git rev-parse --abbrev-ref HEAD)"
-    exit $?
-
-
+    ln -s $(pwd)/.githooks/pre-commit.linux.sample $(pwd)/.git/hooks/pre-commit
 
 ## Credits 
 
