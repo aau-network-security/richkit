@@ -1,82 +1,12 @@
-import requests
-import json
-import logging
-import statistics
-from datetime import datetime
 from richkit.analyse import tld, sld, sl_label, depth, length
+import statistics
+import requests
+import logging
 
 logger = logging.getLogger(__name__)
 
 
-class DomainCertificates:
-
-    # Website used to retrieve the certificates belonging a domain
-    crtSH_url = "https://crt.sh/{}&output=json"
-
-    def __init__(self, domain):
-        self.domain = domain
-        self.certificates = None
-        self.certificates_features = None
-        self.get_certificates(self.domain)
-
-    def get_certificates(self, domain):
-
-        try:
-            r = requests.get(self.crtSH_url.format("?q=" + domain))
-            content = r.content.decode('utf-8')
-            if len(r.text) == 2:        # It's 2 when the domain is not found
-                raise Exception("Domain not found")
-            self.certificates = json.loads(content)
-        except Exception as e:
-            logger.error('Error while retrieving certificates: %s', e)
-            raise e
-
-    def get_all(self):
-        certs_features = []
-        for cert in self.certificates:
-            if '@' not in cert.get('name_value'):
-                cf = CertificateFeatures(cert.get('id'))
-                not_before = cert.get('not_before')
-                not_after = cert.get('not_after')
-                not_before_obj = datetime.strptime(not_before, "%Y-%m-%dT%H:%M:%S")
-                not_after_obj = datetime.strptime(not_after, "%Y-%m-%dT%H:%M:%S")
-                validity = (not_after_obj.date() - not_before_obj.date()).days
-                features = dict({
-                    'ID': cert.get('id'),
-                    'Issuer': cert.get('issuer_name'),
-                    'Algorithm': cf.algorithm,
-                    'ValidationL': cf.policy_list,
-                    'NotBefore': not_before,
-                    'NotAfter': not_after,
-                    'Validity': validity,       # days
-                    'SANFeatures': cf.certificates_features
-                })
-                certs_features.append(features)
-        self.certificates_features = certs_features
-        return certs_features
-
-    def get_cert_features(self):
-        certs_features = []
-        for cert in self.certificates:
-            if '@' not in cert.get('name_value'):
-                not_before = cert.get('not_before')
-                not_after = cert.get('not_after')
-                not_before_obj = datetime.strptime(not_before, "%Y-%m-%dT%H:%M:%S")
-                not_after_obj = datetime.strptime(not_after, "%Y-%m-%dT%H:%M:%S")
-                validity = (not_after_obj.date() - not_before_obj.date()).days
-                features = dict({
-                    'ID': cert.get('id'),
-                    'Issuer': cert.get('issuer_name'),
-                    'NotBefore': not_before,
-                    'NotAfter': not_after,
-                    'Validity': validity,       # days
-                })
-                certs_features.append(features)
-        self.certificates_features = certs_features
-        return certs_features
-
-
-class CertificateFeatures:
+class X509:
 
     crtSH_url = "https://crt.sh/{}"
 
