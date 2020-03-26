@@ -93,7 +93,6 @@ Richkit define a set of functions categorized by the following modules:
 Contributions are most welcome.
 
 We use the [gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
-
 branching strategy, so if you plan to push a branch to this repository
 please follow that. Note that we test branch names with
 `.githooks/check-branch-name.py`. The git pre-commit hook can be used
