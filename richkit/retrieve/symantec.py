@@ -26,16 +26,15 @@ How to use:
 """
 import ast
 import json
-import glob
 import os
 from json import dumps
-from xml.etree.ElementTree import fromstring
-import urllib.request
-from urllib.request import urlopen, build_opener
 import re
 from pathlib import Path
 import logging
-
+import requests
+from xml.etree.ElementTree import fromstring
+from requests.exceptions import HTTPError
+from requests.exceptions import InvalidURL
 logger = logging.getLogger(__name__)
 
 """
@@ -67,13 +66,12 @@ def fetch_categories(categories_url=categories_url, local_categories_path=catego
     if not categories_url:
         return None
     try:
-        u = build_opener()
-        r = u.open(categories_url)
-        data = json.load(r)
+        resp = requests.get(categories_url)
+        data = resp.json()
         d = dict([('%02x' % c['num'], c['name']) for c in data])
-    except urllib.error.HTTPError as e:
+    except HTTPError as e:
         logger.error('Cannot fetch categories, HTTP error: %s\n' % str(e.code))
-    except urllib.error.URLError as e:
+    except InvalidURL as e:
         logger.error('Cannot fetch categories, URL error: %s\n' % str(e.reason))
     try:
         f = open(local_categories_path, 'w')
@@ -126,10 +124,10 @@ def fetch_from_internet(url, categories_file_path=categories_file_path, categori
     result = ''
     hostname = url
     port = '80'
-    r = urlopen(
-        'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (k9License, hostname, port))
-    if r.code == 200:
-        e = fromstring(r.read())
+    webservice_endpoint = 'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (k9License, hostname, port)
+    r = requests.get(webservice_endpoint)
+    if r.status_code == 200:
+        e = fromstring(r.text)
         domc = e.find('DomC')
         dirc = e.find('DirC')
         if domc is not None:
