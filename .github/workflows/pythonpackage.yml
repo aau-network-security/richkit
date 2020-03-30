@@ -34,6 +34,22 @@ jobs:
         fi
         echo "Number of validation errors from flake8 is: $FLAKE8_ERROR_CNT (Limit is: $FLAKE8_ERROR_LIMIT)"
 
+  formalities:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Extract branch name
+      shell: bash
+      run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
+    - name: Check branch name
+      run: |
+        echo "Checking ${BRANCH_NAME}..."
+        python3 .githooks/check-branch-name.py "$BRANCH_NAME"
+
   test:
     runs-on: ${{ matrix.os }}
     strategy:
