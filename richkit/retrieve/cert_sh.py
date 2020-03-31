@@ -73,5 +73,3 @@ class DomainCertificates:
                 certs_features.append(features)
         self.certificates_features = certs_features
         return certs_features
-
-
