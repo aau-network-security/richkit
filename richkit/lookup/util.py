@@ -46,7 +46,7 @@ class MaxMindDB:
         if MaxMindDB.get_db_path(self) is None:
             MaxMindDB.get_db(self)
 
-        if self.is_outdated():
+        if self.get_age() > timedelta(weeks=1):
             os.remove(self.get_db_path())
             MaxMindDB.get_db(self)
 
@@ -122,5 +122,3 @@ class MaxMindDB:
         )
         return delta
 
-    def is_outdated(self):
-        return self.get_age() > timedelta(weeks=1)

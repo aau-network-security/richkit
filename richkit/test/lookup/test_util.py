@@ -1,3 +1,6 @@
+import time
+from datetime import datetime
+
 from richkit.lookup import util
 from richkit.lookup.util import MaxMindDB
 import os
@@ -101,8 +104,11 @@ class MaxMindDBTestCase(unittest.TestCase):
         s.get_db()
         # Check if file is present
         p = s.get_db_path()
+        s_age = s.get_age()
         self.assertIsNotNone(p, "get_db did not a path to the db")
         self.assertTrue(Path(p).exists())
+        self.assertTrue(s_age.microseconds)
+
 
     def test_extracted_db(self):
         s = StubMaxMindDB()
@@ -110,6 +116,10 @@ class MaxMindDBTestCase(unittest.TestCase):
         with self.assertRaises(Exception):
             s.unpack()
 
-    def test_is_outdated(self):
-        obj = MaxMindDB(MaxMindDB.MASTERURL, "cc")
-        self.assertFalse(obj.is_outdated())
+    def test_get_age(self):
+        s = StubMaxMindDB()
+        if type(s.get_age()) != datetime.timedelta:
+            return False
+        else:
+            return True
+
