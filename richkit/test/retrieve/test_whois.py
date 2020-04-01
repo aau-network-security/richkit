@@ -2,6 +2,7 @@ import unittest
 from datetime import datetime
 from richkit.retrieve import whois as wh
 
+
 class WhoisTestCase(unittest.TestCase):
 
     def setUp(self):

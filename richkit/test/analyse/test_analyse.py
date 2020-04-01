@@ -69,7 +69,6 @@ class TestEffect2LD():
 
 class TestAnalyse(unittest.TestCase):
 
-
     def setUp(self):
         self.domain = {
             'www.google.co.uk': {
@@ -225,7 +224,6 @@ class TestAnalyse(unittest.TestCase):
         for k, v in self.domain.items():
             alexa_grams_2ld = analyse.n_grams_alexa(k, is_test=True)
             assert alexa_grams_2ld == v['n_grams_2ld_alexa']
-
 
     def test_get_grams_dict_2ld(self):
         for k, v in self.domain.items():
