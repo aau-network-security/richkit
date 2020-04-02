@@ -35,7 +35,7 @@ def get_country(ip_address):
             "license_key={license_key}&"
             "suffix=tar.gz"
         ).format(
-            license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            license_key=get_license_key(),
         ), "cc"
         )
         result = country_code_db.get_data(ip_address)
@@ -59,7 +59,7 @@ def get_registered_country(ip_address):
             "license_key={license_key}&"
             "suffix=tar.gz"
         ).format(
-            license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            license_key=get_license_key(),
         ), "cc"
         )
         result = country_code_db.get_data(ip_address)
@@ -83,7 +83,7 @@ def get_asn(ip_address):
             "license_key={license_key}&"
             "suffix=tar.gz"
         ).format(
-            license_key=os.environ['MAXMIND_LICENSE_KEY'],
+            license_key=get_license_key(),
         ), "asn"
         )
         result = country_code_db.get_data(ip_address)
