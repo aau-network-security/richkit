@@ -104,7 +104,7 @@ class MaxMindDBTestCase(unittest.TestCase):
         s.get_db()
         # Check if file is present
         p = s.get_db_path()
-        s_age = s.get_age()
+        s_age = s.get_age()  # get_age() function is tested over here
         self.assertIsNotNone(p, "get_db did not a path to the db")
         self.assertTrue(Path(p).exists())
         self.assertTrue(s_age.microseconds)
@@ -115,11 +115,4 @@ class MaxMindDBTestCase(unittest.TestCase):
         # When fail to extract the DB
         with self.assertRaises(Exception):
             s.unpack()
-
-    def test_get_age(self):
-        s = StubMaxMindDB()
-        if type(s.get_age()) != datetime.timedelta:
-            return False
-        else:
-            return True
 
