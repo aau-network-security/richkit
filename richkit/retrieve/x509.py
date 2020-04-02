@@ -37,8 +37,11 @@ class X509:
         policy_list = []        # Used to store the policies in order to get the Validation Level
 
         algo_index = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature&nbsp;Algorithm:'
-        san_index = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS:'
-        policy_index = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Policy:&nbsp;'
+        san_index = \
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS:'
+        policy_index = \
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
+            '&nbsp;&nbsp;&nbsp;&nbsp;Policy:&nbsp;'
         for row in text_list:
             # Get Signature Algorithm
             if algo_index in row:
@@ -69,14 +72,14 @@ class X509:
             'ShortestSAN': int(min([length(row) for row in SAN_list])),
             'LongestSAN': int(max([length(row) for row in SAN_list])),
             'SANsMean': statistics.mean([len(row) for row in SAN_list]),
-            'MinSublabels': min([int(depth(row)) - 2 for row in SAN_list]),
-            'MaxSublabels': max([int(depth(row)) - 2 for row in SAN_list]),
-            'MeanSublabels': statistics.mean([int(depth(row)) for row in SAN_list]),
+            'MinSubLabels': min([int(depth(row)) - 2 for row in SAN_list]),
+            'MaxSubLabels': max([int(depth(row)) - 2 for row in SAN_list]),
+            'MeanSubLabels': statistics.mean([int(depth(row)) for row in SAN_list]),
             'UniqueTLDsCount': unique_tld(SAN_list),
             'UniqueTLDsDomainCount': unique_tld(SAN_list) / len(SAN_list),
             'ApexLCS': None,        # Don't need to implement
             'LenApexLCS': lcs_num,
-            'LenApexLCSnorm': lcs_num / int(max([length(row) for row in SAN_list]))
+            'LenApexLCSNorm': lcs_num / int(max([length(row) for row in SAN_list]))
         })
 
 
@@ -112,20 +115,20 @@ def lcs(x, y):
     The longest common substring (LCS)
     :param x: First string
     :param y: Second string
+    :return LCS
     """
     # find the length of the strings
     m = len(x)
     n = len(y)
 
-    L = [[None] * (n + 1) for i in range(m + 1)]
+    h = [[None] * (n + 1) for i in range(m + 1)]
 
     for i in range(m + 1):
         for j in range(n + 1):
             if i == 0 or j == 0:
-                L[i][j] = 0
+                h[i][j] = 0
             elif x[i - 1] == y[j - 1]:
-                L[i][j] = L[i - 1][j - 1] + 1
+                h[i][j] = h[i - 1][j - 1] + 1
             else:
-                L[i][j] = max(L[i - 1][j], L[i][j - 1])
-
-    return L[m][n]
+                h[i][j] = max(h[i - 1][j], h[i][j - 1])
+    return h[m][n]

@@ -4,7 +4,7 @@ from richkit.retrieve.cert_sh import DomainCertificates
 from richkit.retrieve.x509 import X509
 
 
-class TestCTlogs(unittest.TestCase):
+class TestCTLogs(unittest.TestCase):
 
     def setUp(self):
         self.domains = {
@@ -47,7 +47,7 @@ class TestCTlogs(unittest.TestCase):
             DomainCertificates("this_domain_does_not_exist.com")
 
         for k, v in self.domains.items():
-            certs = ct.get_ctlogs(k)
+            certs = ct.get_logs(k)
             for cert in certs:
                 for vx in v["certs"]:
                     if str(cert["ID"]) == str(vx["ID"]):
