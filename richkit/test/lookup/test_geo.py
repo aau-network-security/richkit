@@ -4,6 +4,7 @@ from richkit.lookup import util
 from richkit import lookup
 import unittest
 
+
 def rm_recursive(pth):
     pth = Path(pth)
     # Recurse
@@ -17,6 +18,7 @@ def rm_recursive(pth):
         pth.unlink()
     else:
         pth.rmdir()
+
 
 class LookupTestCase(unittest.TestCase):
 

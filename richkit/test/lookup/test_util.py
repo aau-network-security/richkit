@@ -48,7 +48,6 @@ class MaxMindDBTestCase(unittest.TestCase):
             license_key=os.environ['MAXMIND_LICENSE_KEY'],
         )
 
-
     def tearDown(self):
         # deletes the files after test is done
         for el in Path(util.maxmind_directory).glob('*'):
