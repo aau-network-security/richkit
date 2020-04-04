@@ -152,13 +152,13 @@ def get_entropy_2ld(domain):
     return str(entropy(get_sld(domain)))
 
 
-def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
+def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5), is_test=False):
     """
     :param : domain, analyzer, ngram_range
     :return: grams of second level domain
     """
 
-    alexa_slds = load_alexa()
+    alexa_slds = load_alexa(is_test=is_test)
     alexa_vc = CountVectorizer(analyzer=analyzer,
                                ngram_range=ngram_range,
                                min_df=1e-4,
@@ -166,16 +166,16 @@ def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
     counts_matrix = alexa_vc.fit_transform(alexa_slds)
     alexa_counts = np.log10(counts_matrix.sum(axis=0).getA1())
     grams_alexa2ld = ngram_count(get_sld(domain), alexa_counts, alexa_vc)
-    return str(grams_alexa2ld)
+    return float(grams_alexa2ld)
 
 
-def get_grams_dict_2ld(domain):
+def get_grams_dict_2ld(domain, is_test=False):
     """
 
     :param domain:
-    :return: grams_dict_2ld as string
+    :return: grams_dict_2ld
     """
-    words = load_words()
+    words = load_words(is_test=is_test)
     dict_vc = CountVectorizer(analyzer='char',
                               ngram_range=(3, 5),
                               min_df=1e-5,
@@ -183,7 +183,7 @@ def get_grams_dict_2ld(domain):
     counts_matrix = dict_vc.fit_transform(words)
     dict_counts = np.log10(counts_matrix.sum(axis=0).getA1())
     grams_dict2ld = ngram_count(get_sld(domain), dict_counts, dict_vc)
-    return grams_dict2ld
+    return float(grams_dict2ld)
 
 
 def get_num_words_2ld(domain):

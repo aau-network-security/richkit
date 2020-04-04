@@ -7,6 +7,8 @@ from os import path
 import requests
 import tempfile
 import logging
+import os
+
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M',
                     level=logging.DEBUG)
@@ -89,8 +91,9 @@ class TestAnalyse(unittest.TestCase):
                 'ratio_special_2ld': 0.0,
                 'num_numeric_2ld': 0,
                 'radio_numeric_2ld': 0.0,
-                'n_grams_2ld': 100.64708682408921,
-                'n_grams_2ld_alexa': 100.39251250792265
+                # following values are smaller than expected due to top 100 alexa which is expected
+                'n_grams_2ld': 27.33635144637163,
+                'n_grams_2ld_alexa': 27.33081895777167
             },
             'www.intranet.es.aau.dk': {
                 'num_tokens': 5,
@@ -112,11 +115,20 @@ class TestAnalyse(unittest.TestCase):
                 'ratio_special_2ld': 0.0,
                 'num_numeric_2ld': 0,
                 'radio_numeric_2ld': 0.0,
-                'n_grams_2ld': 15.663239668199637,
-                'n_grams_2ld_alexa': 13.206136808545434
+                # this is 0.0 because of gathering top 100 alexa db, written for just ensuring test functions running correctly
+                'n_grams_2ld': 0.0,
+                'n_grams_2ld_alexa':  0.0
             }
         }
         self.data_path = "data/"
+
+    def tearDown(self):
+        """
+            Removes the file after test is done.
+            Could be modified in future according to need
+        """
+        if os.path.isfile('top-1m.csv'):
+            os.remove('top-1m.csv')
 
     def test_tld(self):
         for k, v in self.domain.items():
@@ -210,13 +222,13 @@ class TestAnalyse(unittest.TestCase):
 
     def test_get_grams_alexa_2ld(self):
         for k, v in self.domain.items():
-            alexa_grams_2ld = analyse.n_grams_alexa(k)
-            assert alexa_grams_2ld == str(v['n_grams_2ld_alexa'])
+            alexa_grams_2ld = analyse.n_grams_alexa(k, is_test=True)
+            assert alexa_grams_2ld == v['n_grams_2ld_alexa']
 
     def test_get_grams_dict_2ld(self):
         for k, v in self.domain.items():
-            grams_dict_2ld = analyse.n_grams_dict(k)
-            assert grams_dict_2ld == str(v['n_grams_2ld'])
+            grams_dict_2ld = analyse.n_grams_dict(k, is_test=True)
+            assert grams_dict_2ld == v['n_grams_2ld']
 
     def test_correctly_tlds(self):
         tests = TestEffect2LD()

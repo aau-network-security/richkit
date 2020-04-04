@@ -230,21 +230,22 @@ def number_words(s):
     return analyse.get_num_words_2ld(s)
 
 
-def n_grams_alexa(domain):
+def n_grams_alexa(domain, is_test):
     """
     Returns similarity to distribution of N-grams in Alexa Top 1M.
 
     :param domain: Domain (string)
+    :param is_test: Checks whether function called from a test case  or not
 
     """
-    return analyse.get_grams_alexa_2ld(domain)
+    return analyse.get_grams_alexa_2ld(domain, is_test=is_test)
 
 
-def n_grams_dict(domain):
+def n_grams_dict(domain, is_test):
     """
     Returns similarity to distribution of N-grams in English dictionary
 
     :param domain: Domain (string)
 
     """
-    return analyse.get_grams_dict_2ld(domain)
+    return analyse.get_grams_dict_2ld(domain, is_test)

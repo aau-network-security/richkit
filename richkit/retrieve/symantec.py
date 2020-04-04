@@ -124,7 +124,8 @@ def fetch_from_internet(url, categories_file_path=categories_file_path, categori
     result = ''
     hostname = url
     port = '80'
-    webservice_endpoint = 'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (k9License, hostname, port)
+    webservice_endpoint = 'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (
+        k9License, hostname, port)
     r = requests.get(webservice_endpoint)
     if r.status_code == 200:
         e = fromstring(r.text)

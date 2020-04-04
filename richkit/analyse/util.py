@@ -8,6 +8,8 @@ data_folder = Path("top-1m.csv").absolute()
 
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
+top_1m_alexa = "https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
+top_100_alexa = "https://gist.githubusercontent.com/mrturkmen06/98e33d97e6b8d07efabc1fda91946a21/raw/847e1c680d816bbac06ee5034e20b56d2ddfd78d/top-100.csv"
 
 
 class WordMatcher(object):
@@ -67,7 +69,7 @@ class WordMatcher(object):
         return num
 
 
-def load_alexa(limit=None):
+def load_alexa(limit=None, is_test=False):
     """
     Reads top @limit number of popular domains based on alexa.com
 
@@ -75,7 +77,10 @@ def load_alexa(limit=None):
     alexa_domains = set()
     alexa_top_1m = data_folder
     if not path.exists(alexa_top_1m):
-        alexa_top_1m = fetch_alexa_data()
+        if is_test:
+            alexa_top_1m = fetch_alexa_data(url=top_100_alexa)
+        else:
+            alexa_top_1m = fetch_alexa_data()
     with open(alexa_top_1m) as f:
         for line in f:
             line = line.strip()
@@ -102,11 +107,14 @@ def load_alexa(limit=None):
     return alexa_slds
 
 
-def load_words(path_to_data=data_folder):
+def load_words(path_to_data=data_folder, is_test=False):
     if not path.exists(path_to_data):
-        fetch_alexa_data()
+        if is_test:
+            path_to_data = fetch_alexa_data(url=top_100_alexa)
+        else:
+            path_to_data = fetch_alexa_data()
 
-    lines = read_local()
+    lines = read_local(path_to_data)
 
     # strip whitespaces
     # only words with more than three letters are considered
@@ -125,11 +133,9 @@ def read_local(path_to_data=data_folder):
     return lines
 
 
-def fetch_alexa_data(path_to_data=data_folder):
+def fetch_alexa_data(path_to_data=data_folder, url=top_1m_alexa):
 
-    top_1m_url = "https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
-
-    response = requests.get(top_1m_url, stream=True)
+    response = requests.get(url, stream=True)
     if response.status_code == 200:
         with open(path_to_data, 'wb+') as file:
             file.write(response.content)
