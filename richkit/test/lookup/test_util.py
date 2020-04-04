@@ -109,10 +109,8 @@ class MaxMindDBTestCase(unittest.TestCase):
         self.assertTrue(Path(p).exists())
         self.assertTrue(s_age.microseconds)
 
-
     def test_extracted_db(self):
         s = StubMaxMindDB()
         # When fail to extract the DB
         with self.assertRaises(Exception):
             s.unpack()
-
