@@ -1,3 +1,25 @@
 #!/usr/bin/env bash
+
+## Would be nice to have linting before commit
+if ! [ -x "$(command -v autopep8)" ] || [ "$(pip3 list |
+                                          cut -d " " -f 1 |
+                                          grep -xF "$package_name" | grep autopep8)" != "autopep8" ]
+then
+    echo 'autopep8 is NOT installed, linting test may fail on CI ... '
+    echo 'consider to install autopep8, you may use following commands: '
+    echo 'Debian: [ sudo apt-get install -y python-autopep8 ] '
+    echo 'MacOS: [ brew install autopep8 ]'
+    echo 'You may consider to install it into virtual environment of your project:'
+    echo 'source venv/bin/activate'
+    echo 'pip3 install autopep8'
+    echo 'autopep8 should be available in your system, to do not face with linting problem.'
+    exit 1
+else
+    echo 'Linting...'
+    echo 'Going to root directory of the project'
+    cd ../richkit
+    autopep8 --in-place --recursive --max-line-length=100 --exclude docs/source/conf.py,venv,__pycache__,old,build,dist .
+fi
+
 python3 .githooks/check-branch-name.py "$(git rev-parse --abbrev-ref HEAD)"
 exit $?
