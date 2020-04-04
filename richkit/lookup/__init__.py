@@ -35,6 +35,7 @@ def registered_country(ip_address):
     """
     return geo.get_registered_country(ip_address)
 
+
 def maxmindb_licence_key(license_key):
     """
     Return license key for MaxMind DB

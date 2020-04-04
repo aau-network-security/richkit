@@ -123,4 +123,3 @@ class MaxMindDB:
             reader.metadata().build_epoch
         )
         return delta
-

@@ -1,10 +1,30 @@
 import os
-
+from pathlib import Path
+from richkit.lookup import util
 from richkit import lookup
 import unittest
 
 
+def rm_recursive(pth):
+    pth = Path(pth)
+    # Recurse
+    for child in pth.glob('*'):
+        if child.is_file():
+            child.unlink()
+        else:
+            rm_recursive(child)
+    # Handle current pth
+    if pth.is_file():
+        pth.unlink()
+    else:
+        pth.rmdir()
+
+
 class LookupTestCase(unittest.TestCase):
+
+    def tearDown(self):
+        for el in Path(util.maxmind_directory).glob('*'):
+            rm_recursive(el)
 
     def test_country(self):
         country = lookup.country("8.8.8.8")

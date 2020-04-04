@@ -48,6 +48,8 @@ class MaxMindDBTestCase(unittest.TestCase):
             license_key=os.environ['MAXMIND_LICENSE_KEY'],
         )
 
+    def tearDown(self):
+        # deletes the files after test is done
         for el in Path(util.maxmind_directory).glob('*'):
             rm_recursive(el)
 
@@ -109,10 +111,8 @@ class MaxMindDBTestCase(unittest.TestCase):
         self.assertTrue(Path(p).exists())
         self.assertTrue(s_age.microseconds)
 
-
     def test_extracted_db(self):
         s = StubMaxMindDB()
         # When fail to extract the DB
         with self.assertRaises(Exception):
             s.unpack()
-
