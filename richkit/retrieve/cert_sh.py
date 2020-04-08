@@ -19,7 +19,10 @@ class DomainCertificates:
         self.get_certificates(self.domain)
 
     def get_certificates(self, domain):
-
+        """
+        Make a request and get the response content of the given domain
+        :param domain: the choosen domain
+        """
         try:
             r = requests.get(self.crtSH_url.format("?q=" + domain + "&output=json"))
             content = r.content.decode('utf-8')
@@ -31,8 +34,13 @@ class DomainCertificates:
             raise e
 
     def get_all(self):
+        """
+        Get the list of certificates for the given domain and the certificate features for each of them
+        """
         certs_features = []
         for cert in self.certificates:
+            # filter out all the rows containing @ because they are email
+            # example: https://crt.sh/?id=34083306
             if '@' not in cert.get('name_value'):
                 cf = X509(cert.get('id'))
                 not_before = cert.get('not_before')
@@ -55,8 +63,13 @@ class DomainCertificates:
         return certs_features
 
     def get_certificates_list(self):
+        """
+        Get the list of certificates for the given domain
+        """
         certs_features = []
         for cert in self.certificates:
+            # filter out all the rows containing @ because they are email
+            # example: https://crt.sh/?id=34083306
             if '@' not in cert.get('name_value'):
                 not_before = cert.get('not_before')
                 not_after = cert.get('not_after')

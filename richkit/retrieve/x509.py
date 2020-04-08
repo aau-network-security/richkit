@@ -7,9 +7,16 @@ logger = logging.getLogger(__name__)
 
 
 class X509:
+    """
+    This class provides functions to extract certificate features from crt.sh
+    The only needed parameter is the crt.sh ID of the certificate, it's possible to
+    get it just making a request on crt.sh by listing all the certificates for a specific domain
+    """
 
+    # Website used to retrieve the certificates belonging a domain
     crtSH_url = "https://crt.sh/{}"
 
+    # cert_id is the unique ID given by crt.sh per certificate
     def __init__(self, cert_id):
         self.cert_id = cert_id
         self.algorithm = None
@@ -18,6 +25,11 @@ class X509:
         self.get_certificate_features()
 
     def get_certificate_info(self, cert_id):
+        """
+        Make a request and get the response content of the given ID
+        :param cert_id: crt.sh ID of the certificate
+        :return: response as text
+        """
         try:
             r = requests.get(self.crtSH_url.format("?id=" + cert_id))
             if "<BR><BR>Certificate not found </BODY>" in r.text:
@@ -30,6 +42,9 @@ class X509:
             return None
 
     def get_certificate_features(self):
+        """
+        Parse the response content to get the certificate features
+        """
         text = self.get_certificate_info(str(self.cert_id))
         text_list = text.split('<BR>')
 
