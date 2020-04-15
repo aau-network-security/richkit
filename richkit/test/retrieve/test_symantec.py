@@ -22,32 +22,32 @@ class SymantecTestCase(unittest.TestCase):
         for file in Path('.').glob('*.txt'):
             file.unlink()
 
-    def test_read_categorized_file(self, file_path=CAT_URLS_FILE):
+    def test_read_categorized_file(self):
 
-        d = read_categorized_file(file_path=file_path)
+        d = read_categorized_file(CAT_URLS_FILE)
         self.assertIsInstance(d, dict)
         self.assertEqual(len(d), 0)
 
         # Read something already in file
-        with open(file_path, 'w') as fd:
+        with open(CAT_URLS_FILE, 'w') as fd:
             fd.writelines([
                 'www.example.com,Example'
             ])
-        d = read_categorized_file(file_path=file_path)
+        d = read_categorized_file(CAT_URLS_FILE)
         self.assertIsInstance(d, dict)
         self.assertEqual(len(d), 1)
         self.assertEqual(d['www.example.com'], 'Example')
 
-    def test_fetch_categories(self, file_path=CATEGORIES_FILE_PATH):
+    def test_fetch_categories(self):
         # make sure that categories url is accessible and fetched correctly
-        categories = fetch_categories(categories_url, file_path)
+        categories = fetch_categories(categories_url, CATEGORIES_FILE_PATH)
         assert categories != {}
 
-    def test_load_categories(self, categories_file_path=CATEGORIES_FILE_PATH):
-        if os.path.isfile(categories_file_path):
-            assert load_categories(categories_file_path) != {}
+    def test_load_categories(self):
+        if os.path.isfile(CATEGORIES_FILE_PATH):
+            assert load_categories(CATEGORIES_FILE_PATH) != {}
         else:
-            assert load_categories(categories_file_path) == {}
+            assert load_categories(CATEGORIES_FILE_PATH) == {}
 
     def test_fetch_from_internet(
             self,

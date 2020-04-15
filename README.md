@@ -98,7 +98,7 @@ Commands to test them in Docker environment.
 
 - `docker build -t richkit-test -f Dockerfile.test . ` : Builds required image to run test cases 
 
-- `docker run richkit-test ` : Runs `run-test.sh` file in Docker image. 
+- `docker run -e MAXMIND_LICENSE_KEY="<licence-key> " richkit-test ` : Runs `run-test.sh` file in Docker image. 
 
 
 ## Contributing
