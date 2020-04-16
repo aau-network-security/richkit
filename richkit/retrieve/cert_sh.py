@@ -8,11 +8,19 @@ logger = logging.getLogger(__name__)
 
 
 class DomainCertificates:
+    """
+    This class provides the functions to get certificates of a given domain.
+    The website used to get them is crt.sh
+    """
 
     # Website used to retrieve the certificates belonging a domain
     crtSH_url = "https://crt.sh/{}"
 
     def __init__(self, domain):
+        """
+        Get the certificate features from the given domain
+        :param domain: domain to analyze
+        """
         self.domain = domain
         self.certificates = None
         self.certificates_features = None
@@ -41,24 +49,23 @@ class DomainCertificates:
         for cert in self.certificates:
             # filter out all the rows containing @ because they are email
             # example: https://crt.sh/?id=34083306
-            if '@' not in cert.get('name_value'):
-                cf = X509(cert.get('id'))
-                not_before = cert.get('not_before')
-                not_after = cert.get('not_after')
-                not_before_obj = datetime.strptime(not_before, "%Y-%m-%dT%H:%M:%S")
-                not_after_obj = datetime.strptime(not_after, "%Y-%m-%dT%H:%M:%S")
-                validity = (not_after_obj.date() - not_before_obj.date()).days
-                features = dict({
-                    'ID': cert.get('id'),
-                    'Issuer': cert.get('issuer_name'),
-                    'Algorithm': cf.algorithm,
-                    'ValidationL': cf.policy_list,
-                    'NotBefore': not_before,
-                    'NotAfter': not_after,
-                    'Validity': validity,       # days
-                    'SANFeatures': cf.certificates_features
-                })
-                certs_features.append(features)
+            cf = X509(cert.get('id'))
+            not_before = cert.get('not_before')
+            not_after = cert.get('not_after')
+            not_before_obj = datetime.strptime(not_before, "%Y-%m-%dT%H:%M:%S")
+            not_after_obj = datetime.strptime(not_after, "%Y-%m-%dT%H:%M:%S")
+            validity = (not_after_obj.date() - not_before_obj.date()).days
+            features = dict({
+                'ID': cert.get('id'),
+                'Issuer': cert.get('issuer_name'),
+                'Algorithm': cf.algorithm,
+                'ValidationL': cf.policy_list,
+                'NotBefore': not_before,
+                'NotAfter': not_after,
+                'Validity': validity,       # days
+                'SANFeatures': cf.certificates_features
+            })
+            certs_features.append(features)
         self.certificates_features = certs_features
         return certs_features
 
@@ -70,19 +77,18 @@ class DomainCertificates:
         for cert in self.certificates:
             # filter out all the rows containing @ because they are email
             # example: https://crt.sh/?id=34083306
-            if '@' not in cert.get('name_value'):
-                not_before = cert.get('not_before')
-                not_after = cert.get('not_after')
-                not_before_obj = datetime.strptime(not_before, "%Y-%m-%dT%H:%M:%S")
-                not_after_obj = datetime.strptime(not_after, "%Y-%m-%dT%H:%M:%S")
-                validity = (not_after_obj.date() - not_before_obj.date()).days
-                features = dict({
-                    'ID': cert.get('id'),
-                    'Issuer': cert.get('issuer_name'),
-                    'NotBefore': not_before,
-                    'NotAfter': not_after,
-                    'Validity': validity,       # days
-                })
-                certs_features.append(features)
+            not_before = cert.get('not_before')
+            not_after = cert.get('not_after')
+            not_before_obj = datetime.strptime(not_before, "%Y-%m-%dT%H:%M:%S")
+            not_after_obj = datetime.strptime(not_after, "%Y-%m-%dT%H:%M:%S")
+            validity = (not_after_obj.date() - not_before_obj.date()).days
+            features = dict({
+                'ID': cert.get('id'),
+                'Issuer': cert.get('issuer_name'),
+                'NotBefore': not_before,
+                'NotAfter': not_after,
+                'Validity': validity,       # days
+            })
+            certs_features.append(features)
         self.certificates_features = certs_features
         return certs_features

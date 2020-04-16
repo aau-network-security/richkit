@@ -16,8 +16,11 @@ class X509:
     # Website used to retrieve the certificates belonging a domain
     crtSH_url = "https://crt.sh/{}"
 
-    # cert_id is the unique ID given by crt.sh per certificate
     def __init__(self, cert_id):
+        """
+        Get the Subject Alternative Name features from the given certificate
+        :param cert_id: unique ID given by crt.sh per certificate
+        """
         self.cert_id = cert_id
         self.algorithm = None
         self.policy_list = None
@@ -54,6 +57,10 @@ class X509:
         algo_index = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature&nbsp;Algorithm:'
         san_index = \
             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS:'
+
+        san_index_email = \
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email:'
+
         policy_index = \
             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
             '&nbsp;&nbsp;&nbsp;&nbsp;Policy:&nbsp;'
@@ -65,18 +72,15 @@ class X509:
             # Get SANs
             if san_index in row:
                 SAN_list.append(row[len(san_index):])
+            if san_index_email in row:
+                SAN_list.append(row[len(san_index_email):])
 
             if policy_index in row:
                 policy_list.append(row[len(policy_index):])
 
         # Calculating the LCS
         apex = [sld(san) for san in SAN_list]
-        lcs_num = 0
-        for i in apex:
-            for j in apex:
-                current_lcs = lcs(i, j)
-                if current_lcs > lcs_num:
-                    lcs_num = current_lcs
+        lcs_num = get_lcs_apex(apex)
 
         self.policy_list = policy_list
         self.certificates_features = dict({
@@ -109,7 +113,7 @@ def unique_apex(sans):
 
 def unique_tld(sans):
     """
-    Number of unique apex/root domains covered by the certificate
+    Number of unique TLDs covered by the certificate
     :param sans: List of Subject Alternative Name
     """
     get_tlds = [tld(san) for san in sans]
@@ -118,11 +122,28 @@ def unique_tld(sans):
 
 def unique_sld(sans):
     """
-    Number of unique apex/root domains covered by the certificate
+    Number of unique effective 2-level label domains covered by the certificate
     :param sans: List of Subject Alternative Name
     """
     get_sld = [sl_label(san) for san in sans]
     return len(set(get_sld))
+
+
+def get_lcs_apex(apex):
+    """
+    The longest common substring of an array
+    :param apex: apex array
+    :return: The longest common substring
+    """
+    lcs_num = 0
+    for i in apex:
+        current_sans_list = apex[:]
+        current_sans_list.remove(i)
+        for j in current_sans_list:
+            current_lcs = lcs(i, j)
+            if current_lcs > lcs_num:
+                lcs_num = current_lcs
+    return lcs_num
 
 
 def lcs(x, y):
@@ -132,7 +153,6 @@ def lcs(x, y):
     :param y: Second string
     :return LCS
     """
-    # find the length of the strings
     m = len(x)
     n = len(y)
 

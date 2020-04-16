@@ -21,7 +21,7 @@ def get_certificates(domain):
     """
     try:
         certs = DomainCertificates(domain)
-        return certs.get_cert_features()
+        return certs.get_certificates_list()
     except Exception as e:
         print(e)
 
