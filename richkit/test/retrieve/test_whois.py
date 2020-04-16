@@ -6,7 +6,6 @@ from richkit.retrieve import whois
 class WhoisTestCase(unittest.TestCase):
 
     # .dk domains give unknownTld exception !
-    @unittest.skip("No reason to skip however it fails on ci requires more investigation")
     def test_get_whois_info(self):
         # last updated field skipped since it could be None
 

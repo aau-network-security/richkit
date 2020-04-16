@@ -6,4 +6,4 @@ langid==1.1.6
 bs4==0.0.1
 lxml==4.4.1
 requests==2.22.0
-python-whois
+-e git://github.com/aau-network-security/pywhois.git@feature/remove-future#egg=python-whois
