@@ -51,7 +51,7 @@ class X509:
         text = self.get_certificate_info(str(self.cert_id))
         text_list = text.split('<BR>')
 
-        SAN_list = []           # Used to store the  SANs
+        sans = SANList()           # Used to store the  SANs
         policy_list = []        # Used to store the policies in order to get the Validation Level
 
         algo_index = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature&nbsp;Algorithm:'
@@ -71,34 +71,34 @@ class X509:
 
             # Get SANs
             if san_index in row:
-                SAN_list.append(row[len(san_index):])
+                sans.append(row[len(san_index):])
             if san_index_email in row:
-                SAN_list.append(row[len(san_index_email):])
+                sans.append(row[len(san_index_email):])
 
             if policy_index in row:
                 policy_list.append(row[len(policy_index):])
 
         # Calculating the LCS
-        apex = [sld(san) for san in SAN_list]
+        apex = [sld(san) for san in sans.get_sans()]
         lcs_num = get_lcs_apex(apex)
 
         self.policy_list = policy_list
         self.certificates_features = dict({
-            'san_list': SAN_list,
-            'DomainCount': len(SAN_list),
-            'UniqueApexCount': unique_apex(SAN_list),
-            'UniqueSLDCount': unique_sld(SAN_list),
-            'ShortestSAN': int(min([length(row) for row in SAN_list])),
-            'LongestSAN': int(max([length(row) for row in SAN_list])),
-            'SANsMean': statistics.mean([len(row) for row in SAN_list]),
-            'MinSubLabels': min([int(depth(row)) - 2 for row in SAN_list]),
-            'MaxSubLabels': max([int(depth(row)) - 2 for row in SAN_list]),
-            'MeanSubLabels': statistics.mean([int(depth(row)) for row in SAN_list]),
-            'UniqueTLDsCount': unique_tld(SAN_list),
-            'UniqueTLDsDomainCount': unique_tld(SAN_list) / len(SAN_list),
+            'san_list': sans.get_sans(),
+            'DomainCount': len(sans.get_sans()),
+            'UniqueApexCount': unique_apex(sans.get_sans()),
+            'UniqueSLDCount': unique_sld(sans.get_sans()),
+            'ShortestSAN': sans.min(),
+            'LongestSAN': sans.max(),
+            'SANsMean': sans.mean(),
+            'MinSubLabels': sans.min_labels(),
+            'MaxSubLabels': sans.max_labels(),
+            'MeanSubLabels': sans.mean_labels(),
+            'UniqueTLDsCount': unique_tld(sans.get_sans()),
+            'UniqueTLDsDomainCount': unique_tld(sans.get_sans()) / len(sans.get_sans()),
             'ApexLCS': None,        # Don't need to implement
             'LenApexLCS': lcs_num,
-            'LenApexLCSNorm': lcs_num / int(max([length(row) for row in SAN_list]))
+            'LenApexLCSNorm': lcs_num / sans.max()
         })
 
 
@@ -167,3 +167,48 @@ def lcs(x, y):
             else:
                 h[i][j] = max(h[i - 1][j], h[i][j - 1])
     return h[m][n]
+
+
+class SANList:
+    """
+    This class provides tje functions to extract features from the SAN list
+    """
+
+    def __init__(self):
+        self.sans = []
+
+    def append(self, san):
+        self.sans.append(san)
+
+    def get_sans(self):
+        return self.sans
+
+    def min(self):
+        if not self.sans:
+            return 0
+        return int(min([length(row) for row in self.sans]))
+
+    def max(self):
+        if not self.sans:
+            return 0
+        return int(max([length(row) for row in self.sans]))
+
+    def mean(self):
+        if not self.sans:
+            return 0
+        return statistics.mean([len(row) for row in self.sans])
+
+    def min_labels(self):
+        if not self.sans:
+            return 0
+        return min([int(depth(row)) - 2 for row in self.sans])
+
+    def max_labels(self):
+        if not self.sans:
+            return 0
+        return max([int(depth(row)) - 2 for row in self.sans])
+
+    def mean_labels(self):
+        if not self.sans:
+            return 0
+        return statistics.mean([int(depth(row)) for row in self.sans])

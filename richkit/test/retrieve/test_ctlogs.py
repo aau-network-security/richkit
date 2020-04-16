@@ -41,10 +41,13 @@ class TestCTLogs(unittest.TestCase):
         obj2 = X509("12345678")
         self.assertIsNotNone(obj2)
 
-    def test_get_all_certificate(self):
-
+    def test_domain_error(self):
         with self.assertRaises(Exception):
             DomainCertificates("this_domain_does_not_exist.com")
+        with self.assertRaises(Exception):
+            X509("this_id_does_not_exist.com")
+
+    def test_get_all_certificate(self):
 
         for k, v in self.domains.items():
             certs = ct.get_logs(k)
@@ -55,9 +58,6 @@ class TestCTLogs(unittest.TestCase):
                         assert cert["SANFeatures"]["DomainCount"] == vx["SANFeatures"]["DomainCount"]
 
     def test_get_certificate_features(self):
-
-        with self.assertRaises(Exception):
-            X509("this_id_does_not_exist.com")
 
         for k, v in self.domains.items():
             for cert in v["certs"]:
