@@ -32,7 +32,6 @@ class SymantecTestCase(unittest.TestCase):
         self.assertIsInstance(read_categorized_file(), dict)
 
         # Read with empty file
-        cat_urls_file_path.unlink()
         cat_urls_file_path.touch()
 
         d = read_categorized_file(CAT_URLS_FILE)
