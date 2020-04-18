@@ -24,6 +24,17 @@ class SymantecTestCase(unittest.TestCase):
 
     def test_read_categorized_file(self):
 
+        # Read with missing file
+        try:
+            CAT_URLS_FILE.unlink()
+        except FileNotFoundError:
+            pass
+        self.assertIsInstance(read_categorized_file(), dict)
+
+        # Read with empty file
+        CAT_URLS_FILE.unlink()
+        CAT_URLS_FILE.touch()
+
         d = read_categorized_file(CAT_URLS_FILE)
         self.assertIsInstance(d, dict)
         self.assertEqual(len(d), 0)
