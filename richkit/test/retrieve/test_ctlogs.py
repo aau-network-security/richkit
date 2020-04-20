@@ -59,8 +59,9 @@ class TestCTLogs(unittest.TestCase):
 
         for k, v in self.domains.items():
             certs = ct.get_logs(k)
-            if not certs:
-                pass
+            print(certs)
+            if certs is None:
+                self.skipTest("Server not available")
 
             for cert in certs:
                 for vx in v["certs"]:
