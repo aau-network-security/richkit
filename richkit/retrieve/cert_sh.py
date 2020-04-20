@@ -33,6 +33,8 @@ class DomainCertificates:
         """
         try:
             r = requests.get(self.crtSH_url.format("?q=" + domain + "&output=json"))
+            if r.status_code != 200:
+                raise Exception("Server not available")
             content = r.content.decode('utf-8')
             if len(r.text) == 2:        # It's 2 when the domain is not found
                 raise Exception("Domain not found")

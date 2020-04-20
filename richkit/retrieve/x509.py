@@ -95,10 +95,10 @@ class X509:
             'MaxSubLabels': sans.max_labels(),
             'MeanSubLabels': sans.mean_labels(),
             'UniqueTLDsCount': unique_tld(sans.get_sans()),
-            'UniqueTLDsDomainCount': unique_tld(sans.get_sans()) / len(sans.get_sans()),
+            'UniqueTLDsDomainCount': sans.uniqueTLDsDomainCount(),
             'ApexLCS': None,        # Don't need to implement
             'LenApexLCS': lcs_num,
-            'LenApexLCSNorm': lcs_num / sans.max()
+            'LenApexLCSNorm': sans.lenApexLCSNorm(lcs_num),
         })
 
 
@@ -212,3 +212,13 @@ class SANList:
         if not self.sans:
             return 0
         return statistics.mean([int(depth(row)) for row in self.sans])
+
+    def uniqueTLDsDomainCount(self):
+        if not self.sans:
+            return 0
+        return unique_tld(self.sans) / len(self.sans)
+
+    def lenApexLCSNorm(self, lcs):
+        if not self.sans:
+            return 0
+        return lcs / len(self.sans)
