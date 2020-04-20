@@ -88,6 +88,19 @@ Richkit define a set of functions categorized by the following modules:
 
 - `richkit.retrieve`: This module provides the ability to retrieve data on domain names of any sort. It comes without the "confidentiality contract" of `richkit.lookup`.
 
+## Run Tests on Docker 
+
+In order to prevent any problems regarding to environment, we are providing `Dockerfile.test`  file which basically constructs a docker image to run tests of Richkit.
+
+ - The only thing to add is just `MAXMIND_LICENCE_KEY` in `.github/local-test/run-test.sh` at line 3. It is required to pass the test cases for `lookup` module. 
+
+Commands to test them in Docker environment. 
+
+- `docker build -t richkit-test -f Dockerfile.test . ` : Builds required image to run test cases 
+
+- `docker run -e MAXMIND_LICENSE_KEY="<licence-key> " richkit-test ` : Runs `run-test.sh` file in Docker image. 
+
+
 ## Contributing
 
 Contributions are most welcome.

@@ -149,12 +149,12 @@ def fetch_from_internet(url, categories_file_path=categories_file_path, categori
     return re.sub('\n', '', result)
 
 
-def read_categorized_file():
+def read_categorized_file(file_path=categorized_urls_file):
     url_to_category = dict()
-    if not os.path.exists(categorized_urls_file):
-        open(categorized_urls_file, 'w').close()
+    if not os.path.exists(file_path):
+        open(file_path, 'w').close()
     else:
-        with open(categorized_urls_file, "r") as ins:
+        with open(file_path, "r") as ins:
             for line in ins:
                 pair = line.replace('\n', '').split(',')
                 url_to_category[pair[0]] = pair[1]
