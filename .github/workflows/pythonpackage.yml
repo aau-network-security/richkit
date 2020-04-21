@@ -75,7 +75,7 @@ jobs:
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
-        coverage run --source=richkit -m pytest -Werror
+        coverage run --source=richkit -m pytest -Werror --ignore src/python-whois
     - name: Coverage report
       run: |
         coverage report --fail-under=79
