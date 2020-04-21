@@ -19,6 +19,8 @@ breaching confidentiality.
 from richkit.analyse import analyse
 
 # aka tld
+
+
 def tld(domain):
     """
     Returns the Effective Top-Level Domain (eTLD) (aka Public Suffix).
@@ -61,14 +63,14 @@ def nld(domain, n):
 
     :param domain: Domain (string)
     :param n: N'th-Level (int)
-    
+
     Usage: 
-      
+
       from richkit.analyse import nld
-      
+
       ## returns second level domain ... 
       print(nld("www.google.com", 2))
-      
+
       ## returns top level domain
       print(nld("www.google.com",1))
 
@@ -79,7 +81,7 @@ def nld(domain, n):
 def n_label(domain, n):
     """
     Returns the Effective N'th-level label.
-        
+
     :param domain: Domain (string)
     :param n: N'th-Level (int)
 
@@ -228,21 +230,22 @@ def number_words(s):
     return analyse.get_num_words_2ld(s)
 
 
-def n_grams_alexa(domain):
+def n_grams_alexa(domain, is_test):
     """
     Returns similarity to distribution of N-grams in Alexa Top 1M.
 
     :param domain: Domain (string)
+    :param is_test: Checks whether function called from a test case  or not
 
     """
-    return analyse.get_grams_alexa_2ld(domain)
+    return analyse.get_grams_alexa_2ld(domain, is_test=is_test)
 
 
-def n_grams_dict(domain):
+def n_grams_dict(domain, is_test):
     """
     Returns similarity to distribution of N-grams in English dictionary
 
     :param domain: Domain (string)
 
     """
-    return analyse.get_grams_dict_2ld(domain)
+    return analyse.get_grams_dict_2ld(domain, is_test)

@@ -26,13 +26,29 @@ jobs:
     - name: Check that number of pep8 violations is not going up
       run: |
         # test that number of violations does not increase
-        FLAKE8_ERROR_CNT=$(flake8 . -qq --count --exit-zero --max-complexity=10 --max-line-length=127)
-        FLAKE8_ERROR_LIMIT=308
+        FLAKE8_ERROR_CNT=$(flake8 . -qq --count --exit-zero --max-complexity=10 --max-line-length=127 --exclude venv,__pycache__,docs/source/conf.py,old,build,dist)
+        FLAKE8_ERROR_LIMIT=25
         if [ "$FLAKE8_ERROR_CNT" -gt "$FLAKE8_ERROR_LIMIT" ] ; then
             echo "Failed because the number of errors from flake8 increased (This: $FLAKE8_ERROR_CNT Previously: $FLAKE8_ERROR_LIMIT)" 1>&2
             false
         fi
         echo "Number of validation errors from flake8 is: $FLAKE8_ERROR_CNT (Limit is: $FLAKE8_ERROR_LIMIT)"
+
+  formalities:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Extract branch name
+      shell: bash
+      run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
+    - name: Check branch name
+      run: |
+        echo "Checking ${BRANCH_NAME}..."
+        python3 .githooks/check-branch-name.py "$BRANCH_NAME"
 
   test:
     runs-on: ${{ matrix.os }}
@@ -59,7 +75,7 @@ jobs:
       env:
         MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
       run: |
-        coverage run --source=richkit -m pytest -Werror
+        coverage run --source=richkit -m pytest -Werror --ignore src/python-whois
     - name: Coverage report
       run: |
         coverage report --fail-under=79

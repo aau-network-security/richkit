@@ -40,7 +40,6 @@ Documentation can be found at https://richkit.readthedocs.io/en/latest/.
 
 In order to install richikit just type in the terminal `pip install richkit`
 
-
 ## Usage
 
 The following codes can be used to retrieve the TLD and the URL category, respectively.
@@ -88,6 +87,33 @@ Richkit define a set of functions categorized by the following modules:
 - `richkit.lookup`: This modules provides the ability to look up domain names in local resources, i.e. the domain name cannot be sent of to third parties. The module might fetch resources, such as lists or databasese, but this must be done in a way that keeps the domain name confidential. Contrast this with `richkit.retrieve`.
 
 - `richkit.retrieve`: This module provides the ability to retrieve data on domain names of any sort. It comes without the "confidentiality contract" of `richkit.lookup`.
+
+## Run Tests on Docker 
+
+In order to prevent any problems regarding to environment, we are providing `Dockerfile.test`  file which basically constructs a docker image to run tests of Richkit.
+
+ - The only thing to add is just `MAXMIND_LICENCE_KEY` in `.github/local-test/run-test.sh` at line 3. It is required to pass the test cases for `lookup` module. 
+
+Commands to test them in Docker environment. 
+
+- `docker build -t richkit-test -f Dockerfile.test . ` : Builds required image to run test cases 
+
+- `docker run -e MAXMIND_LICENSE_KEY="<licence-key> " richkit-test ` : Runs `run-test.sh` file in Docker image. 
+
+
+## Contributing
+
+Contributions are most welcome.
+
+We use the [gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+branching strategy, so if you plan to push a branch to this repository
+please follow that. Note that we test branch names with
+`.githooks/check-branch-name.py`. The git pre-commit hook can be used
+to automatically check this on commit. An example that can be used
+directly as follows is available on linux, and can be enabled like
+this (assuming `python>=3.6` and `bash`):
+
+    ln -s $(pwd)/.githooks/pre-commit.linux.sample $(pwd)/.git/hooks/pre-commit
 
 ## Credits 
 

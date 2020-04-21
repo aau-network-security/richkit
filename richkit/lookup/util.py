@@ -1,5 +1,6 @@
 import requests
-import os, subprocess
+import os
+import subprocess
 import time
 from datetime import datetime, timedelta
 import logging
@@ -44,8 +45,10 @@ class MaxMindDB:
         self.path_db = maxmind_directory
         if MaxMindDB.get_db_path(self) is None:
             MaxMindDB.get_db(self)
+        #  weeks = 1 because the database is updated once a week.
+        #  if it is downloaded more than one week ago, it will be removed and updated
 
-        if self.is_outdated():
+        if self.get_age() > timedelta(weeks=1):
             os.remove(self.get_db_path())
             MaxMindDB.get_db(self)
 
@@ -93,7 +96,8 @@ class MaxMindDB:
         Return the ASN Database path if exists
 
         """
-        filtered_dir = [x for x in os.listdir(self.path_db) if x.startswith(self.helpers[self.query][0])]
+        filtered_dir = [x for x in os.listdir(
+            self.path_db) if x.startswith(self.helpers[self.query][0])]
         sorted_dir = sorted(filtered_dir, reverse=True)
         if sorted_dir:
             return str(Path(
@@ -119,6 +123,3 @@ class MaxMindDB:
             reader.metadata().build_epoch
         )
         return delta
-
-    def is_outdated(self):
-        return self.get_age() > timedelta(weeks=1)

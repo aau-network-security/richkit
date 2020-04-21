@@ -72,7 +72,8 @@ def get_nld(domain, n):
     :param n: Label number (int)
     :return: Effective N'th-level Domain
     """
-    if abs(n) == 1 :
+
+    if abs(n) == 1:
         nld = get_tld(domain)
     elif len(domain.split('.')) <= n:
         nld = None
@@ -95,7 +96,8 @@ def get_n_label(domain, n):
     :param n: Label number (int)
     :return: Effective N'th-level label
     """
-    if abs(n) == 1 :
+
+    if abs(n) == 1:
         n_label = get_tld(domain)
     elif abs(n) == 2:
         n_label = get_2l_label(domain)
@@ -106,7 +108,7 @@ def get_n_label(domain, n):
         except IndexError:
             n_label = None
         except Exception:
-            n_label = domain.split(".")[-abs(n) -1]
+            n_label = domain.split(".")[-abs(n) - 1]
     return n_label
 
 
@@ -152,12 +154,13 @@ def get_entropy_2ld(domain):
     return str(entropy(get_sld(domain)))
 
 
-def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
+def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5), is_test=False):
     """
     :param : domain, analyzer, ngram_range
     :return: grams of second level domain
     """
-    alexa_slds = load_alexa()
+
+    alexa_slds = load_alexa(is_test=is_test)
     alexa_vc = CountVectorizer(analyzer=analyzer,
                                ngram_range=ngram_range,
                                min_df=1e-4,
@@ -165,16 +168,17 @@ def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5)):
     counts_matrix = alexa_vc.fit_transform(alexa_slds)
     alexa_counts = np.log10(counts_matrix.sum(axis=0).getA1())
     grams_alexa2ld = ngram_count(get_sld(domain), alexa_counts, alexa_vc)
-    return str(grams_alexa2ld)
+
+    return float(grams_alexa2ld)
 
 
-def get_grams_dict_2ld(domain):
+def get_grams_dict_2ld(domain, is_test=False):
     """
 
     :param domain:
-    :return: grams_dict_2ld as string
+    :return: grams_dict_2ld
     """
-    words = load_words()
+    words = load_words(is_test=is_test)
     dict_vc = CountVectorizer(analyzer='char',
                               ngram_range=(3, 5),
                               min_df=1e-5,
@@ -182,7 +186,8 @@ def get_grams_dict_2ld(domain):
     counts_matrix = dict_vc.fit_transform(words)
     dict_counts = np.log10(counts_matrix.sum(axis=0).getA1())
     grams_dict2ld = ngram_count(get_sld(domain), dict_counts, dict_vc)
-    return str(grams_dict2ld)
+
+    return float(grams_dict2ld)
 
 
 def get_num_words_2ld(domain):
@@ -201,7 +206,8 @@ def get_num_of_vowels_2ld(domain):
     :param domain:
     :return: number of counts:  vowels in 2ld
     """
-    sld=get_sld(domain)
+
+    sld = get_sld(domain)
     vowels = list("aeiouy")
     return str(sum([sld.count(c) for c in vowels]))
 
@@ -265,6 +271,7 @@ def ngram_count(domain, counts, counts_vc):
 
 
 def get_num_numeric_2ld(domain):
+
     """
 
     :param domain:
@@ -274,6 +281,7 @@ def get_num_numeric_2ld(domain):
 
 
 def get_radio_numeric_2ld(domain):
+
     """
 
     :param domain:
