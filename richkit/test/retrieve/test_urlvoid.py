@@ -35,23 +35,26 @@ class URLVoidTestCase(unittest.TestCase):
     def test_domain_registration_date(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
-            assert instance.domain_registration_date()[:-15] \
-                == v["domain_registration"]
+            domain_registration = instance.domain_registration_date()[:-15]
+            self.assertEqual(domain_registration,v["domain_registration"])
 
     def test_get_detection_rate(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
-            assert instance.get_detection_rate() == v["detection_rate"]
+            domain_detection_rate = instance.get_detection_rate()
+            self.assertEqual(domain_detection_rate, v["detection_rate"])
 
     def test_get_server_location(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
-            assert instance.get_server_location() == v["server_location"]
+            domain_server_location = instance.get_server_location()
+            self.assertEqual(domain_server_location, v["server_location"])
 
     def test_get_asn(self):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
-            assert instance.get_asn() == v["ASN"]
+            domain_asn = instance.get_asn()
+            self.assertEqual(domain_asn, v["ASN"])
 
         class StubURLVoid(URLVoid):
             def __init__(self, asn):
@@ -78,7 +81,7 @@ class URLVoidTestCase(unittest.TestCase):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
             blacklist_status = instance.blacklist_status()
-            assert re.match(r'[0]/\d*', blacklist_status)
+            self.assertTrue(re.match(r'[0]/\d*', blacklist_status))
 
 
 if __name__ == '__main__':

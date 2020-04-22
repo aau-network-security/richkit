@@ -12,13 +12,13 @@ class DNSTestCase(unittest.TestCase):
     def test_a_record(self):
         for url in self.test_urls:
             instance = dns.get_a_record(url)
-            assert instance[0] is not None
+            self.assertIsNot(instance[0], None)
 
     # Since PTR record change every time, just checking whether we are retrieving a record or not
     def test_ptr_record(self):
         for url in self.test_ips:
             instance = dns.get_ptr_record(url)
-            assert instance[0] is not None
+            self.assertIsNot(instance[0], None)
 
 
 if __name__ == '__main__':

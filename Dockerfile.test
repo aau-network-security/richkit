@@ -3,8 +3,10 @@ FROM ubuntu
 # provide environment variable as MAXMIND_LICENSE_KEY
 # when you run docker image see readme
 
+# git is required to fetch given requirement in the requirements.txt file
+# for unmerged whois library
 
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN apt-get update && apt-get install -y python3 python3-pip git
 
 COPY requirements.txt /richkit/requirements.txt
 
