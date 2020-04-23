@@ -153,7 +153,7 @@ class TestAnalyse(unittest.TestCase):
     def test_n_label(self):
         for k, v in self.domain.items():
             n_label3 = analyse.n_label(k, 3)
-            self.assertEqual(n_label3,v['n_label'])
+            self.assertEqual(n_label3, v['n_label'])
 
     def test_depth(self):
         for k, v in self.domain.items():
