@@ -75,5 +75,5 @@ class TestCTLogs(unittest.TestCase):
             for cert in v["certs"]:
                 cert_features = ct.get_certificates_features(cert["ID"])
                 if not cert_features:
-                    pass
+                    continue
                 assert cert_features.get('DomainCount') == cert["SANFeatures"]["DomainCount"]

@@ -22,9 +22,8 @@ class DomainCertificates:
         :param domain: domain to analyze
         """
         self.domain = domain
-        self.certificates = None
+        self.certificates = self.get_certificates(self.domain)
         self.certificates_features = None
-        self.get_certificates(self.domain)
 
     def get_certificates(self, domain):
         """
@@ -34,11 +33,11 @@ class DomainCertificates:
         try:
             r = requests.get(self.crtSH_url.format("?q=" + domain + "&output=json"))
             if r.status_code != 200:
-                return
+                raise Exception("Server not available")
             content = r.content.decode('utf-8')
             if len(r.text) == 2:        # It's 2 when the domain is not found
                 raise Exception("Domain not found")
-            self.certificates = json.loads(content)
+            return json.loads(content)
         except Exception as e:
             logger.error('Error while retrieving certificates: %s', e)
             raise e

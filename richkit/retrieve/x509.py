@@ -2,6 +2,7 @@ from richkit.analyse import tld, sld, sl_label, depth, length
 import statistics
 import requests
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ class X509:
         """
         Make a request and get the response content of the given ID
         :param cert_id: crt.sh ID of the certificate
-        :return: response as text
+        :return: response as text or None in case an Exception raised
         """
         try:
             r = requests.get(self.crtSH_url.format("?id=" + cert_id))
@@ -41,15 +42,21 @@ class X509:
                 raise Exception("Certificate not found")
             return r.text
         except Exception as e:
-            logger.error('Error while retrieving certificate %s: %s', cert_id, e)
-            return None
+            raise e
 
     def get_certificate_features(self):
         """
         Parse the response content to get the certificate features
         """
-        text = self.get_certificate_info(str(self.cert_id))
-        text_list = text.split('<BR>')
+        text = None
+        for _ in range(5):
+            if text is not None:
+                break
+            try:
+                text = self.get_certificate_info(str(self.cert_id))
+                text_list = text.split('<BR>')
+            except:
+                time.sleep(10)
 
         sans = SANList()           # Used to store the  SANs
         policy_list = []        # Used to store the policies in order to get the Validation Level
