@@ -26,16 +26,15 @@ How to use:
 """
 import ast
 import json
-import glob
 import os
 from json import dumps
-from xml.etree.ElementTree import fromstring
-import urllib.request
-from urllib.request import urlopen, build_opener
 import re
 from pathlib import Path
 import logging
-
+import requests
+from xml.etree.ElementTree import fromstring
+from requests.exceptions import HTTPError
+from requests.exceptions import InvalidURL
 logger = logging.getLogger(__name__)
 
 """
@@ -62,19 +61,17 @@ class LocalCategoryDB():
             return ''
 
 
-
 def fetch_categories(categories_url=categories_url, local_categories_path=categories_file_path):
     """Fetch categories and create local cache """
     if not categories_url:
         return None
     try:
-        u = build_opener()
-        r = u.open(categories_url)
-        data = json.load(r)
+        resp = requests.get(categories_url)
+        data = resp.json()
         d = dict([('%02x' % c['num'], c['name']) for c in data])
-    except urllib.error.HTTPError as e:
+    except HTTPError as e:
         logger.error('Cannot fetch categories, HTTP error: %s\n' % str(e.code))
-    except urllib.error.URLError as e:
+    except InvalidURL as e:
         logger.error('Cannot fetch categories, URL error: %s\n' % str(e.reason))
     try:
         f = open(local_categories_path, 'w')
@@ -107,8 +104,8 @@ def load_categories(name):
 
 def check_local_categories_file_exists(categories_file_path=categories_file_path):
     webCats = load_categories(categories_file_path)
-    if webCats=={}:
-         webCats = fetch_categories(categories_url, categories_file_path)
+    if webCats == {}:
+        webCats = fetch_categories(categories_url, categories_file_path)
     return webCats
 
 
@@ -117,50 +114,53 @@ def _chunks(s):
     return [s[i:i + 2] for i in range(0, len(s), 2)]
 
 
-## if there is no info related with link  then call for api and append it to categorized_url.txt
-def write_to_local_file(text,categorized_urls_file=categorized_urls_file):
+# if there is no info related with link  then call for api and append it to categorized_url.txt
+def write_to_local_file(text, categorized_urls_file=categorized_urls_file):
     with open(categorized_urls_file, 'a') as file:
         file.write(text + "\n")
 
 
-def fetch_from_internet(url,categories_file_path=categories_file_path,categorized_urls_file=categorized_urls_file):
+def fetch_from_internet(url, categories_file_path=categories_file_path, categorized_urls_file=categorized_urls_file):
     result = ''
     hostname = url
     port = '80'
-    r = urlopen(
-        'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (k9License, hostname, port))
-    if r.code == 200:
-        e = fromstring(r.read())
+    webservice_endpoint = 'http://sp.cwfservice.net/1/R/%s/K9-00006/0/GET/HTTP/%s/%s///' % (
+        k9License, hostname, port)
+    r = requests.get(webservice_endpoint)
+    if r.status_code == 200:
+        e = fromstring(r.text)
         domc = e.find('DomC')
         dirc = e.find('DirC')
         if domc is not None:
             cats = _chunks(domc.text)
-            result = [check_local_categories_file_exists().get(c.lower(), 'Unknown') for c in cats][0]
-            write_to_local_file(url + "," + re.sub('\n', '', result),categorized_urls_file)
+            result = [check_local_categories_file_exists().get(c.lower(), 'Unknown')
+                      for c in cats][0]
+            write_to_local_file(url + "," + re.sub('\n', '', result), categorized_urls_file)
         elif dirc is not None:
             cats = _chunks(dirc.text)
             logger.debug(
                 '%s,%s\n' % (hostname, [check_local_categories_file_exists(categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]))
-            result = [check_local_categories_file_exists(categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]
-            write_to_local_file(url + "," + re.sub('\n', '', result),categorized_urls_file)
+            result = [check_local_categories_file_exists(
+                categories_file_path).get(c.lower(), 'Unknown') for c in cats][0]
+            write_to_local_file(url + "," + re.sub('\n', '', result), categorized_urls_file)
         else:
             logger.error('Cannot get category for %s\n' % hostname)
 
     return re.sub('\n', '', result)
 
 
-
-def read_categorized_file():
+def read_categorized_file(file_path=categorized_urls_file):
     url_to_category = dict()
-    if not os.path.exists(categorized_urls_file):
-        open(categorized_urls_file,'w').close()
+    if not os.path.exists(file_path):
+        open(file_path, 'w').close()
     else:
-        with open(categorized_urls_file, "r") as ins:
+        with open(file_path, "r") as ins:
             for line in ins:
                 pair = line.replace('\n', '').split(',')
                 url_to_category[pair[0]] = pair[1]
 
     return url_to_category
+
 
 def check_for_local(url):
     domains = dict()
@@ -181,7 +181,6 @@ def check_for_local(url):
         if url in domains[key]:
             result = key
     return result
-
 
 
 def get_index(category):

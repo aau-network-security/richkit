@@ -1,0 +1,22 @@
+FROM ubuntu
+
+# provide environment variable as MAXMIND_LICENSE_KEY
+# when you run docker image see readme
+
+
+RUN apt-get update && apt-get install -y python3 python3-pip
+
+COPY requirements.txt /richkit/requirements.txt
+
+COPY richkit /richkit/richkit
+
+
+RUN pip3 install -r /richkit/requirements.txt
+
+RUN pip3 install coverage pytest sphinx flake8
+
+COPY .github/local-test/run-test.sh /richkit/richkit/run-test.sh
+
+CMD ["/richkit/richkit/run-test.sh"]
+
+

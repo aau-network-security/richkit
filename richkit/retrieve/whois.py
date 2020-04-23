@@ -5,15 +5,15 @@ logger = logging.getLogger(__name__)
 
 
 def get_whois_info(domain):
-    """
+    """Retrive a WHOIS information for a domain name
 
-    :return: returns whois information of given domain name.
+    :param domain: Domain name
+    :type domain: str
+    :return: WHOIS information of given domain name
+    :rtype: dict (Actually a subclass of whois.parser.WhoisEntry, which
+    itself is a subclass of `dict`)
+
     """
-    d = whois.query(domain)
-    result = {
-            "d_name": d.name,
-            "d_expiration_date": d.expiration_date,
-            "d_last_updated": d.last_updated,
-            "d_registrar": d.registrar
-    }
+    result = whois.whois(domain)
+
     return result

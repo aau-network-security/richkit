@@ -7,7 +7,7 @@ with open(path.join(root, 'README.md'), encoding='utf-8') as f:
 setuptools.setup(
     name='richkit',
     description='Domain enrichment kit ',
-    version='1.1.0-Beta',
+    version='1.1.1b0',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/aau-network-security/richkit',
@@ -20,7 +20,7 @@ setuptools.setup(
     install_requires=['maxminddb',
                       'numpy==1.17.2',
                       'scikit-learn==0.21.3',
-                      'langid==1.1.6', 'urllib3==1.25.6',
+                      'langid==1.1.6',
                       'bs4==0.0.1',
                       'lxml==4.4.1',
                       'requests==2.22.0',

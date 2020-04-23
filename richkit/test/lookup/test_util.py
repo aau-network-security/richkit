@@ -1,3 +1,6 @@
+import time
+from datetime import datetime
+
 from richkit.lookup import util
 from richkit.lookup.util import MaxMindDB
 import os
@@ -24,6 +27,7 @@ def rm_recursive(pth):
 
 class StubMaxMindDB(MaxMindDB):
     """Stub with minimal __init__, to not hit error there."""
+
     def __init__(self):
         self.path_db = util.maxmind_directory
         self.query = "cc"
@@ -36,14 +40,16 @@ class MaxMindDBTestCase(unittest.TestCase):
         logging.disable(logging.CRITICAL)
 
         MaxMindDB.MASTERURL = (
-                "https://download.maxmind.com/app/geoip_download?"
-                "edition_id=GeoLite2-Country&"
-                "license_key={license_key}&"
-                "suffix=tar.gz"
-            ).format(
-                license_key=os.environ['MAXMIND_LICENSE_KEY'],
-            )
+            "https://download.maxmind.com/app/geoip_download?"
+            "edition_id=GeoLite2-Country&"
+            "license_key={license_key}&"
+            "suffix=tar.gz"
+        ).format(
+            license_key=os.environ['MAXMIND_LICENSE_KEY'],
+        )
 
+    def tearDown(self):
+        # deletes the files after test is done
         for el in Path(util.maxmind_directory).glob('*'):
             rm_recursive(el)
 
@@ -100,17 +106,13 @@ class MaxMindDBTestCase(unittest.TestCase):
         s.get_db()
         # Check if file is present
         p = s.get_db_path()
+        s_age = s.get_age()  # get_age() function is tested over here
         self.assertIsNotNone(p, "get_db did not a path to the db")
         self.assertTrue(Path(p).exists())
+        self.assertTrue(s_age.microseconds)
 
     def test_extracted_db(self):
         s = StubMaxMindDB()
         # When fail to extract the DB
         with self.assertRaises(Exception):
             s.unpack()
-
-    def test_is_outdated(self):
-        obj = MaxMindDB(MaxMindDB.MASTERURL, "cc")
-        self.assertFalse(obj.is_outdated())
-
-

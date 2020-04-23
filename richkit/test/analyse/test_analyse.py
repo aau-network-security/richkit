@@ -1,9 +1,14 @@
+import os
 import unittest
+from pathlib import Path
+
 from richkit import analyse
 from os import path
 import requests
 import tempfile
 import logging
+import os
+
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M',
                     level=logging.DEBUG)
@@ -26,16 +31,17 @@ class TestEffect2LD():
             with open(cls.MASTERFILE, 'wb') as file:
                 file.write(response.content)
         else:
-            logger.error('Error while downloading the Test List status code: %s',response.status_code)
+            logger.error('Error while downloading the Test List status code: %s',
+                         response.status_code)
 
     @classmethod
     def load_tlds(cls):
         try:
-            f = open(cls.MASTERFILE, 'r',encoding="utf8")
+            f = open(cls.MASTERFILE, 'r', encoding="utf8")
             lines = f.readlines()
         except FileNotFoundError as e:
 
-            logger.error("File not readable, not found %s",e)
+            logger.error("File not readable, not found %s", e)
             f.close()
         f.close()
 
@@ -85,6 +91,9 @@ class TestAnalyse(unittest.TestCase):
                 'ratio_special_2ld': 0.0,
                 'num_numeric_2ld': 0,
                 'radio_numeric_2ld': 0.0,
+                # following values are smaller than expected due to top 100 alexa which is expected
+                'n_grams_2ld': 27.33635144637163,
+                'n_grams_2ld_alexa': 27.33081895777167
             },
             'www.intranet.es.aau.dk': {
                 'num_tokens': 5,
@@ -106,8 +115,20 @@ class TestAnalyse(unittest.TestCase):
                 'ratio_special_2ld': 0.0,
                 'num_numeric_2ld': 0,
                 'radio_numeric_2ld': 0.0,
+                # this is 0.0 because of gathering top 100 alexa db, written for just ensuring test functions running correctly
+                'n_grams_2ld': 0.0,
+                'n_grams_2ld_alexa':  0.0
             }
         }
+        self.data_path = "data/"
+
+    def tearDown(self):
+        """
+            Removes the file after test is done.
+            Could be modified in future according to need
+        """
+        if os.path.isfile('top-1m.csv'):
+            os.remove('top-1m.csv')
 
     def test_tld(self):
         for k, v in self.domain.items():
@@ -199,15 +220,15 @@ class TestAnalyse(unittest.TestCase):
             domain_number_words = analyse.number_words(k)
             assert domain_number_words == str(v['num_words_2ld'])
 
-    @unittest.skip("Skipping alexa test, tested locally")
     def test_get_grams_alexa_2ld(self):
-        alexa_grams = analyse.n_grams_alexa(self.domain)
-        assert alexa_grams == ''
+        for k, v in self.domain.items():
+            alexa_grams_2ld = analyse.n_grams_alexa(k, is_test=True)
+            assert alexa_grams_2ld == v['n_grams_2ld_alexa']
 
-    @unittest.skip("Skipping dict test since no data folder")
     def test_get_grams_dict_2ld(self):
-        grams_dict_2ld = analyse.n_grams_dict(self.domain)
-        assert grams_dict_2ld == '25.77346214958408'
+        for k, v in self.domain.items():
+            grams_dict_2ld = analyse.n_grams_dict(k, is_test=True)
+            assert grams_dict_2ld == v['n_grams_2ld']
 
     def test_correctly_tlds(self):
         tests = TestEffect2LD()
