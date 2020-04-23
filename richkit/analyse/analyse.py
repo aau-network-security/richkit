@@ -72,6 +72,7 @@ def get_nld(domain, n):
     :param n: Label number (int)
     :return: Effective N'th-level Domain
     """
+
     if abs(n) == 1:
         nld = get_tld(domain)
     elif len(domain.split('.')) <= n:
@@ -95,6 +96,7 @@ def get_n_label(domain, n):
     :param n: Label number (int)
     :return: Effective N'th-level label
     """
+
     if abs(n) == 1:
         n_label = get_tld(domain)
     elif abs(n) == 2:
@@ -121,11 +123,11 @@ def get_domain_name_features(domain):
     """
     domain_array = domain.split('.')
     num_tokens = len(domain_array)
-    len2ld = len(get_sld(domain))
+    len2ld  = len(get_sld(domain))
     len_domain = sum([len(el) for el in domain_array])
     domain_name_features = {
         "num_tokens": str(num_tokens),
-        "len2ld": str(len2ld),
+        "len2ld"    : str(len2ld),
         "len_domain": str(len_domain)
     }
     return domain_name_features
@@ -166,6 +168,7 @@ def get_grams_alexa_2ld(domain, analyzer='char', ngram_range=(3, 5), is_test=Fal
     counts_matrix = alexa_vc.fit_transform(alexa_slds)
     alexa_counts = np.log10(counts_matrix.sum(axis=0).getA1())
     grams_alexa2ld = ngram_count(get_sld(domain), alexa_counts, alexa_vc)
+
     return float(grams_alexa2ld)
 
 
@@ -183,6 +186,7 @@ def get_grams_dict_2ld(domain, is_test=False):
     counts_matrix = dict_vc.fit_transform(words)
     dict_counts = np.log10(counts_matrix.sum(axis=0).getA1())
     grams_dict2ld = ngram_count(get_sld(domain), dict_counts, dict_vc)
+
     return float(grams_dict2ld)
 
 
@@ -202,6 +206,7 @@ def get_num_of_vowels_2ld(domain):
     :param domain:
     :return: number of counts:  vowels in 2ld
     """
+
     sld = get_sld(domain)
     vowels = list("aeiouy")
     return str(sum([sld.count(c) for c in vowels]))
@@ -265,19 +270,21 @@ def ngram_count(domain, counts, counts_vc):
     return str(match[0])
 
 
-def get_num_numeric_2ld(s):
+def get_num_numeric_2ld(domain):
+
     """
 
     :param domain:
     :return: ratio of special characters in 2ld
     """
-    return str(len([c for c in s if c.isdigit()]))
+    return str(len([c for c in domain if c.isdigit()]))
 
 
-def get_radio_numeric_2ld(s):
+def get_radio_numeric_2ld(domain):
+
     """
 
     :param domain:
     :return: ratio of special characters in 2ld
     """
-    return str(float(get_num_numeric_2ld(s)) / float(len(get_sld(s))))
+    return str(float(get_num_numeric_2ld(domain)) / float(len(get_sld(domain))))

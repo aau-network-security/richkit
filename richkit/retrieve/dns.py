@@ -1,5 +1,5 @@
-from dns import reversename
 from dns import resolver
+from dns import reversename
 import logging
 
 logger = logging.getLogger(__name__)
