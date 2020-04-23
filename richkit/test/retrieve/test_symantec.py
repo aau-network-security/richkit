@@ -51,13 +51,13 @@ class SymantecTestCase(unittest.TestCase):
     def test_fetch_categories(self):
         # make sure that categories url is accessible and fetched correctly
         categories = fetch_categories(categories_url, CATEGORIES_FILE_PATH)
-        assert categories != {}
+        self.assertNotEqual(categories, {})
 
     def test_load_categories(self):
         if os.path.isfile(CATEGORIES_FILE_PATH):
-            assert load_categories(CATEGORIES_FILE_PATH) != {}
+            self.assertNotEqual(load_categories(CATEGORIES_FILE_PATH), {})
         else:
-            assert load_categories(CATEGORIES_FILE_PATH) == {}
+            self.assertEqual(load_categories(CATEGORIES_FILE_PATH), {})
 
     def test_fetch_from_internet(
             self,
@@ -77,9 +77,10 @@ class SymantecTestCase(unittest.TestCase):
         }
         for category, url_list in domain_categories.items():
             for url in url_list:
-                assert fetch_from_internet(
+                fetched_category = fetch_from_internet(
                     url, categories_file_path, categorized_url_path
-                ) == category
+                )
+                self.assertEqual(fetched_category, category)
         # unlinking CAT_URLS_FILE here, otherwise the len of dict
         # at line 29 (within test_read_categorized_file) will be different
         # it may cause failing that's why unlinking the file here is required.
