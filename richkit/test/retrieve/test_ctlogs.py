@@ -6,6 +6,7 @@ from urllib.parse import parse_qs
 import socket
 import threading
 import requests
+import os
 import richkit.retrieve.ctlogs as ct
 from richkit.retrieve.cert_sh import DomainCertificates
 from richkit.retrieve.x509 import X509
@@ -19,7 +20,8 @@ class MockServer(BaseHTTPRequestHandler):
             arguments = parse_qs(arguments_url)
             key = arguments.get('q')[0]
 
-            with open("crtsh_response.txt", "r") as crt:
+            path = os.getcwd()
+            with open(path+"/crtsh_response.txt", "r") as crt:
                 crt_response = crt.read()
                 crt_response = crt_response.replace("\n", "")
 
@@ -94,7 +96,7 @@ class TestCTLogs(unittest.TestCase):
 
     def test_mock_server(self):
         r = requests.get("http://localhost:{}/api/?q={}".format(self.port, "test.com"))
-        self.assertEqual(r.text, "ok")
+        self.assertEqual(r.text, "<BR><BR>Certificate not found </BODY>")
 
     def test_init_domain(self):
         obj = DomainCertificates("example.com")
