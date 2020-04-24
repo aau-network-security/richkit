@@ -58,6 +58,9 @@ class X509:
             except:
                 time.sleep(10)
 
+        if text is None:
+            raise Exception("Certificate not found")
+
         sans = SANList()           # Used to store the  SANs
         policy_list = []        # Used to store the policies in order to get the Validation Level
 
