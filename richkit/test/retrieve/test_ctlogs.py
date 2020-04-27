@@ -1,16 +1,14 @@
 import unittest
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import re
-import json
 from urllib.parse import parse_qs
 import socket
 import threading
 import requests
-import os
 import richkit.retrieve.ctlogs as ct
 from richkit.retrieve.cert_sh import DomainCertificates
 from richkit.retrieve.x509 import X509
-
+import pathlib
 
 class MockServer(BaseHTTPRequestHandler):
 
@@ -20,8 +18,8 @@ class MockServer(BaseHTTPRequestHandler):
             arguments = parse_qs(arguments_url)
             key = arguments.get('q')[0]
 
-            path = os.getcwd()
-            with open(path+"/crtsh_response.txt", "r") as crt:
+            path = pathlib.Path(__file__).parent.absolute()
+            with open(str(path)+"/crtsh_response.txt", "r") as crt:
                 crt_response = crt.read()
                 crt_response = crt_response.replace("\n", "")
 
@@ -116,8 +114,6 @@ class TestCTLogs(unittest.TestCase):
         for k, v in self.domains.items():
             DomainCertificates.crtSH_url = "http://localhost:{}/api/?q={}".format(self.port, k)
             certs = ct.get_logs(k)
-            if certs is None:
-                self.skipTest("Server not available")
 
             for cert in certs:
                 for vx in v["certs"]:
