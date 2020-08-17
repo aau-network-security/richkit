@@ -114,3 +114,5 @@ richkit/lookup/data/*
 
 # caches for of resources fetched from Internet, used in richkit
 richkit/retrieve/data/categorized_urls.txt
+
+config.yml

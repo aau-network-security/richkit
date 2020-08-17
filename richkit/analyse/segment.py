@@ -40,16 +40,16 @@ class OneGramDist(dict):
             return 1.0 / (self.gramCount * 10 ** (len(key) - 2))
 
 
-if os.path.exists(temp_directory + "/one-grams.txt"):
-    singleWordProb = OneGramDist(temp_directory + "/one-grams.txt")
-else:
-    OneGramDist.fetch_one_grams()
+# if os.path.exists(temp_directory + "/one-grams.txt"):
+#     singleWordProb = OneGramDist(temp_directory + "/one-grams.txt")
+# else:
+#     OneGramDist.fetch_one_grams()
+#
+# singleWordProb = OneGramDist(temp_directory + "/one-grams.txt")
 
-singleWordProb = OneGramDist(temp_directory + "/one-grams.txt")
 
-
-def word_seq_fitness(words):
-    return sum(math.log10(singleWordProb(w)) for w in words)
+# def word_seq_fitness(words):
+#     return sum(math.log10(singleWordProb(w)) for w in words)
 
 
 def memoize(f):
