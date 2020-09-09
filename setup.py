@@ -7,7 +7,7 @@ with open(path.join(root, 'README.md'), encoding='utf-8') as f:
 setuptools.setup(
     name='richkit',
     description='Domain enrichment kit ',
-    version='1.1.1b0',
+    version='1.1.1',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/aau-network-security/richkit',
