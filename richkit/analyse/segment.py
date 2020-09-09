@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class OneGramDist(dict):
-    URL = "https://gist.githubusercontent.com/mrturkmen06/d9d5f8bc35be8efd81c447f70ca99fbf/raw/cfa317d7bce53ba55ca8f9bf27aa3170038f99cf/one-grams.txt"
+    URL = "https://gist.githubusercontent.com/mrturkmencom/d9d5f8bc35be8efd81c447f70ca99fbf/raw/cfa317d7bce53ba55ca8f9bf27aa3170038f99cf/one-grams.txt"
     FILEPATH = temp_directory + "/one-grams.txt"
 
     @classmethod

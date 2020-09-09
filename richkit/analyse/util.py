@@ -9,7 +9,7 @@ data_folder = Path("top-1m.csv").absolute()
 logger = logging.getLogger(__name__)
 temp_directory = tempfile.mkdtemp()
 top_1m_alexa = "https://github.com/mozilla/cipherscan/blob/master/top1m/top-1m.csv?raw=true"
-top_100_alexa = "https://gist.githubusercontent.com/mrturkmen06/98e33d97e6b8d07efabc1fda91946a21/raw/847e1c680d816bbac06ee5034e20b56d2ddfd78d/top-100.csv"
+top_100_alexa = "https://gist.githubusercontent.com/mrturkmencom/98e33d97e6b8d07efabc1fda91946a21/raw/847e1c680d816bbac06ee5034e20b56d2ddfd78d/top-100.csv"
 
 
 class WordMatcher(object):
