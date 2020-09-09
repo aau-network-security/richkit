@@ -40,7 +40,7 @@ class DomainCertificates:
             return json.loads(content)
         except Exception as e:
             logger.error('Error while retrieving certificates: %s', e)
-            raise e
+            return None
 
     def get_all(self):
         """

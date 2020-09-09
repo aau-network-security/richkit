@@ -123,11 +123,11 @@ def get_domain_name_features(domain):
     """
     domain_array = domain.split('.')
     num_tokens = len(domain_array)
-    len2ld  = len(get_sld(domain))
+    len2ld = len(get_sld(domain))
     len_domain = sum([len(el) for el in domain_array])
     domain_name_features = {
         "num_tokens": str(num_tokens),
-        "len2ld"    : str(len2ld),
+        "len2ld": str(len2ld),
         "len_domain": str(len_domain)
     }
     return domain_name_features
@@ -271,7 +271,6 @@ def ngram_count(domain, counts, counts_vc):
 
 
 def get_num_numeric_2ld(domain):
-
     """
 
     :param domain:
@@ -281,7 +280,6 @@ def get_num_numeric_2ld(domain):
 
 
 def get_radio_numeric_2ld(domain):
-
     """
 
     :param domain:

@@ -36,7 +36,7 @@ class URLVoidTestCase(unittest.TestCase):
         for k, v in self.test_urls.items():
             instance = URLVoid(k)
             domain_registration = instance.domain_registration_date()[:-15]
-            self.assertEqual(domain_registration,v["domain_registration"])
+            self.assertEqual(domain_registration, v["domain_registration"])
 
     def test_get_detection_rate(self):
         for k, v in self.test_urls.items():
