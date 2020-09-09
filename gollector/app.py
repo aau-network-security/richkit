@@ -1,6 +1,34 @@
 import yaml
 import psycopg2
-from gollector.domain import FQDN_Features
+from richkit.analyse import depth, length, entropy, number_vowels, ratio_vowels, number_consonants, \
+    ratio_consonants, number_numerics, ratio_numerics, number_specials, ratio_specials
+
+
+class FQDN_Features:
+
+    def __init__(self, fqdn_id, fqdn):
+        self.fqdn_id = fqdn_id
+        self.fqdn = fqdn
+
+    def get_features(self):
+
+        domain_name_features = {
+            "fqdn_id": self.fqdn_id,
+            "label_number": depth(self.fqdn),
+            "lenght": length(self.fqdn),
+            "entropy": entropy(self.fqdn),
+            "vowels_ratio": ratio_vowels(self.fqdn),
+            "vowels_number": number_vowels(self.fqdn),
+            "consonants_ratio": ratio_consonants(self.fqdn),
+            "consonants_number": number_consonants(self.fqdn),
+            "numeric_ratio": ratio_numerics(self.fqdn),
+            "numeric_number": number_numerics(self.fqdn),
+            "special_ratio": number_specials(self.fqdn),
+            "special_number": ratio_specials(self.fqdn),
+        }
+
+        return domain_name_features
+
 
 
 def get_config():
@@ -13,7 +41,7 @@ class DomainFeatures:
     def __init__(self, config):
         self.config = config
         self.conn = self.connect_db()
-        self.batch_size = 2
+        self.batch_size = 50000
         self.inserts = list()
         self.create_table()
 
@@ -68,7 +96,7 @@ class DomainFeatures:
         cursor.execute("select count(*) as count from fqdns")
         domain_count = cursor.fetchall()
         for offset in range(0, domain_count[0][0], self.batch_size):
-
+            print(offset + "/" + domain_count[0][0])
             cc = self.conn.cursor()
             cc.execute("select id, fqdn from fqdns limit %s offset %s", (self.batch_size, offset,))
             fqdns = cc.fetchall()

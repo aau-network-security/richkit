@@ -1,6 +1,6 @@
 repository: gollector
 user: postgres
 password: postgres
-host: localhost
-port: 10001
+host: db
+port: 5432
 dbname: domains
