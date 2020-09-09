@@ -26,4 +26,3 @@ class FQDN_Features:
         }
 
         return domain_name_features
-
