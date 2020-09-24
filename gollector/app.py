@@ -30,7 +30,6 @@ class FQDN_Features:
         return domain_name_features
 
 
-
 def get_config():
     config = open("config.yml")
     return yaml.load(config)
@@ -58,18 +57,18 @@ class DomainFeatures:
         try:
             c = self.conn.cursor()
             c.execute("create table if not exists fqdn_features ("
-                            "fqdn_id int primary key, "
-                            "label_number int, "
-                            "lenght int, "
-                            "entropy numeric, "
-                            "vowels_ratio numeric, "
-                            "vowels_number int, "
-                            "consonants_ratio numeric, "
-                            "consonants_number int, "
-                            "numeric_ratio numeric, "
-                            "numeric_number int, "
-                            "special_ratio numeric, "
-                            "special_number numeric);")
+                      "fqdn_id int primary key, "
+                      "label_number int, "
+                      "lenght int, "
+                      "entropy numeric, "
+                      "vowels_ratio numeric, "
+                      "vowels_number int, "
+                      "consonants_ratio numeric, "
+                      "consonants_number int, "
+                      "numeric_ratio numeric, "
+                      "numeric_number int, "
+                      "special_ratio numeric, "
+                      "special_number numeric);")
             self.conn.commit()
             c.close()
         except Exception as e:
@@ -98,7 +97,8 @@ class DomainFeatures:
         for offset in range(0, domain_count[0][0], self.batch_size):
             print(offset + "/" + domain_count[0][0])
             cc = self.conn.cursor()
-            cc.execute("select id, fqdn from fqdns limit %s offset %s", (self.batch_size, offset,))
+            cc.execute("select id, fqdn from fqdns limit %s offset %s",
+                       (self.batch_size, offset,))
             fqdns = cc.fetchall()
 
             for fqdn in fqdns:
@@ -112,9 +112,8 @@ def main():
     conf = get_config()
     df = DomainFeatures(conf)
     df.run_gollector()
-    #todo make run function about buldozer
+    # todo make run function about buldozer
 
 
 if __name__ == '__main__':
     main()
-
