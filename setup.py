@@ -22,7 +22,7 @@ setuptools.setup(
                       'scikit-learn==0.21.3',
                       'langid==1.1.6',
                       'bs4==0.0.1',
-                      'lxml==4.4.1',
+                      'lxml==4.6.2',
                       'requests==2.22.0',
                       'pytest',
                       'dnspython',
