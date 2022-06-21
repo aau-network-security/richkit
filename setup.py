@@ -18,7 +18,7 @@ setuptools.setup(
                 'Source': 'https://github.com/aau-network-security/richkit',
     },
     install_requires=['maxminddb',
-                      'numpy==1.17.2',
+                      'numpy==1.22.0',
                       'scikit-learn==0.21.3',
                       'langid==1.1.6',
                       'bs4==0.0.1',
