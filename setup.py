@@ -23,7 +23,7 @@ setuptools.setup(
                       'langid==1.1.6',
                       'bs4==0.0.1',
                       'lxml==4.4.1',
-                      'requests==2.22.0',
+                      'requests==2.31.0',
                       'pytest',
                       'dnspython',
                       'coverage'],
